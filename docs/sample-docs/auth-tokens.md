@@ -1,6 +1,21 @@
 ---
 sidebar_position: 1
 title: Authentication Token Management
+keywords:
+  - JWT
+  - JSON Web Token
+  - OAuth 2.0
+  - PKCE
+  - Token Refresh
+  - RSA-256
+  - Access Token
+  - Authorization Code Flow
+tags:
+  - authentication
+  - security
+ai-enhanced: '2025-06-24T01:35:11.645Z'
+ai-keywords-added: 8
+ai-tags-added: 2
 ---
 
 # Authentication Token Management
@@ -22,11 +37,11 @@ const tokenResponse = await fetch('/api/v2/auth/token', {
     code: authorizationCode,
     client_id: clientId,
     code_verifier: codeVerifier,
-    redirect_uri: redirectUri
-  })
-});
+    redirect_uri: redirectUri,
+  }),
+})
 
-const { access_token, refresh_token, expires_in } = await tokenResponse.json();
+const { access_token, refresh_token, expires_in } = await tokenResponse.json()
 ```
 
 ## JWT Payload Structure
@@ -43,14 +58,14 @@ Our implementation employs refresh token rotation as a security best practice. W
 def rotate_refresh_token(current_refresh_token):
     # Validate current refresh token
     payload = validate_jwt(current_refresh_token, verify_expiration=True)
-    
+
     # Generate new token pair
     new_access_token = generate_access_token(payload['sub'])
     new_refresh_token = generate_refresh_token(payload['sub'])
-    
+
     # Invalidate old refresh token
     blacklist_token(current_refresh_token)
-    
+
     return {
         'access_token': new_access_token,
         'refresh_token': new_refresh_token,

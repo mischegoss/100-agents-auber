@@ -82,21 +82,13 @@ const config = {
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: 'Doc Search Demo',
-        logo: {
-          alt: 'Doc Search Logo',
-          src: 'img/logo.svg',
-        },
+        
         items: [
           {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
             label: 'Sample Docs',
-          },
-          {
-            to: '/search',
-            label: 'Search',
-            position: 'left',
           },
           {
             href: 'https://github.com/yourusername/doc-steward-demo',
@@ -115,10 +107,7 @@ const config = {
                 label: 'Sample Docs',
                 to: '/docs/intro',
               },
-              {
-                label: 'Search',
-                to: '/search',
-              },
+             
             ],
           },
           {

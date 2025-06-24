@@ -17,6 +17,40 @@ function SearchWidget({
   const allDocsData = useAllDocsData()
   const docs = allDocsData?.default?.versions?.[0]?.docs || {}
 
+  // 🚨 DEBUG: Log what we're getting from Docusaurus
+  useEffect(() => {
+    console.log('🔍 RAW ALL DOCS DATA:', allDocsData)
+    console.log('🔍 PARSED DOCS OBJECT:', docs)
+    console.log('🔍 DOCS KEYS:', Object.keys(docs))
+    console.log('🔍 TOTAL DOCS COUNT:', Object.keys(docs).length)
+
+    if (Object.keys(docs).length > 0) {
+      console.log('🔍 FIRST DOC SAMPLE:', Object.values(docs)[0])
+
+      // Look for auth tokens doc specifically
+      const authDoc = Object.values(docs).find(
+        doc =>
+          doc.title?.toLowerCase().includes('authentication') ||
+          doc.title?.toLowerCase().includes('token') ||
+          doc.id?.includes('auth-tokens') ||
+          doc.source?.includes('auth-tokens'),
+      )
+      console.log('🔍 AUTH TOKENS DOC FOUND:', authDoc)
+
+      if (authDoc) {
+        console.log('🔍 AUTH DOC FRONT MATTER:', authDoc.frontMatter)
+        console.log('🔍 AUTH DOC KEYWORDS:', authDoc.frontMatter?.keywords)
+        console.log('🔍 AUTH DOC TAGS:', authDoc.frontMatter?.tags)
+      } else {
+        console.log('❌ AUTH TOKENS DOC NOT FOUND')
+        console.log(
+          '📋 Available doc titles:',
+          Object.values(docs).map(d => d.title),
+        )
+      }
+    }
+  }, [allDocsData, docs])
+
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {

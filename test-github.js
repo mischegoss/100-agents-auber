@@ -43,16 +43,33 @@ async function testGitHub() {
         const { data: contents } = await octokit.rest.repos.getContent({
           owner: user.login,
           repo: TARGET_REPO_NAME,
-          path: 'docs',
+          path: 'docs/sample-docs',
         })
 
         const docFiles = contents.filter(file => file.name.endsWith('.md'))
-        console.log(`✅ Found ${docFiles.length} markdown files in docs/`)
+        console.log(
+          `✅ Found ${docFiles.length} markdown files in docs/sample-docs/`,
+        )
         docFiles.forEach(file => {
           console.log(`   - ${file.name}`)
         })
       } catch (error) {
-        console.log('💡 No docs/ folder found - create some sample docs')
+        console.log(
+          '💡 No docs/sample-docs/ folder found - create some sample docs',
+        )
+
+        // Fallback: check if regular docs/ exists
+        try {
+          const { data: fallbackContents } =
+            await octokit.rest.repos.getContent({
+              owner: user.login,
+              repo: TARGET_REPO_NAME,
+              path: 'docs',
+            })
+          console.log('📁 Found docs/ folder but expected docs/sample-docs/')
+        } catch (fallbackError) {
+          console.log('📁 No docs/ folder found either')
+        }
       }
     } catch (error) {
       if (error.status === 404) {
