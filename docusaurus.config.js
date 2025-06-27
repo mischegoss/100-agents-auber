@@ -10,8 +10,8 @@ import { themes as prismThemes } from 'prism-react-renderer'
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Doc Search',
-  tagline: 'AI Enabled Search for Docusaurus',
+  title: 'RAG Plugin Demo',
+  tagline: 'AI-Powered Documentation Enhancement for Docusaurus',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -20,15 +20,14 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://rag-plugin-demo.web.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'yourusername', // Replace with your GitHub username
+  projectName: 'rag-plugin-demo-site', // Replace with your repo name
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -41,33 +40,44 @@ const config = {
     locales: ['en'],
   },
 
+  plugins: [
+    // Enhanced docs (where your RAG plugin will work)
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'docs-enhanced',
+        path: 'docs-enhanced',
+        routeBasePath: 'docs-enhanced',
+        sidebarPath: './sidebars-enhanced.js',
+        editUrl:
+          'https://github.com/yourusername/rag-plugin-demo-site/tree/main/',
+      },
+    ],
+    // Original docs (for comparison)
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'docs-original',
+        path: 'docs-original',
+        routeBasePath: 'docs-original',
+        sidebarPath: './sidebars-original.js',
+        editUrl:
+          'https://github.com/yourusername/rag-plugin-demo-site/tree/main/',
+      },
+    ],
+    // Your RAG plugin will go here
+    // ['./src/plugins/rag-prep-plugin', {}],
+  ],
+
   presets: [
     [
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        docs: {
-          sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        // Remove the default docs - we're using custom plugins above
+        docs: false,
+        // Remove blog completely
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -81,17 +91,38 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'Doc Search Demo',
-        
+        title: 'RAG Plugin Demo',
+        logo: {
+          alt: 'RAG Plugin Logo',
+          src: 'img/logo.svg',
+        },
         items: [
           {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
+            docsPluginId: 'docs-enhanced',
             position: 'left',
-            label: 'Sample Docs',
+            label: 'Enhanced Docs',
           },
           {
-            href: 'https://github.com/yourusername/doc-steward-demo',
+            type: 'docSidebar',
+            sidebarId: 'tutorialSidebar',
+            docsPluginId: 'docs-original',
+            position: 'left',
+            label: 'Original Docs',
+          },
+          {
+            to: '/demo',
+            label: 'Live Demo',
+            position: 'left',
+          },
+          {
+            to: '/analytics',
+            label: 'Analytics',
+            position: 'left',
+          },
+          {
+            href: 'https://github.com/yourusername/rag-plugin-demo-site',
             label: 'GitHub',
             position: 'right',
           },
@@ -101,47 +132,50 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
               {
-                label: 'Sample Docs',
-                to: '/docs/intro',
-              },
-             
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Enhanced Docs',
+                to: '/docs-enhanced/intro',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+                label: 'Original Docs',
+                to: '/docs-original/intro',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Demo & Tools',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
+                label: 'Interactive Demo',
+                to: '/demo',
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/yourusername/doc-steward-demo',
+                label: 'Analytics Dashboard',
+                to: '/analytics',
+              },
+              {
+                label: 'Plugin Documentation',
+                to: '/docs-enhanced/plugin-setup',
+              },
+            ],
+          },
+          {
+            title: 'Development',
+            items: [
+              {
+                label: 'GitHub Repository',
+                href: 'https://github.com/yourusername/rag-plugin-demo-site',
+              },
+              {
+                label: 'Plugin Source',
+                href: 'https://github.com/yourusername/docusaurus-rag-prep-plugin',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Doc Steward Demo. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} RAG Plugin Demo. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,

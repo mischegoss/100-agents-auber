@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useAllDocsData } from '@docusaurus/plugin-content-docs/client'
+import { useLocation } from '@docusaurus/router'
 
 function SearchWidget({
   placeholder = 'Search docs...',
@@ -13,21 +14,79 @@ function SearchWidget({
   const [isOpen, setIsOpen] = useState(false)
   const searchRef = useRef(null)
 
+  // Get current location to determine which docs we're in
+  const location = useLocation()
+
   // Get all docs data from Docusaurus
   const allDocsData = useAllDocsData()
-  const docs = allDocsData?.default?.versions?.[0]?.docs || {}
+
+  // Determine current docs context and get the right docs
+  const getCurrentDocsContext = () => {
+    const path = location.pathname
+
+    if (path.startsWith('/docs-enhanced')) {
+      return {
+        context: 'docs-enhanced',
+        docs: allDocsData?.['docs-enhanced']?.versions?.[0]?.docs || {},
+        label: 'Enhanced Docs',
+      }
+    } else if (path.startsWith('/docs-original')) {
+      return {
+        context: 'docs-original',
+        docs: allDocsData?.['docs-original']?.versions?.[0]?.docs || {},
+        label: 'Original Docs',
+      }
+    } else {
+      // Fallback to default docs if available
+      return {
+        context: 'default',
+        docs: allDocsData?.default?.versions?.[0]?.docs || {},
+        label: 'Docs',
+      }
+    }
+  }
+
+  const { context, docs, label } = getCurrentDocsContext()
 
   // 🚨 DEBUG: Log what we're getting from Docusaurus
   useEffect(() => {
+    console.log('🔍 CURRENT LOCATION:', location.pathname)
+    console.log('🔍 CURRENT CONTEXT:', context)
     console.log('🔍 RAW ALL DOCS DATA:', allDocsData)
-    console.log('🔍 PARSED DOCS OBJECT:', docs)
+    console.log('🔍 FILTERED DOCS OBJECT:', docs)
     console.log('🔍 DOCS KEYS:', Object.keys(docs))
     console.log('🔍 TOTAL DOCS COUNT:', Object.keys(docs).length)
 
     if (Object.keys(docs).length > 0) {
       console.log('🔍 FIRST DOC SAMPLE:', Object.values(docs)[0])
 
-      // Look for auth tokens doc specifically
+      // Check for docs in /sample-docs/ subdirectory specifically
+      const sampleDocs = Object.values(docs).filter(
+        doc =>
+          doc.source?.includes('sample-docs/') ||
+          doc.id?.includes('sample-docs/') ||
+          doc.permalink?.includes('sample-docs'),
+      )
+      console.log(`📁 SAMPLE-DOCS FOUND IN ${context}:`, sampleDocs.length)
+      console.log(
+        '📁 SAMPLE-DOCS LIST:',
+        sampleDocs.map(d => ({
+          title: d.title,
+          id: d.id,
+          source: d.source,
+          permalink: d.permalink,
+        })),
+      )
+
+      // Show all doc sources to verify directory structure
+      console.log('📋 ALL DOC SOURCES IN CURRENT CONTEXT:')
+      Object.values(docs).forEach(doc => {
+        console.log(
+          `  - ${doc.title}: ${doc.source || 'No source'} (${doc.id})`,
+        )
+      })
+
+      // Look for auth tokens doc specifically in current context
       const authDoc = Object.values(docs).find(
         doc =>
           doc.title?.toLowerCase().includes('authentication') ||
@@ -35,21 +94,21 @@ function SearchWidget({
           doc.id?.includes('auth-tokens') ||
           doc.source?.includes('auth-tokens'),
       )
-      console.log('🔍 AUTH TOKENS DOC FOUND:', authDoc)
+      console.log(`🔍 AUTH TOKENS DOC FOUND IN ${context}:`, authDoc)
 
       if (authDoc) {
         console.log('🔍 AUTH DOC FRONT MATTER:', authDoc.frontMatter)
         console.log('🔍 AUTH DOC KEYWORDS:', authDoc.frontMatter?.keywords)
         console.log('🔍 AUTH DOC TAGS:', authDoc.frontMatter?.tags)
       } else {
-        console.log('❌ AUTH TOKENS DOC NOT FOUND')
+        console.log(`❌ AUTH TOKENS DOC NOT FOUND IN ${context}`)
         console.log(
-          '📋 Available doc titles:',
+          '📋 Available doc titles in current context:',
           Object.values(docs).map(d => d.title),
         )
       }
     }
-  }, [allDocsData, docs])
+  }, [allDocsData, docs, context, location.pathname])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -77,7 +136,7 @@ function SearchWidget({
       const q = searchQuery.toLowerCase()
       const results = []
 
-      // Search through all docs
+      // Search through docs in current context only
       Object.values(docs).forEach(doc => {
         const titleMatch = doc.title?.toLowerCase().includes(q)
         const contentMatch = doc.content?.toLowerCase().includes(q)
@@ -125,12 +184,26 @@ function SearchWidget({
     const q = query.toLowerCase()
     const frontMatter = doc.frontMatter || {}
 
+    // Enhanced docs get RAG score boost (key differentiator!)
+    if (context === 'docs-enhanced' && frontMatter.ragScore) {
+      score += frontMatter.ragScore * 10 // RAG score multiplier
+    }
+
     // Title matches are most important
     if (doc.title?.toLowerCase().includes(q)) score += 50
 
-    // Keyword matches are very important
+    // Enhanced keyword matches (more keywords = better search in enhanced docs)
+    const keywordBonus = context === 'docs-enhanced' ? 40 : 30
     if (frontMatter.keywords?.some(k => k.toLowerCase().includes(q)))
-      score += 30
+      score += keywordBonus
+
+    // Enhanced docs have related_docs that can boost relevance
+    if (context === 'docs-enhanced' && frontMatter.related_docs) {
+      const relatedMatch = frontMatter.related_docs.some(related =>
+        related.toLowerCase().includes(q),
+      )
+      if (relatedMatch) score += 25
+    }
 
     // Tag matches are important
     if (frontMatter.tags?.some(t => t.toLowerCase().includes(q))) score += 20
@@ -140,6 +213,14 @@ function SearchWidget({
 
     // Content matches are least important
     if (doc.content?.toLowerCase().includes(q)) score += 10
+
+    // Cross-reference bonus for enhanced docs
+    if (context === 'docs-enhanced' && frontMatter.cross_references) {
+      const crossRefMatch = frontMatter.cross_references.some(ref =>
+        ref.toLowerCase().includes(q),
+      )
+      if (crossRefMatch) score += 15
+    }
 
     return score
   }
@@ -215,6 +296,9 @@ function SearchWidget({
     window.location.href = result.permalink
   }
 
+  // Update placeholder to show current context
+  const contextualPlaceholder = placeholder.replace('docs', label.toLowerCase())
+
   const widgetStyles = {
     container: {
       position: 'relative',
@@ -235,8 +319,12 @@ function SearchWidget({
       boxSizing: 'border-box',
     },
     searchInputFocused: {
-      borderColor: '#007acc',
-      boxShadow: '0 0 0 3px rgba(0, 122, 204, 0.1)',
+      borderColor: context === 'docs-enhanced' ? '#28a745' : '#007acc',
+      boxShadow: `0 0 0 3px ${
+        context === 'docs-enhanced'
+          ? 'rgba(40, 167, 69, 0.1)'
+          : 'rgba(0, 122, 204, 0.1)'
+      }`,
     },
     dropdown: {
       position: 'absolute',
@@ -252,6 +340,18 @@ function SearchWidget({
       overflowY: 'auto',
       marginTop: '4px',
     },
+    contextBadge: {
+      position: 'absolute',
+      top: '-8px',
+      right: '8px',
+      backgroundColor: context === 'docs-enhanced' ? '#28a745' : '#6c757d',
+      color: 'white',
+      fontSize: '10px',
+      padding: '2px 6px',
+      borderRadius: '4px',
+      fontWeight: '600',
+      textTransform: 'uppercase',
+    },
     result: {
       padding: compact ? '12px' : '16px',
       borderBottom: '1px solid #f0f0f0',
@@ -261,7 +361,7 @@ function SearchWidget({
     resultTitle: {
       fontSize: compact ? '14px' : '16px',
       fontWeight: '600',
-      color: '#007acc',
+      color: context === 'docs-enhanced' ? '#28a745' : '#007acc',
       margin: '0 0 4px 0',
       lineHeight: '1.3',
     },
@@ -294,9 +394,12 @@ function SearchWidget({
 
   return (
     <div ref={searchRef} style={widgetStyles.container}>
+      <div style={widgetStyles.contextBadge}>
+        {context === 'docs-enhanced' ? 'Enhanced' : 'Original'}
+      </div>
       <input
         type='text'
-        placeholder={placeholder}
+        placeholder={contextualPlaceholder}
         value={query}
         onChange={handleSearch}
         onFocus={() => query && setIsOpen(true)}
@@ -308,53 +411,247 @@ function SearchWidget({
 
       {isOpen && (
         <div style={widgetStyles.dropdown}>
+          {/* Performance indicator */}
+          {query && (
+            <div
+              style={{
+                padding: '8px 16px',
+                backgroundColor:
+                  context === 'docs-enhanced' ? '#d4edda' : '#fff3cd',
+                borderBottom: '1px solid #e1e1e1',
+                fontSize: '11px',
+                fontWeight: 'bold',
+                color: context === 'docs-enhanced' ? '#155724' : '#856404',
+              }}
+            >
+              {context === 'docs-enhanced'
+                ? '🚀 AI-Enhanced Search Active'
+                : '⚠️ Basic Keyword Search Only'}
+            </div>
+          )}
+
           {isSearching ? (
-            <div style={widgetStyles.loading}>Searching...</div>
+            <div style={widgetStyles.loading}>
+              Searching {label.toLowerCase()}...
+            </div>
           ) : searchResults.length > 0 ? (
-            searchResults.map((result, index) => (
-              <div
-                key={result.id}
-                style={widgetStyles.result}
-                onClick={() => handleResultClick(result)}
-                onMouseEnter={e => (e.target.style.backgroundColor = '#f8f9fa')}
-                onMouseLeave={e =>
-                  (e.target.style.backgroundColor = 'transparent')
-                }
-              >
-                <h4 style={widgetStyles.resultTitle}>
-                  {highlightText(result.title, query)}
-                </h4>
-                <p style={widgetStyles.resultExcerpt}>
-                  {highlightText(result.excerpt, query)}
-                </p>
-                {showKeywords && (
-                  <div style={widgetStyles.resultMeta}>
-                    {result.frontMatter?.keywords && (
-                      <span>
-                        <strong>Keywords:</strong>{' '}
-                        {result.frontMatter.keywords.join(', ')}
+            <>
+              {searchResults.map((result, index) => (
+                <div
+                  key={result.id}
+                  style={widgetStyles.result}
+                  onClick={() => handleResultClick(result)}
+                  onMouseEnter={e =>
+                    (e.target.style.backgroundColor = '#f8f9fa')
+                  }
+                  onMouseLeave={e =>
+                    (e.target.style.backgroundColor = 'transparent')
+                  }
+                >
+                  <h4 style={widgetStyles.resultTitle}>
+                    {highlightText(result.title, query)}
+                  </h4>
+                  <p style={widgetStyles.resultExcerpt}>
+                    {highlightText(result.excerpt, query)}
+                  </p>
+                  {showKeywords && (
+                    <div style={widgetStyles.resultMeta}>
+                      {/* Enhanced docs show RAG score prominently */}
+                      {context === 'docs-enhanced' &&
+                        result.frontMatter?.ragScore && (
+                          <span
+                            style={{
+                              backgroundColor: '#28a745',
+                              color: 'white',
+                              padding: '2px 6px',
+                              borderRadius: '4px',
+                              fontSize: '11px',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            RAG Score: {result.frontMatter.ragScore}
+                          </span>
+                        )}
+
+                      {result.frontMatter?.keywords && (
+                        <span>
+                          <strong>Keywords:</strong>{' '}
+                          {result.frontMatter.keywords.slice(0, 3).join(', ')}
+                          {result.frontMatter.keywords.length > 3 &&
+                            ` (+${
+                              result.frontMatter.keywords.length - 3
+                            } more)`}
+                        </span>
+                      )}
+
+                      {result.frontMatter?.tags && (
+                        <span>
+                          <strong>Tags:</strong>{' '}
+                          {result.frontMatter.tags.join(', ')}
+                        </span>
+                      )}
+
+                      {/* Show related docs for enhanced version */}
+                      {context === 'docs-enhanced' &&
+                        result.frontMatter?.related_docs && (
+                          <span style={{ color: '#28a745' }}>
+                            <strong>Related:</strong>{' '}
+                            {result.frontMatter.related_docs.length} docs
+                          </span>
+                        )}
+
+                      {/* Show cross-references for enhanced version */}
+                      {context === 'docs-enhanced' &&
+                        result.frontMatter?.cross_references && (
+                          <span style={{ color: '#17a2b8' }}>
+                            <strong>Cross-refs:</strong>{' '}
+                            {result.frontMatter.cross_references.length}
+                          </span>
+                        )}
+
+                      <span
+                        style={{
+                          marginLeft: 'auto',
+                          color:
+                            context === 'docs-enhanced' ? '#28a745' : '#007acc',
+                          fontWeight:
+                            context === 'docs-enhanced' ? 'bold' : 'normal',
+                        }}
+                      >
+                        Score: {result.relevanceScore}
                       </span>
+                    </div>
+                  )}
+
+                  {/* Enhanced docs show improvement hints */}
+                  {context === 'docs-enhanced' &&
+                    result.frontMatter?.enhancement_summary && (
+                      <div
+                        style={{
+                          marginTop: '8px',
+                          padding: '6px 8px',
+                          backgroundColor: '#e8f5e8',
+                          borderLeft: '3px solid #28a745',
+                          fontSize: '12px',
+                          color: '#155724',
+                        }}
+                      >
+                        <strong>✨ Enhanced:</strong>{' '}
+                        {result.frontMatter.enhancement_summary}
+                      </div>
                     )}
-                    {result.frontMatter?.tags && (
-                      <span>
-                        <strong>Tags:</strong>{' '}
-                        {result.frontMatter.tags.join(', ')}
-                      </span>
-                    )}
-                    <span style={{ marginLeft: 'auto', color: '#007acc' }}>
-                      Score: {result.relevanceScore}
+                </div>
+              ))}
+
+              {/* Search analytics for enhanced docs */}
+              {context === 'docs-enhanced' && searchResults.length > 0 && (
+                <div
+                  style={{
+                    borderTop: '2px solid #e9ecef',
+                    padding: '12px 16px',
+                    backgroundColor: '#f8f9fa',
+                    fontSize: '12px',
+                    color: '#495057',
+                  }}
+                >
+                  <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+                    🎯 Search Enhancement Stats:
+                  </div>
+                  <div
+                    style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}
+                  >
+                    <span>Results: {searchResults.length}</span>
+                    <span>
+                      Avg Score:{' '}
+                      {Math.round(
+                        searchResults.reduce(
+                          (sum, r) => sum + r.relevanceScore,
+                          0,
+                        ) / searchResults.length,
+                      )}
+                    </span>
+                    <span>
+                      RAG Enhanced:{' '}
+                      {
+                        searchResults.filter(r => r.frontMatter?.ragScore)
+                          .length
+                      }
+                    </span>
+                    <span>
+                      With Related:{' '}
+                      {
+                        searchResults.filter(r => r.frontMatter?.related_docs)
+                          .length
+                      }
                     </span>
                   </div>
-                )}
-              </div>
-            ))
+                </div>
+              )}
+            </>
           ) : query ? (
             <div style={widgetStyles.noResults}>
-              <strong>No results found for "{query}"</strong>
+              <strong>
+                No results found for "{query}" in {label.toLowerCase()}
+              </strong>
               <br />
-              <small style={{ color: '#999', fontSize: '12px' }}>
-                💡 This will improve after AI enhancement!
-              </small>
+              {context === 'docs-enhanced' ? (
+                <div style={{ marginTop: '8px' }}>
+                  <small style={{ color: '#28a745', fontSize: '12px' }}>
+                    ✨ Enhanced docs provide better search with:
+                  </small>
+                  <ul
+                    style={{
+                      textAlign: 'left',
+                      fontSize: '11px',
+                      color: '#666',
+                      margin: '4px 0',
+                      paddingLeft: '20px',
+                    }}
+                  >
+                    <li>AI-extracted keywords</li>
+                    <li>Related document connections</li>
+                    <li>Cross-reference mapping</li>
+                    <li>RAG optimization scores</li>
+                  </ul>
+                </div>
+              ) : (
+                <div style={{ marginTop: '8px' }}>
+                  <small style={{ color: '#dc3545', fontSize: '12px' }}>
+                    💡 Limited search capabilities in original docs
+                  </small>
+                  <br />
+                  <small style={{ color: '#999', fontSize: '11px' }}>
+                    Try the enhanced docs for AI-powered search improvements!
+                  </small>
+                </div>
+              )}
+
+              {/* Show search suggestions for enhanced docs */}
+              {context === 'docs-enhanced' && (
+                <div
+                  style={{
+                    marginTop: '12px',
+                    padding: '8px',
+                    backgroundColor: '#f8f9fa',
+                    borderRadius: '4px',
+                    textAlign: 'left',
+                  }}
+                >
+                  <small style={{ fontWeight: 'bold', color: '#495057' }}>
+                    💡 Try searching for:
+                  </small>
+                  <div
+                    style={{
+                      fontSize: '11px',
+                      color: '#6c757d',
+                      marginTop: '4px',
+                    }}
+                  >
+                    "authentication", "tokens", "api", "configuration",
+                    "troubleshooting"
+                  </div>
+                </div>
+              )}
             </div>
           ) : null}
         </div>
