@@ -1,7 +1,26 @@
 ---
 sidebar_position: 2
-title: Credential Lifecycle Operations
-
+title: 'Credential Lifecycle: Reset, Update & Security Guide'
+description: >-
+  Learn credential lifecycle operations: reset, update, and secure management.
+  Step-by-step guide with code examples for secure system access control.
+tags:
+  - credentials
+  - security
+  - authentication
+  - access control
+  - passwords
+keywords:
+  - credential lifecycle
+  - password reset
+  - user authentication
+  - identity management
+  - access control
+  - credential management
+category: Security
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:31:56.464Z'
+original_title: Credential Lifecycle Operations
 ---
 
 # Credential Lifecycle Operations
