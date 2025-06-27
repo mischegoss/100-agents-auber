@@ -1,5 +1,27 @@
 ---
 sidebar_position: 6
+description: >-
+  Learn how to leverage Markdown features in Docusaurus, including front matter,
+  links, images, code blocks, admonitions, and MDX components. Enhance your
+  docu...
+tags:
+  - docusaurus
+  - markdown
+  - mdx
+  - react
+  - documentation
+keywords:
+  - docusaurus markdown
+  - markdown features
+  - docusaurus documentation
+  - mdx components
+  - front matter
+  - admonitions
+category: Documentation
+title: 'Markdown Features in Docusaurus: A Comprehensive Guide'
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:28:06.876Z'
+original_title: Untitled
 ---
 
 # Markdown Features
