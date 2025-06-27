@@ -2,40 +2,41 @@
 sidebar_position: 4
 title: Configuration
 description: >-
-  This document explains how to configure the application using the YAML
-  configuration file.
+  This document explains how to configure the application using the app.yml YAML
+  file.
 tags:
   - configuration
   - YAML
+  - app.yml
   - settings
-  - database
-  - redis
+  - parameters
   - application configuration
   - YAML file
   - database settings
-  - Redis cache
+  - redis cache
   - API settings
 keywords:
   - application configuration
   - YAML file
   - database settings
-  - Redis cache
+  - redis cache
   - API settings
 topics:
-  - Configuration
   - Application Setup
+  - Configuration Management
 related:
   - YAML syntax
-  - Environment variables
+  - Database configuration
+  - Redis configuration
 ragImprovements:
-  - Add default values
+  - Add example configuration with comments
+  - Include schema definition
   - Explain environment variable overrides
-  - Link to YAML syntax guide
 category: Configuration
 difficulty: beginner
 ragScore: 85
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T05:17:05.860Z'
+enhanced_at: '2025-06-27T22:11:09.627Z'
 original_title: Configuration
 ---
 
