@@ -2,8 +2,8 @@
 sidebar_position: 2
 title: Credential Lifecycle Operations
 description: >-
-  This document outlines credential-related procedures, implementation details,
-  and administrative functions for system access management.
+  This document outlines procedures for managing user credentials, including
+  resets, modifications, and security considerations.
 tags:
   - credentials
   - lifecycle
@@ -12,30 +12,32 @@ tags:
   - access management
   - credential management
   - user authentication
-  - access control
   - password reset
-  - identity management
+  - database integrity
+  - security protocols
 keywords:
   - credential management
   - user authentication
-  - access control
   - password reset
-  - identity management
+  - database integrity
+  - security protocols
 topics:
   - Authentication
   - Authorization
+  - Security Management
 related:
   - User Management
-  - Access Control Lists
+  - Access Control
+  - Identity Verification
 ragImprovements:
-  - Add specific error handling examples
-  - Expand on timeout configuration options
-  - Clarify database schema details
+  - Add specific use case examples
+  - Expand on error handling
+  - Include diagrams for workflows
 category: Security
 difficulty: intermediate
 ragScore: 85
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T05:17:05.861Z'
+enhanced_at: '2025-06-27T22:07:32.943Z'
 original_title: Credential Lifecycle Operations
 ---
 
