@@ -1,6 +1,27 @@
 ---
 sidebar_position: 6
-title: Advanced Concepts
+title: Advanced System Architecture & Internals
+description: >-
+  Delve into advanced system architecture concepts: message queues, state
+  machines, JVM memory management, and network configuration. Optimize your
+  system's pe...
+tags:
+  - architecture
+  - internals
+  - memory management
+  - jvm
+  - redis
+  - networking
+keywords:
+  - system architecture
+  - message queue
+  - state machine
+  - jvm garbage collection
+  - redis cache
+category: System Administration
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:27:49.523Z'
+original_title: Advanced Concepts
 ---
 
 # Advanced Concepts
