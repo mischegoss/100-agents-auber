@@ -2,40 +2,40 @@
 sidebar_position: 9
 title: Release Notes Version 3.2
 description: >-
-  Release 3.2 includes enhancements, bug fixes, and performance improvements for
-  a more stable and robust system.
+  This release includes enhancements and bug fixes focused on improving user
+  experience, stability, and performance.
 tags:
   - release
   - notes
   - version 3.2
-  - bug fixes
   - enhancements
-  - software release
+  - bug fixes
+  - usability
   - stability
   - performance
-  - user experience
+  - refactoring
   - internal components
 keywords:
-  - software release
+  - usability
   - stability
   - performance
-  - user experience
+  - refactoring
   - internal components
 topics:
-  - Release Management
   - Software Updates
+  - Release Information
 related:
-  - Previous Release Notes
+  - Previous Releases
   - Known Issues
 ragImprovements:
-  - Added a concise description
-  - Included relevant keywords
-  - Specified beginner difficulty
+  - Improved user experience
+  - Increased system stability
+  - Enhanced performance
 category: Documentation
 difficulty: beginner
 ragScore: 85
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T05:17:05.864Z'
+enhanced_at: '2025-06-27T22:07:32.948Z'
 original_title: Release Notes
 ---
 
