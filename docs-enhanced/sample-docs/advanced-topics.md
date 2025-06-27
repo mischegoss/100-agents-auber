@@ -2,14 +2,14 @@
 sidebar_position: 6
 title: Advanced Concepts
 description: >-
-  This document details advanced concepts related to system architecture,
-  internals, memory management, and network configuration.
+  This document details advanced system architecture, internal workings, memory
+  management, and network configurations.
 tags:
   - architecture
   - scalability
-  - performance
   - memory management
   - networking
+  - performance
   - message queue
   - state machine
   - garbage collection
@@ -22,20 +22,20 @@ keywords:
   - redis
   - containerization
 topics:
-  - System Architecture
+  - System Design
   - Performance Tuning
 related:
-  - API Design
-  - Database Optimization
+  - Basic Concepts
+  - Troubleshooting
 ragImprovements:
   - Add diagrams
+  - Include code examples
   - Expand on error handling
-  - Provide configuration examples
-category: System Design
+category: System Architecture
 difficulty: advanced
 ragScore: 85
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T05:17:05.857Z'
+enhanced_at: '2025-06-27T22:07:32.935Z'
 original_title: Advanced Concepts
 ---
 
