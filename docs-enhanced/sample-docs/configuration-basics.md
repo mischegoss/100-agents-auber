@@ -1,6 +1,28 @@
 ---
 sidebar_position: 4
-title: Configuration
+title: 'App Configuration: YAML Settings & Best Practices'
+description: >-
+  Learn how to configure your application using YAML files. Master database
+  settings, Redis cache, API limits, and optimize application behavior. Set up
+  your ...
+tags:
+  - yaml
+  - configuration
+  - settings
+  - database
+  - redis
+  - api
+keywords:
+  - application configuration
+  - yaml configuration
+  - app.yml
+  - database configuration
+  - redis configuration
+  - api settings
+category: Configuration
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:31:52.679Z'
+original_title: Configuration
 ---
 
 # Configuration
