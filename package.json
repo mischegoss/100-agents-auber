@@ -1,5 +1,5 @@
 {
-  "name": "my-website",
+  "name": "rag-plugin-demo-site",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,8 @@
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids"
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "firebase:deploy": "npm run build && firebase deploy"
   },
   "dependencies": {
     "@docusaurus/core": "3.8.1",
@@ -24,14 +25,17 @@
     "dotenv": "^16.5.0",
     "fs-extra": "^11.3.0",
     "gray-matter": "^4.0.3",
+    "kaibanjs": "^0.21.1",
     "openai": "^5.7.0",
     "prism-react-renderer": "^2.3.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.8.1",
-    "@docusaurus/types": "3.8.1"
+    "@docusaurus/types": "3.8.1",
+    "@types/node": "^20.19.1",
+    "typescript": "^5.8.3"
   },
   "browserslist": {
     "production": [
