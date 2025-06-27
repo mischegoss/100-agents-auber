@@ -1,38 +1,41 @@
 ---
 sidebar_position: 6
 description: >-
-  This document outlines Markdown and MDX features supported by Docusaurus,
-  including front matter, links, images, code blocks, admonitions, and React
+  This document explains the Markdown features supported in Docusaurus,
+  including front matter, links, images, code blocks, admonitions, and MDX
   components.
 tags:
   - markdown
   - docusaurus
-  - mdx
   - documentation
   - syntax
-  - static-site-generator
-  - documentation-tooling
-  - react-components
+  - frontmatter
+  - links
+  - images
+  - code blocks
+  - admonitions
+  - MDX
 keywords:
-  - static-site-generator
-  - documentation-tooling
-  - react-components
+  - docusaurus markdown
+  - documentation features
+  - mdx react
 topics:
-  - markdown
-  - mdx
+  - Markdown
+  - Docusaurus
 related:
-  - front-matter
-  - code-snippets
+  - MDX
+  - React Components
+  - Front Matter
 ragImprovements:
-  - Add more examples
-  - Clarify MDX usage
-  - Expand on React components
+  - Add code example explanations
+  - Include common use cases
+  - Expand on MDX and React integration
 category: Documentation
 difficulty: beginner
 ragScore: 85
 title: Markdown Features
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T05:17:05.863Z'
+enhanced_at: '2025-06-27T22:11:09.631Z'
 original_title: Untitled
 ---
 

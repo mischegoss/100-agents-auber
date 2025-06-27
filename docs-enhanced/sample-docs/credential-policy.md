@@ -2,37 +2,37 @@
 sidebar_position: 3
 title: Credential Policy
 description: >-
-  This document outlines the organization's credential policy, covering user
-  responsibilities, governance, and security measures.
+  This document outlines the organization's credential policy, covering
+  governance, user responsibilities, and security objectives for managing user
+  credentials.
 tags:
-  - credential
-  - policy
+  - credentials
   - security
-  - passwords
-  - authentication
-  - credential lifecycle
-  - password complexity
-  - security governance
+  - policy
+  - governance
+  - users
+  - password management
+  - access control
+  - security protocols
 keywords:
-  - credential lifecycle
-  - password complexity
-  - security governance
+  - password management
+  - access control
+  - security protocols
 topics:
   - Security
-  - Policy
-  - Authentication
+  - Compliance
 related:
   - Access Control Policy
   - Data Security Policy
 ragImprovements:
-  - Add examples
-  - Clarify enforcement
-  - Expand on reporting
+  - Add specific examples of credential complexity
+  - Expand on reporting channels for compromise
+  - Detail consequences of policy violations
 category: Security Policies
 difficulty: beginner
 ragScore: 85
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T05:17:05.862Z'
+enhanced_at: '2025-06-27T22:11:09.629Z'
 original_title: Credential Policy
 ---
 

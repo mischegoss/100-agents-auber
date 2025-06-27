@@ -1,6 +1,6 @@
 /**
  * Enhance Metadata Task
- * Coordinates keyword extraction and frontmatter enhancement
+ * Coordinates keyword extraction and frontmatter enhancement with GitHub PR creation
  * Note: Using simple class instead of extending KaibanJS Task to avoid constructor issues
  */
 class EnhanceMetadataTask {
@@ -13,12 +13,14 @@ class EnhanceMetadataTask {
                       2. Generate enhanced metadata using Google Gemini AI
                       3. Write improved frontmatter back to the files
                       4. Create backups of original files
-                      5. Provide summary of enhancements made`
+                      5. Create GitHub PR with enhancement summary
+                      6. Provide summary of enhancements made`
 
     this.expectedOutput = `A comprehensive report containing:
                          - List of all processed files with their enhancements
                          - Summary of metadata improvements made
                          - RAG effectiveness scores for each document
+                         - GitHub PR URL for human review
                          - Any errors or issues encountered during processing`
 
     this.agent = null // Will be set when task is assigned
@@ -46,7 +48,10 @@ class EnhanceMetadataTask {
       )
 
       const FrontmatterEnhancerTool = require('../tools/frontmatterEnhancerTool')
+      const GitHubPRTool = require('../tools/githubPRTool')
+
       const enhancerTool = new FrontmatterEnhancerTool()
+      const githubTool = new GitHubPRTool()
 
       if (
         !processedFiles ||
@@ -94,7 +99,9 @@ class EnhanceMetadataTask {
             originalContent: content,
             enhancedMetadata: analysisResult.enhancedMetadata,
             improvements: analysisResult.improvements,
-            ragScore: analysisResult.enhancedMetadata.rag_score,
+            ragScore:
+              analysisResult.enhancedMetadata.ragScore ||
+              analysisResult.enhancedMetadata.rag_score,
           })
 
           console.log(`✅ Analysis complete for: ${fileInfo.title}`)
@@ -129,6 +136,50 @@ class EnhanceMetadataTask {
       console.log(`   Successfully enhanced: ${summary.successful}`)
       console.log(`   Errors: ${summary.errors}`)
       console.log(`   Average RAG score: ${summary.averageRagScore}`)
+
+      // Create GitHub PR if we have successful enhancements
+      if (
+        enhancementResults.length > 0 &&
+        enhancementResults.some(r => r.success)
+      ) {
+        console.log('\n🔀 [Enhance Metadata Task] Creating GitHub PR...')
+
+        try {
+          const prResult = await githubTool.createEnhancementPR(
+            enhancementResults,
+            summary,
+          )
+
+          if (prResult.success) {
+            console.log(
+              `✅ [Enhance Metadata Task] PR created: ${prResult.prUrl}`,
+            )
+            summary.githubPR = {
+              url: prResult.prUrl,
+              number: prResult.prNumber,
+              branch: prResult.branch,
+            }
+          } else {
+            console.error(
+              `❌ [Enhance Metadata Task] PR creation failed: ${prResult.error}`,
+            )
+            errors.push({
+              file: 'GitHub PR Creation',
+              error: prResult.error,
+            })
+          }
+        } catch (prError) {
+          console.error(`❌ [Enhance Metadata Task] PR error:`, prError.message)
+          errors.push({
+            file: 'GitHub PR Creation',
+            error: prError.message,
+          })
+        }
+      } else {
+        console.log(
+          '\n⏭️ [Enhance Metadata Task] Skipping PR creation - no successful enhancements',
+        )
+      }
 
       return {
         success: true,
@@ -167,25 +218,92 @@ class EnhanceMetadataTask {
       })
     })
 
+    // Count added fields across all successful enhancements
+    const addedFieldTypes = {}
+    successful.forEach(result => {
+      if (result.addedFields) {
+        result.addedFields.forEach(field => {
+          addedFieldTypes[field] = (addedFieldTypes[field] || 0) + 1
+        })
+      }
+    })
+
     return {
       totalFiles: enhancements.length,
       successful: successful.length,
       errors: errors.length,
       averageRagScore,
-      ragScores: {
-        min: Math.min(...ragScores),
-        max: Math.max(...ragScores),
-        average: averageRagScore,
-      },
+      ragScores:
+        ragScores.length > 0
+          ? {
+              min: Math.min(...ragScores),
+              max: Math.max(...ragScores),
+              average: averageRagScore,
+            }
+          : null,
       improvementTypes,
+      addedFieldTypes,
       topImprovements: Object.entries(improvementTypes)
         .sort(([, a], [, b]) => b - a)
         .slice(0, 5)
         .map(([type, count]) => ({ type, count })),
+      topAddedFields: Object.entries(addedFieldTypes)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 5)
+        .map(([field, count]) => ({ field, count })),
       enhancementDetails: successful.map(result => ({
         file: result.filePath.split('/').pop(),
-        addedFields: result.addedFields,
+        addedFields: result.addedFields || [],
+        success: result.success,
       })),
+    }
+  }
+
+  /**
+   * Generate human-readable summary for console output
+   */
+  logEnhancementSummary(summary) {
+    console.log('\n📈 DETAILED ENHANCEMENT SUMMARY:')
+    console.log('=====================================')
+
+    if (summary.githubPR) {
+      console.log(`🔗 GitHub PR: ${summary.githubPR.url}`)
+      console.log(`📝 PR Number: #${summary.githubPR.number}`)
+      console.log(`🌿 Branch: ${summary.githubPR.branch}`)
+      console.log('')
+    }
+
+    console.log(`📁 Total files processed: ${summary.totalFiles}`)
+    console.log(`✅ Successfully enhanced: ${summary.successful}`)
+    console.log(`❌ Errors encountered: ${summary.errors}`)
+    console.log(`🎯 Average RAG score: ${summary.averageRagScore}/100`)
+
+    if (summary.ragScores) {
+      console.log(
+        `📊 RAG score range: ${summary.ragScores.min} - ${summary.ragScores.max}`,
+      )
+    }
+
+    if (summary.topAddedFields && summary.topAddedFields.length > 0) {
+      console.log('\n🏷️ MOST COMMON FIELD ADDITIONS:')
+      summary.topAddedFields.forEach((field, index) => {
+        console.log(`   ${index + 1}. ${field.field}: ${field.count} files`)
+      })
+    }
+
+    if (summary.topImprovements && summary.topImprovements.length > 0) {
+      console.log('\n🔧 TOP IMPROVEMENT TYPES:')
+      summary.topImprovements.forEach((improvement, index) => {
+        console.log(
+          `   ${index + 1}. ${improvement.type}: ${improvement.count} files`,
+        )
+      })
+    }
+
+    console.log('\n🎉 Metadata enhancement task completed!')
+
+    if (summary.githubPR) {
+      console.log(`\n👀 Review your changes: ${summary.githubPR.url}`)
     }
   }
 }

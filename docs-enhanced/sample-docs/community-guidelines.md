@@ -2,36 +2,40 @@
 sidebar_position: 7
 title: Community Guidelines
 description: >-
-  These community guidelines outline the rules and expectations for
-  participating in our software-related forums.
+  These community guidelines outline the forum rules and expectations for
+  professional conduct and relevant discussions.
 tags:
   - community
   - guidelines
   - forum
   - rules
+  - etiquette
+  - professionalism
+  - documentation
+  - support
+  - moderation
   - conduct
-  - forum etiquette
-  - posting rules
-  - community standards
 keywords:
-  - forum etiquette
-  - posting rules
-  - community standards
+  - professionalism
+  - documentation
+  - support
+  - moderation
+  - conduct
 topics:
-  - Community Standards
+  - Community Conduct
   - Forum Usage
 related:
   - Terms of Service
   - Privacy Policy
 ragImprovements:
   - Add examples of good posts
-  - Expand on consequences
-  - Clarify 'professional' conduct
+  - Expand on acceptable questions
+  - Clarify consequences of violations
 category: Community
 difficulty: beginner
 ragScore: 85
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T05:17:05.859Z'
+enhanced_at: '2025-06-27T22:11:09.627Z'
 original_title: Community Guidelines
 ---
 

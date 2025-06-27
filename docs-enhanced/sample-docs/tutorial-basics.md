@@ -2,40 +2,40 @@
 sidebar_position: 3
 title: Basic Tutorial
 description: >-
-  This tutorial guides you through creating a project, uploading data, and
-  configuring settings using the API.
+  Learn how to create a new project, upload data, check the import status, and
+  configure project settings using the API.
 tags:
   - API
   - project creation
   - data upload
   - settings
-  - CSV
+  - tutorial
+  - project management
+  - data ingestion
   - REST API
   - asynchronous processing
-  - JSON
-  - endpoint
-  - project configuration
+  - JSON configuration
 keywords:
+  - project management
+  - data ingestion
   - REST API
   - asynchronous processing
-  - JSON
-  - endpoint
-  - project configuration
+  - JSON configuration
 topics:
-  - API Interaction
-  - Project Management
+  - API interaction
+  - Project setup
 related:
   - authentication
-  - data processing
+  - error handling
 ragImprovements:
-  - Add example requests/responses
-  - Elaborate on data format
-  - Include error handling tips
+  - Add example request/response bodies
+  - Clarify default settings
+  - Include error handling information
 category: Tutorial
 difficulty: beginner
 ragScore: 85
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T05:17:05.865Z'
+enhanced_at: '2025-06-27T22:11:09.632Z'
 original_title: Basic Tutorial
 ---
 
