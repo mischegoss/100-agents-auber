@@ -2,6 +2,9 @@ const path = require('path')
 const fs = require('fs-extra')
 const matter = require('gray-matter')
 
+// Load environment variables from .env.local
+require('dotenv').config({ path: path.join(process.cwd(), '.env.local') })
+
 /**
  * Docusaurus RAG Prep Plugin
  * Enhances documentation for RAG effectiveness using KaibanJS agents
@@ -44,7 +47,27 @@ class RagPrepPlugin {
         `\n✅ Initial analysis complete! Processed ${this.processedFiles.length} files`,
       )
 
-      // Run AI agent processing
+      // Show enhancement efficiency summary
+      const filesToEnhance = this.processedFiles.filter(
+        file => file.needsEnhancement,
+      )
+      const recentlyEnhanced = this.processedFiles.filter(
+        file => !file.needsEnhancement,
+      )
+
+      console.log('\n📊 ENHANCEMENT EFFICIENCY SUMMARY:')
+      console.log(`   📁 Total files: ${this.processedFiles.length}`)
+      console.log(`   🔄 Need enhancement: ${filesToEnhance.length}`)
+      console.log(`   ✅ Recently enhanced (skip): ${recentlyEnhanced.length}`)
+
+      if (recentlyEnhanced.length > 0) {
+        const efficiencyGain = Math.round(
+          (recentlyEnhanced.length / this.processedFiles.length) * 100,
+        )
+        console.log(`   ⚡ Processing time saved: ~${efficiencyGain}%`)
+      }
+
+      // Run AI agent processing only on files that need it
       const agentResult = await this.runAgentProcessing()
 
       return {
@@ -96,7 +119,9 @@ class RagPrepPlugin {
       const parsed = matter(content)
       const relativePath = path.relative(this.siteDir, filePath)
 
-      // Basic document analysis
+      // Check if document was recently enhanced (skip if within 24 hours)
+      const needsEnhancement = this.shouldEnhanceDocument(parsed.data)
+
       const analysis = {
         path: relativePath,
         title: parsed.data.title || 'Untitled',
@@ -105,20 +130,27 @@ class RagPrepPlugin {
         hasMetadata: Object.keys(parsed.data).length > 0,
         frontmatter: parsed.data,
         contentPreview: parsed.content.substring(0, 100) + '...',
+        needsEnhancement, // Flag to determine if processing is needed
+        lastEnhanced: parsed.data.enhanced_at || null,
+        enhancedBy: parsed.data.enhanced_by || null,
       }
 
-      // Show immediate feedback
-      console.log(`\n📄 ${analysis.title}`)
-      console.log(`   Path: ${analysis.path}`)
-      console.log(
-        `   Words: ${analysis.wordCount} | Headings: ${analysis.headingCount}`,
-      )
-      console.log(`   Has metadata: ${analysis.hasMetadata ? '✅' : '❌'}`)
-
-      // Identify potential issues for RAG optimization
-      const issues = this.identifyBasicIssues(analysis)
-      if (issues.length > 0) {
-        console.log(`   🔧 Potential improvements: ${issues.join(', ')}`)
+      // Show status for each document
+      if (needsEnhancement) {
+        console.log(`📄 ${analysis.title}`)
+        console.log(`   Path: ${analysis.path}`)
+        console.log(
+          `   Words: ${analysis.wordCount} | Headings: ${analysis.headingCount}`,
+        )
+        console.log(`   Status: 🔄 Needs enhancement`)
+      } else {
+        console.log(`📄 ${analysis.title}`)
+        console.log(`   Path: ${analysis.path}`)
+        console.log(
+          `   Status: ✅ Recently enhanced (${this.getTimeSinceEnhancement(
+            parsed.data.enhanced_at,
+          )})`,
+        )
       }
 
       this.processedFiles.push(analysis)
@@ -128,32 +160,62 @@ class RagPrepPlugin {
   }
 
   /**
-   * Identify basic issues that agents can fix
+   * Determine if a document should be enhanced based on when it was last processed
    */
-  identifyBasicIssues(analysis) {
-    const issues = []
-
-    if (!analysis.hasMetadata) {
-      issues.push('Missing metadata')
+  shouldEnhanceDocument(frontmatter) {
+    // If never enhanced, definitely needs enhancement
+    if (!frontmatter.enhanced_by || !frontmatter.enhanced_at) {
+      return true
     }
 
-    if (analysis.wordCount < 50) {
-      issues.push('Very short content')
+    // If not enhanced by our plugin, needs enhancement
+    if (frontmatter.enhanced_by !== 'rag-prep-plugin') {
+      return true
     }
 
-    if (analysis.headingCount === 0) {
-      issues.push('No headings')
-    }
+    // Check if enhanced within last 24 hours
+    try {
+      const enhancedAt = new Date(frontmatter.enhanced_at)
+      const now = new Date()
+      const hoursSinceEnhancement = (now - enhancedAt) / (1000 * 60 * 60)
 
-    if (!analysis.frontmatter.description) {
-      issues.push('No description')
-    }
+      // Skip if enhanced within last 24 hours
+      if (hoursSinceEnhancement < 24) {
+        return false
+      }
 
-    if (!analysis.frontmatter.tags) {
-      issues.push('No tags')
+      return true // Needs re-enhancement after 24 hours
+    } catch (error) {
+      console.warn(
+        `⚠️ Invalid enhanced_at timestamp, will re-enhance: ${frontmatter.enhanced_at}`,
+      )
+      return true
     }
+  }
 
-    return issues
+  /**
+   * Get human-readable time since enhancement
+   */
+  getTimeSinceEnhancement(enhancedAt) {
+    if (!enhancedAt) return 'never'
+
+    try {
+      const enhanced = new Date(enhancedAt)
+      const now = new Date()
+      const hoursSince = (now - enhanced) / (1000 * 60 * 60)
+
+      if (hoursSince < 1) {
+        const minutesSince = Math.round(hoursSince * 60)
+        return `${minutesSince}m ago`
+      } else if (hoursSince < 24) {
+        return `${Math.round(hoursSince)}h ago`
+      } else {
+        const daysSince = Math.round(hoursSince / 24)
+        return `${daysSince}d ago`
+      }
+    } catch (error) {
+      return 'unknown'
+    }
   }
 
   /**
@@ -222,7 +284,6 @@ function ragPrepPlugin(context, options = {}) {
       // This is where processed content gets integrated back into Docusaurus
       console.log('📋 Content loaded into Docusaurus build process')
 
-      // Future: Create pages showing analytics, before/after comparisons
       const { createData } = actions
       await createData('rag-analysis.json', JSON.stringify(content, null, 2))
     },

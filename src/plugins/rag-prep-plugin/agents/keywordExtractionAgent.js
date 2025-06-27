@@ -10,10 +10,10 @@ class KeywordExtractionAgent {
     this.goal =
       'Analyze documentation content to extract keywords, improve metadata, and enhance discoverability using AI-powered analysis'
     this.backstory = `You are an expert content analyst specializing in documentation optimization. 
-                    You excel at understanding technical content, extracting meaningful keywords, 
-                    and creating metadata that improves document discoverability and RAG effectiveness.
-                    You use Google Gemini AI to perform deep content analysis and generate high-quality 
-                    descriptions, tags, and categories that make documentation more searchable and useful.`
+                  You excel at understanding technical content, extracting meaningful keywords, 
+                  and creating metadata that improves document discoverability and RAG effectiveness.
+                  You use Google Gemini AI to perform deep content analysis and generate high-quality 
+                  descriptions, tags, and categories that make documentation more searchable and useful.`
     this.verbose = true
     this.allowDelegation = false
     this.maxIter = 3
@@ -139,16 +139,38 @@ class KeywordExtractionAgent {
         enhancedMetadata.topics = ['general']
       }
 
-      // Convert snake_case to camelCase for better JavaScript compatibility
+      // Clean improvements array for simple YAML
+      if (
+        enhancedMetadata.rag_improvements &&
+        Array.isArray(enhancedMetadata.rag_improvements)
+      ) {
+        enhancedMetadata.ragImprovements =
+          enhancedMetadata.rag_improvements.map(item => {
+            return typeof item === 'string'
+              ? item.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()
+              : String(item)
+          })
+        delete enhancedMetadata.rag_improvements // Remove snake_case version
+      }
+
+      // Convert snake_case to camelCase and remove duplicates
       if (enhancedMetadata.rag_score) {
         enhancedMetadata.ragScore = enhancedMetadata.rag_score
+        delete enhancedMetadata.rag_score // Remove snake_case version
       }
-      if (enhancedMetadata.rag_improvements) {
-        enhancedMetadata.ragImprovements = enhancedMetadata.rag_improvements
+
+      // Ensure description is a simple string
+      if (
+        enhancedMetadata.description &&
+        typeof enhancedMetadata.description === 'string'
+      ) {
+        enhancedMetadata.description = enhancedMetadata.description
+          .replace(/\n/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
       }
 
       // Ensure keywords are also included in tags for better search indexing
-      // Docusaurus search definitely indexes tags, but may not index custom keyword fields
       const combinedTags = [
         ...new Set([...enhancedMetadata.tags, ...enhancedMetadata.keywords]),
       ]
@@ -168,46 +190,44 @@ class KeywordExtractionAgent {
    */
   buildAnalysisPrompt(context) {
     return `You are a documentation metadata expert. Analyze this technical document and generate enhanced metadata for better RAG effectiveness and searchability.
-  
-  DOCUMENT TO ANALYZE:
-  Title: ${context.title}
-  Word Count: ${context.wordCount}
-  Headings: ${context.headings
-    .map(h => `${'#'.repeat(h.level)} ${h.text}`)
-    .join('\n')}
-  
-  CONTENT:
-  ${context.content.substring(0, 2000)}${
+
+DOCUMENT TO ANALYZE:
+Title: ${context.title}
+Word Count: ${context.wordCount}
+Headings: ${context.headings
+      .map(h => `${'#'.repeat(h.level)} ${h.text}`)
+      .join('\n')}
+
+CONTENT:
+${context.content.substring(0, 2000)}${
       context.content.length > 2000 ? '...' : ''
     }
-  
-  CURRENT METADATA:
-  ${JSON.stringify(context.currentMetadata, null, 2)}
-  
-  Generate enhanced metadata as valid JSON with these fields:
-  {
-    "title": "Improved title if needed (keep original if good)",
-    "description": "Clear, SEO-friendly description (2-3 sentences)",
-    "tags": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
-    "keywords": ["semantic-keyword1", "semantic-keyword2", "semantic-keyword3"],
-    "category": "primary-category",
-    "difficulty": "beginner|intermediate|advanced",
-    "topics": ["main-topic1", "main-topic2"],
-    "related": ["related-concept1", "related-concept2"],
-    "rag_score": 85,
-    "rag_improvements": ["improvement1", "improvement2"]
-  }
-  
-  Rules:
-  - Keep existing title if it's already good
-  - Description should be concise but informative
-  - Tags should be specific and relevant to the content
-  - Keywords should capture semantic meaning
-  - Category should reflect the primary purpose
-  - RAG score (1-100) based on content clarity, structure, completeness
-  - RAG improvements should suggest specific enhancements
-  
-  Return ONLY valid JSON, no additional text.`
+
+CURRENT METADATA:
+${JSON.stringify(context.currentMetadata, null, 2)}
+
+Generate enhanced metadata as valid JSON with these fields:
+{
+  "title": "Improved title if needed (keep original if good)",
+  "description": "Clear, SEO-friendly description in one sentence",
+  "tags": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
+  "keywords": ["semantic-keyword1", "semantic-keyword2", "semantic-keyword3"],
+  "category": "primary-category",
+  "difficulty": "beginner|intermediate|advanced",
+  "topics": ["main-topic1", "main-topic2"],
+  "related": ["related-concept1", "related-concept2"],
+  "ragScore": 85,
+  "ragImprovements": ["Short improvement 1", "Short improvement 2", "Short improvement 3"]
+}
+
+CRITICAL REQUIREMENTS:
+- Keep description to ONE simple sentence without line breaks
+- All ragImprovements must be short, simple phrases (no multiline text)
+- Use only simple strings in arrays (no complex formatting)
+- Keep array items short and clear
+- Ensure all text is clean and quote-safe
+
+Return ONLY valid JSON, no markdown formatting, no code blocks.`
   }
 
   /**

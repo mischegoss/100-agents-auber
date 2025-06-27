@@ -2,40 +2,40 @@
 sidebar_position: 4
 title: Configuration
 description: >-
-  This document outlines the application's configuration process using a YAML
-  file. It provides details on setting up database connections, Redis caching,
-  and API rate limits and timeouts for customizing application behavior, along
-  with configuration file examples.
+  This document explains how to configure the application using the YAML
+  configuration file.
 tags:
   - configuration
-  - yaml
+  - YAML
+  - settings
   - database
   - redis
-  - api-settings
-  - application-configuration
-  - yaml-configuration
-  - api-rate-limiting
+  - application configuration
+  - YAML file
+  - database settings
+  - Redis cache
+  - API settings
 keywords:
-  - application-configuration
-  - yaml-configuration
-  - api-rate-limiting
-category: Configuration
-difficulty: beginner
+  - application configuration
+  - YAML file
+  - database settings
+  - Redis cache
+  - API settings
 topics:
   - Configuration
-  - Application Settings
+  - Application Setup
 related:
   - YAML syntax
-  - Redis configuration
-  - API rate limiting
-rag_score: 85
-rag_improvements: &ref_0
-  - Add default values for database host and Redis endpoint.
-  - Include a section on validating the YAML configuration file.
+  - Environment variables
+ragImprovements:
+  - Add default values
+  - Explain environment variable overrides
+  - Link to YAML syntax guide
+category: Configuration
+difficulty: beginner
 ragScore: 85
-ragImprovements: *ref_0
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T04:31:33.277Z'
+enhanced_at: '2025-06-27T05:17:05.860Z'
 original_title: Configuration
 ---
 

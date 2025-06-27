@@ -2,44 +2,40 @@
 sidebar_position: 6
 title: Advanced Concepts
 description: >-
-  Delve into advanced system architecture, covering message queues with
-  RabbitMQ, state machine implementation, JVM tuning with G1GC, and
-  containerized network configuration. This guide helps optimize system
-  performance, resilience, and scalability through informed design and
-  configuration.
+  This document details advanced concepts related to system architecture,
+  internals, memory management, and network configuration.
 tags:
-  - RabbitMQ
-  - state machines
-  - G1GC
-  - Redis
+  - architecture
+  - scalability
+  - performance
+  - memory management
+  - networking
+  - message queue
+  - state machine
+  - garbage collection
+  - redis
   - containerization
-  - message queue decoupling
-  - JVM garbage collection tuning
-  - container networking best practices
 keywords:
-  - message queue decoupling
-  - JVM garbage collection tuning
-  - container networking best practices
-category: System Architecture
-difficulty: advanced
+  - message queue
+  - state machine
+  - garbage collection
+  - redis
+  - containerization
 topics:
-  - System Design
+  - System Architecture
   - Performance Tuning
 related:
-  - Basic Concepts
-  - Troubleshooting Guide
-rag_score: 85
-rag_improvements: &ref_0
-  - >-
-    Add a diagram illustrating the RabbitMQ message flow and worker pool
-    architecture.
-  - >-
-    Provide example configuration snippets for Redis eviction policies and G1GC
-    JVM flags.
+  - API Design
+  - Database Optimization
+ragImprovements:
+  - Add diagrams
+  - Expand on error handling
+  - Provide configuration examples
+category: System Design
+difficulty: advanced
 ragScore: 85
-ragImprovements: *ref_0
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T04:31:33.274Z'
+enhanced_at: '2025-06-27T05:17:05.857Z'
 original_title: Advanced Concepts
 ---
 

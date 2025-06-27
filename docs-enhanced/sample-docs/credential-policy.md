@@ -2,42 +2,37 @@
 sidebar_position: 3
 title: Credential Policy
 description: >-
-  This document outlines the organization's policy for managing user
-  credentials. It covers password complexity, rotation guidelines, and user
-  responsibilities for maintaining a strong security posture and complying with
-  relevant security frameworks. This policy is essential for all users and
-  systems within the enterprise ecosystem.
+  This document outlines the organization's credential policy, covering user
+  responsibilities, governance, and security measures.
 tags:
-  - credential management
-  - password policy
-  - security compliance
-  - user authentication
-  - access control
+  - credential
+  - policy
+  - security
+  - passwords
+  - authentication
   - credential lifecycle
   - password complexity
-  - user accountability
+  - security governance
 keywords:
   - credential lifecycle
   - password complexity
-  - user accountability
+  - security governance
+topics:
+  - Security
+  - Policy
+  - Authentication
+related:
+  - Access Control Policy
+  - Data Security Policy
+ragImprovements:
+  - Add examples
+  - Clarify enforcement
+  - Expand on reporting
 category: Security Policies
 difficulty: beginner
-topics:
-  - Information Security
-  - Access Management
-related:
-  - Data Security Policy
-  - Acceptable Use Policy
-rag_score: 85
-rag_improvements: &ref_0
-  - >-
-    Add specific password complexity requirements (e.g., minimum length,
-    character types, prohibited patterns).
-  - Include details on account lockout policies and password reset procedures.
 ragScore: 85
-ragImprovements: *ref_0
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T04:31:33.280Z'
+enhanced_at: '2025-06-27T05:17:05.862Z'
 original_title: Credential Policy
 ---
 

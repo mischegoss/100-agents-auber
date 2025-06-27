@@ -3,44 +3,35 @@ sidebar_position: 7
 title: Community Guidelines
 description: >-
   These community guidelines outline the rules and expectations for
-  participating in our software forum. They promote a professional and
-  solution-oriented environment by requiring users to search for existing
-  solutions and contribute constructively. Failure to comply will result in a
-  ban.
+  participating in our software-related forums.
 tags:
-  - forum rules
-  - community standards
-  - acceptable use policy
+  - community
+  - guidelines
+  - forum
+  - rules
+  - conduct
   - forum etiquette
-  - posting guidelines
-  - forum professionalism
-  - constructive contribution
-  - community moderation
+  - posting rules
+  - community standards
 keywords:
-  - forum professionalism
-  - constructive contribution
-  - community moderation
-category: Community Support
-difficulty: beginner
+  - forum etiquette
+  - posting rules
+  - community standards
 topics:
-  - forum guidelines
-  - community expectations
+  - Community Standards
+  - Forum Usage
 related:
-  - terms of service
-  - code of conduct
-rag_score: 85
-rag_improvements: &ref_0
-  - >-
-    Provide specific examples of acceptable and unacceptable forum posts (e.g.,
-    acceptable: providing a detailed bug report with steps to reproduce;
-    unacceptable: simply stating 'I have the same problem').
-  - >-
-    Explain the process for appealing a ban, including the criteria considered
-    for reinstatement.
+  - Terms of Service
+  - Privacy Policy
+ragImprovements:
+  - Add examples of good posts
+  - Expand on consequences
+  - Clarify 'professional' conduct
+category: Community
+difficulty: beginner
 ragScore: 85
-ragImprovements: *ref_0
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T04:31:33.277Z'
+enhanced_at: '2025-06-27T05:17:05.859Z'
 original_title: Community Guidelines
 ---
 

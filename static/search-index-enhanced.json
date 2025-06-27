@@ -1,0 +1,534 @@
+{
+  "generated": "2025-06-27T06:19:07.502Z",
+  "version": "1.0.0",
+  "totalDocuments": 14,
+  "enhancementRate": 100,
+  "averageRagScore": 85,
+  "capabilities": {
+    "semanticSearch": true,
+    "aiProcessing": true,
+    "relatedDocs": true,
+    "ragScoring": true,
+    "topicClustering": true
+  },
+  "documents": [
+    {
+      "id": "account-lockout",
+      "title": "Account Lockout",
+      "description": "Comprehensive guide to preventing and resolving account lockouts, including timeout policies and recovery procedures.",
+      "keywords": [
+        "authentication",
+        "lockout",
+        "security",
+        "timeout",
+        "access-control",
+        "failed-login",
+        "account-recovery",
+        "session-management"
+      ],
+      "content": "This is the content for Account Lockout. It contains information about account lockout.",
+      "url": "/docs-enhanced/sample-docs/account-lockout",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 92,
+      "relatedDocs": [
+        "auth-tokens",
+        "credential-management",
+        "system-integration"
+      ],
+      "semanticCategories": [
+        "authentication"
+      ],
+      "topicClusters": [
+        "security"
+      ],
+      "searchPriority": 9,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 87,
+      "readingTime": 1,
+      "tags": [
+        "authentication"
+      ]
+    },
+    {
+      "id": "auth-tokens",
+      "title": "Auth Tokens",
+      "description": "Complete reference for managing authentication tokens, including generation, validation, expiry, and security best practices.",
+      "keywords": [
+        "authentication",
+        "tokens",
+        "JWT",
+        "session",
+        "security",
+        "expiry",
+        "validation",
+        "bearer-token",
+        "oauth"
+      ],
+      "content": "This is the content for Auth Tokens. It contains information about auth tokens.",
+      "url": "/docs-enhanced/sample-docs/auth-tokens",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 95,
+      "relatedDocs": [
+        "account-lockout",
+        "credential-management",
+        "system-integration"
+      ],
+      "semanticCategories": [
+        "authentication"
+      ],
+      "topicClusters": [
+        "security"
+      ],
+      "searchPriority": 9,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 79,
+      "readingTime": 1,
+      "tags": [
+        "authentication"
+      ]
+    },
+    {
+      "id": "credential-management",
+      "title": "Credential Management",
+      "description": "Advanced credential management including password policies, multi-factor authentication, and secure storage mechanisms.",
+      "keywords": [
+        "credentials",
+        "password",
+        "MFA",
+        "security",
+        "storage",
+        "encryption",
+        "authentication",
+        "access-control"
+      ],
+      "content": "This is the content for Credential Management. It contains information about credential management.",
+      "url": "/docs-enhanced/sample-docs/credential-management",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 88,
+      "relatedDocs": [
+        "account-lockout",
+        "auth-tokens",
+        "credential-policy"
+      ],
+      "semanticCategories": [
+        "authentication"
+      ],
+      "topicClusters": [
+        "security"
+      ],
+      "searchPriority": 8,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 99,
+      "readingTime": 1,
+      "tags": [
+        "authentication"
+      ]
+    },
+    {
+      "id": "credential-policy",
+      "title": "Credential Policy",
+      "description": "Enterprise credential policies covering password requirements, security standards, and compliance guidelines.",
+      "keywords": [
+        "policy",
+        "credentials",
+        "security",
+        "compliance",
+        "governance",
+        "authentication",
+        "password-policy",
+        "access-rules"
+      ],
+      "content": "This is the content for Credential Policy. It contains information about credential policy.",
+      "url": "/docs-enhanced/sample-docs/credential-policy",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 85,
+      "relatedDocs": [
+        "credential-management",
+        "system-integration"
+      ],
+      "semanticCategories": [
+        "authentication"
+      ],
+      "topicClusters": [
+        "security"
+      ],
+      "searchPriority": 5,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 91,
+      "readingTime": 1,
+      "tags": [
+        "authentication"
+      ]
+    },
+    {
+      "id": "system-integration",
+      "title": "System Integration",
+      "description": "Enterprise system integration patterns including SSO, LDAP, and API authentication strategies.",
+      "keywords": [
+        "integration",
+        "SSO",
+        "LDAP",
+        "API",
+        "enterprise",
+        "authentication",
+        "federation",
+        "directory-services",
+        "endpoints"
+      ],
+      "content": "This is the content for System Integration. It contains information about system integration.",
+      "url": "/docs-enhanced/sample-docs/system-integration",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 90,
+      "relatedDocs": [
+        "auth-tokens",
+        "credential-management",
+        "env-setup"
+      ],
+      "semanticCategories": [
+        "system"
+      ],
+      "topicClusters": [
+        "setup",
+        "advanced"
+      ],
+      "searchPriority": 6,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 93,
+      "readingTime": 1,
+      "tags": [
+        "system"
+      ]
+    },
+    {
+      "id": "tutorial-basics",
+      "title": "Tutorial Basics",
+      "description": "Step-by-step getting started tutorial for new users with comprehensive onboarding procedures.",
+      "keywords": [
+        "tutorial",
+        "getting-started",
+        "beginner",
+        "introduction",
+        "basics",
+        "first-steps",
+        "onboarding"
+      ],
+      "content": "This is the content for Tutorial Basics. It contains information about tutorial basics.",
+      "url": "/docs-enhanced/sample-docs/tutorial-basics",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 78,
+      "relatedDocs": [
+        "configuration-basics",
+        "env-setup"
+      ],
+      "semanticCategories": [
+        "user-guide"
+      ],
+      "topicClusters": [
+        "setup"
+      ],
+      "searchPriority": 10,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 87,
+      "readingTime": 1,
+      "tags": [
+        "user-guide"
+      ]
+    },
+    {
+      "id": "configuration-basics",
+      "title": "Configuration Basics",
+      "description": "Essential system configuration guide covering initial setup, deployment, and environment preparation.",
+      "keywords": [
+        "configuration",
+        "setup",
+        "deployment",
+        "environment",
+        "installation",
+        "initialization",
+        "system-config"
+      ],
+      "content": "This is the content for Configuration Basics. It contains information about configuration basics.",
+      "url": "/docs-enhanced/sample-docs/configuration-basics",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 80,
+      "relatedDocs": [
+        "tutorial-basics",
+        "env-setup",
+        "system-integration"
+      ],
+      "semanticCategories": [
+        "system"
+      ],
+      "topicClusters": [
+        "setup"
+      ],
+      "searchPriority": 7,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 97,
+      "readingTime": 1,
+      "tags": [
+        "system"
+      ]
+    },
+    {
+      "id": "env-setup",
+      "title": "Env Setup",
+      "description": "Advanced environment configuration framework for production and development deployments.",
+      "keywords": [
+        "environment",
+        "setup",
+        "configuration",
+        "deployment",
+        "infrastructure",
+        "system-configuration",
+        "installation"
+      ],
+      "content": "This is the content for Env Setup. It contains information about env setup.",
+      "url": "/docs-enhanced/sample-docs/env-setup",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 87,
+      "relatedDocs": [
+        "configuration-basics",
+        "system-integration"
+      ],
+      "semanticCategories": [
+        "system"
+      ],
+      "topicClusters": [
+        "setup",
+        "advanced"
+      ],
+      "searchPriority": 5,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 75,
+      "readingTime": 1,
+      "tags": [
+        "system"
+      ]
+    },
+    {
+      "id": "create-a-page",
+      "title": "Create A Page",
+      "description": "System diagnostic procedures and page creation workflows for content management.",
+      "keywords": [
+        "documentation",
+        "page-creation",
+        "content-management",
+        "publishing",
+        "authoring",
+        "system-procedures"
+      ],
+      "content": "This is the content for Create A Page. It contains information about create a page.",
+      "url": "/docs-enhanced/sample-docs/create-a-page",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 75,
+      "relatedDocs": [
+        "markdown-features",
+        "tutorial-basics"
+      ],
+      "semanticCategories": [
+        "user-guide"
+      ],
+      "topicClusters": [
+        "content"
+      ],
+      "searchPriority": 5,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 83,
+      "readingTime": 1,
+      "tags": [
+        "user-guide"
+      ]
+    },
+    {
+      "id": "advanced-topics",
+      "title": "Advanced Topics",
+      "description": "Advanced technical concepts and expert-level configuration options for experienced users.",
+      "keywords": [
+        "advanced",
+        "concepts",
+        "expert",
+        "complex",
+        "technical",
+        "in-depth",
+        "professional"
+      ],
+      "content": "This is the content for Advanced Topics. It contains information about advanced topics.",
+      "url": "/docs-enhanced/sample-docs/advanced-topics",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 93,
+      "relatedDocs": [
+        "system-integration",
+        "credential-management"
+      ],
+      "semanticCategories": [
+        "administration"
+      ],
+      "topicClusters": [
+        "advanced",
+        "maintenance"
+      ],
+      "searchPriority": 4,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 87,
+      "readingTime": 1,
+      "tags": [
+        "administration"
+      ]
+    },
+    {
+      "id": "markdown-features",
+      "title": "Markdown Features",
+      "description": "Comprehensive markdown syntax guide and formatting options for documentation authoring.",
+      "keywords": [
+        "markdown",
+        "formatting",
+        "documentation",
+        "content",
+        "authoring",
+        "syntax",
+        "writing"
+      ],
+      "content": "This is the content for Markdown Features. It contains information about markdown features.",
+      "url": "/docs-enhanced/sample-docs/markdown-features",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 82,
+      "relatedDocs": [
+        "create-a-page",
+        "community-guidelines"
+      ],
+      "semanticCategories": [
+        "user-guide"
+      ],
+      "topicClusters": [
+        "content"
+      ],
+      "searchPriority": 3,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 91,
+      "readingTime": 1,
+      "tags": [
+        "user-guide"
+      ]
+    },
+    {
+      "id": "community-guidelines",
+      "title": "Community Guidelines",
+      "description": "Community standards, best practices, and collaboration guidelines for effective teamwork.",
+      "keywords": [
+        "community",
+        "guidelines",
+        "standards",
+        "best-practices",
+        "collaboration",
+        "social",
+        "conduct"
+      ],
+      "content": "This is the content for Community Guidelines. It contains information about community guidelines.",
+      "url": "/docs-enhanced/sample-docs/community-guidelines",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 79,
+      "relatedDocs": [
+        "markdown-features"
+      ],
+      "semanticCategories": [
+        "community"
+      ],
+      "topicClusters": [
+        "content"
+      ],
+      "searchPriority": 2,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 97,
+      "readingTime": 1,
+      "tags": [
+        "community"
+      ]
+    },
+    {
+      "id": "release-notes",
+      "title": "Release Notes",
+      "description": "Latest product updates, new features, and version history with detailed change documentation.",
+      "keywords": [
+        "release",
+        "updates",
+        "changelog",
+        "version",
+        "features",
+        "improvements",
+        "announcements"
+      ],
+      "content": "This is the content for Release Notes. It contains information about release notes.",
+      "url": "/docs-enhanced/sample-docs/release-notes",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 84,
+      "relatedDocs": [
+        "advanced-topics"
+      ],
+      "semanticCategories": [
+        "administration"
+      ],
+      "topicClusters": [
+        "maintenance"
+      ],
+      "searchPriority": 1,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 83,
+      "readingTime": 1,
+      "tags": [
+        "administration"
+      ]
+    },
+    {
+      "id": "audit-log-review",
+      "title": "Audit Log Review",
+      "description": "Security audit procedures, log analysis, and compliance monitoring for system accountability.",
+      "keywords": [
+        "audit",
+        "logging",
+        "review",
+        "compliance",
+        "monitoring",
+        "security",
+        "tracking",
+        "accountability"
+      ],
+      "content": "This is the content for Audit Log Review. It contains information about audit log review.",
+      "url": "/docs-enhanced/sample-docs/audit-log-review",
+      "isEnhanced": true,
+      "enhancementLevel": "ai-enhanced",
+      "ragScore": 86,
+      "relatedDocs": [
+        "account-lockout",
+        "credential-policy"
+      ],
+      "semanticCategories": [
+        "administration"
+      ],
+      "topicClusters": [
+        "security",
+        "maintenance"
+      ],
+      "searchPriority": 1,
+      "lastModified": "2025-06-27T06:19:07.502Z",
+      "contentLength": 89,
+      "readingTime": 1,
+      "tags": [
+        "administration"
+      ]
+    }
+  ]
+}

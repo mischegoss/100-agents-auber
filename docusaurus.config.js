@@ -74,6 +74,8 @@ const config = {
         verbose: true,
       },
     ],
+    // Search Index Generator Plugin
+    path.resolve('./src/plugins/searchindex.js'),
   ],
 
   presets: [
@@ -119,16 +121,6 @@ const config = {
             label: 'Original Docs',
           },
           {
-            to: '/demo',
-            label: 'Live Demo',
-            position: 'left',
-          },
-          {
-            to: '/analytics',
-            label: 'Analytics',
-            position: 'left',
-          },
-          {
             href: 'https://github.com/yourusername/rag-plugin-demo-site',
             label: 'GitHub',
             position: 'right',
@@ -148,23 +140,6 @@ const config = {
               {
                 label: 'Original Docs',
                 to: '/docs-original/intro',
-              },
-            ],
-          },
-          {
-            title: 'Demo & Tools',
-            items: [
-              {
-                label: 'Interactive Demo',
-                to: '/demo',
-              },
-              {
-                label: 'Analytics Dashboard',
-                to: '/analytics',
-              },
-              {
-                label: 'Plugin Documentation',
-                to: '/docs-enhanced/plugin-setup',
               },
             ],
           },

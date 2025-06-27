@@ -72,7 +72,6 @@ class DocumentProcessingTeam {
     console.log('\n🎯 [Document Team] Starting document processing workflow...')
 
     try {
-      // Debug: Check input
       console.log(
         `🔍 [Debug Team] Received processedFiles: ${
           processedFiles?.length || 'undefined'
@@ -89,27 +88,74 @@ class DocumentProcessingTeam {
         throw new Error('No files to process')
       }
 
+      // Filter to only files that need enhancement
+      const filesToEnhance = processedFiles.filter(
+        file => file.needsEnhancement,
+      )
+      const skippedFiles = processedFiles.filter(file => !file.needsEnhancement)
+
+      console.log(`📊 [Document Team] Enhancement Summary:`)
+      console.log(`   📁 Total files found: ${processedFiles.length}`)
+      console.log(`   🔄 Files to enhance: ${filesToEnhance.length}`)
+      console.log(
+        `   ✅ Files skipped (recently enhanced): ${skippedFiles.length}`,
+      )
+
+      if (skippedFiles.length > 0) {
+        console.log(`\n⏭️ [Document Team] Skipped files (enhanced within 24h):`)
+        skippedFiles.forEach(file => {
+          console.log(
+            `   • ${file.title} (${this.getTimeSinceEnhancement(
+              file.lastEnhanced,
+            )})`,
+          )
+        })
+      }
+
+      if (filesToEnhance.length === 0) {
+        console.log(
+          '\n🎉 [Document Team] All files are up to date! No enhancement needed.',
+        )
+        return {
+          success: true,
+          summary: {
+            totalFiles: processedFiles.length,
+            successful: 0,
+            skipped: skippedFiles.length,
+            errors: 0,
+            averageRagScore: 0,
+            message: 'All files already enhanced within 24 hours',
+          },
+          enhancements: [],
+          errors: [],
+        }
+      }
+
       if (!this.agents.length || !this.tasks.length) {
         await this.initialize()
       }
 
       const context = {
-        processedFiles,
+        processedFiles: filesToEnhance, // Only process files that need enhancement
         timestamp: new Date().toISOString(),
         teamName: this.name,
       }
 
       console.log(
-        `📋 [Document Team] Processing ${processedFiles.length} documents...`,
+        `\n🤖 [Document Team] Processing ${filesToEnhance.length} files that need enhancement...`,
       )
 
       // Execute the enhancement task
-      const enhanceTask = this.tasks[0] // We only have one task for now
+      const enhanceTask = this.tasks[0]
       const result = await enhanceTask.execute(context)
 
       if (result.success) {
+        // Add skipped files info to the result
+        result.summary.skipped = skippedFiles.length
+        result.summary.totalFiles = processedFiles.length
+
         console.log('✅ [Document Team] Workflow completed successfully!')
-        this.logWorkflowResults(result)
+        this.logWorkflowResults(result, skippedFiles.length)
       } else {
         console.error('❌ [Document Team] Workflow failed:', result.error)
       }
@@ -127,15 +173,41 @@ class DocumentProcessingTeam {
   }
 
   /**
+   * Get human-readable time since enhancement
+   */
+  getTimeSinceEnhancement(enhancedAt) {
+    if (!enhancedAt) return 'never'
+
+    try {
+      const enhanced = new Date(enhancedAt)
+      const now = new Date()
+      const hoursSince = (now - enhanced) / (1000 * 60 * 60)
+
+      if (hoursSince < 1) {
+        const minutesSince = Math.round(hoursSince * 60)
+        return `${minutesSince}m ago`
+      } else if (hoursSince < 24) {
+        return `${Math.round(hoursSince)}h ago`
+      } else {
+        const daysSince = Math.round(hoursSince / 24)
+        return `${daysSince}d ago`
+      }
+    } catch (error) {
+      return 'unknown'
+    }
+  }
+
+  /**
    * Log detailed workflow results
    */
-  logWorkflowResults(result) {
+  logWorkflowResults(result, skippedCount = 0) {
     const { summary } = result
 
     console.log('\n📊 WORKFLOW RESULTS SUMMARY:')
     console.log('================================')
-    console.log(`📁 Total files processed: ${summary.totalFiles}`)
+    console.log(`📁 Total files found: ${summary.totalFiles}`)
     console.log(`✅ Successfully enhanced: ${summary.successful}`)
+    console.log(`⏭️ Skipped (recently enhanced): ${skippedCount}`)
     console.log(`❌ Errors encountered: ${summary.errors}`)
     console.log(`🎯 Average RAG score: ${summary.averageRagScore}/100`)
 
@@ -145,14 +217,28 @@ class DocumentProcessingTeam {
       )
     }
 
-    console.log('\n🔧 TOP IMPROVEMENTS MADE:')
-    summary.topImprovements.forEach((improvement, index) => {
-      console.log(
-        `   ${index + 1}. ${improvement.type} (${improvement.count} files)`,
+    // Show efficiency gains
+    if (skippedCount > 0) {
+      const efficiencyGain = Math.round(
+        (skippedCount / summary.totalFiles) * 100,
       )
-    })
+      console.log(
+        `⚡ Efficiency: ${efficiencyGain}% of processing time saved by skipping recent enhancements`,
+      )
+    }
 
-    if (result.errors.length > 0) {
+    console.log('\n🔧 TOP IMPROVEMENTS MADE:')
+    if (summary.topImprovements && summary.topImprovements.length > 0) {
+      summary.topImprovements.forEach((improvement, index) => {
+        console.log(
+          `   ${index + 1}. ${improvement.type} (${improvement.count} files)`,
+        )
+      })
+    } else {
+      console.log('   No improvements to display')
+    }
+
+    if (result.errors && result.errors.length > 0) {
       console.log('\n⚠️  ERRORS:')
       result.errors.forEach(error => {
         console.log(`   - ${error.file}: ${error.error}`)

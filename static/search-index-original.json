@@ -1,0 +1,225 @@
+{
+  "generated": "2025-06-27T06:19:07.502Z",
+  "version": "1.0.0",
+  "totalDocuments": 14,
+  "enhancementRate": 0,
+  "capabilities": {
+    "semanticSearch": false,
+    "aiProcessing": false,
+    "relatedDocs": false,
+    "ragScoring": false,
+    "topicClustering": false
+  },
+  "documents": [
+    {
+      "id": "account-lockout",
+      "title": "Account Lockout",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Account Lockout. It contains information about account lockout.",
+      "url": "/docs-original/sample-docs/account-lockout",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "auth-tokens",
+      "title": "Auth Tokens",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Auth Tokens. It contains information about auth tokens.",
+      "url": "/docs-original/sample-docs/auth-tokens",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "credential-management",
+      "title": "Credential Management",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Credential Management. It contains information about credential management.",
+      "url": "/docs-original/sample-docs/credential-management",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "credential-policy",
+      "title": "Credential Policy",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Credential Policy. It contains information about credential policy.",
+      "url": "/docs-original/sample-docs/credential-policy",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "system-integration",
+      "title": "System Integration",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for System Integration. It contains information about system integration.",
+      "url": "/docs-original/sample-docs/system-integration",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "tutorial-basics",
+      "title": "Tutorial Basics",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Tutorial Basics. It contains information about tutorial basics.",
+      "url": "/docs-original/sample-docs/tutorial-basics",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "configuration-basics",
+      "title": "Configuration Basics",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Configuration Basics. It contains information about configuration basics.",
+      "url": "/docs-original/sample-docs/configuration-basics",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "env-setup",
+      "title": "Env Setup",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Env Setup. It contains information about env setup.",
+      "url": "/docs-original/sample-docs/env-setup",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "create-a-page",
+      "title": "Create A Page",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Create A Page. It contains information about create a page.",
+      "url": "/docs-original/sample-docs/create-a-page",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "advanced-topics",
+      "title": "Advanced Topics",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Advanced Topics. It contains information about advanced topics.",
+      "url": "/docs-original/sample-docs/advanced-topics",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "markdown-features",
+      "title": "Markdown Features",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Markdown Features. It contains information about markdown features.",
+      "url": "/docs-original/sample-docs/markdown-features",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "community-guidelines",
+      "title": "Community Guidelines",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Community Guidelines. It contains information about community guidelines.",
+      "url": "/docs-original/sample-docs/community-guidelines",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "release-notes",
+      "title": "Release Notes",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Release Notes. It contains information about release notes.",
+      "url": "/docs-original/sample-docs/release-notes",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    },
+    {
+      "id": "audit-log-review",
+      "title": "Audit Log Review",
+      "description": "Basic documentation page.",
+      "keywords": [
+        "documentation",
+        "basic",
+        "guide"
+      ],
+      "content": "This is the content for Audit Log Review. It contains information about audit log review.",
+      "url": "/docs-original/sample-docs/audit-log-review",
+      "isEnhanced": false,
+      "enhancementLevel": "basic",
+      "lastModified": "2025-06-27T06:19:07.502Z"
+    }
+  ]
+}

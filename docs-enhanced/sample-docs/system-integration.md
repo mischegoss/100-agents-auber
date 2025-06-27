@@ -2,46 +2,40 @@
 sidebar_position: 3
 title: System Integration Endpoints
 description: >-
-  This document details the system integration endpoints, covering data
-  retrieval and modification via RESTful APIs. It includes authentication
-  methods, rate limiting policies, and error handling strategies, along with
-  code examples for common operations.
+  This document details the network endpoints used for system integration with
+  backend services, including data retrieval and modification.
 tags:
-  - REST
   - API
-  - Endpoints
-  - Integration
+  - endpoints
+  - integration
+  - REST
   - HTTP
-  - JSON
-  - Authentication
-  - Rate Limiting
-  - User Profile
-  - Data Modification
+  - system integration
+  - API endpoints
+  - REST API
+  - data retrieval
+  - user profile
 keywords:
-  - API authentication
-  - RESTful architecture
-  - Data exchange
-  - Error codes
-  - Endpoint security
-category: API Documentation
-difficulty: intermediate
+  - system integration
+  - API endpoints
+  - REST API
+  - data retrieval
+  - user profile
 topics:
-  - API Integration
-  - RESTful APIs
+  - API
+  - Integration
 related:
   - Authentication
-  - Error Handling
   - Rate Limiting
-  - JSON Schema Validation
-rag_score: 87
-rag_improvements: &ref_0
-  - 'Include specific rate limit values (e.g., requests per minute).'
-  - Provide a comprehensive error code table with potential resolutions.
-  - Add information about request idempotency for idempotent API calls.
-ragScore: 87
-ragImprovements: *ref_0
+ragImprovements:
+  - Add versioning information
+  - Expand on error code explanations
+  - Include request examples
+category: API Documentation
+difficulty: intermediate
+ragScore: 85
 enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T04:31:33.282Z'
+enhanced_at: '2025-06-27T05:17:05.864Z'
 original_title: System Integration Endpoints
 ---
 

@@ -23,16 +23,8 @@ class FrontmatterEnhancerTool {
       // Parse the original file
       const parsed = matter(originalContent)
 
-      // Clean the enhanced metadata to avoid YAML formatting issues
-      const cleanedMetadata = { ...enhancedMetadata }
-
-      // Ensure description is a clean single-line string
-      if (cleanedMetadata.description) {
-        cleanedMetadata.description = cleanedMetadata.description
-          .replace(/\n/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim()
-      }
+      // Clean and simplify the enhanced metadata for maximum YAML compatibility
+      const cleanedMetadata = this.cleanMetadataForSimpleYaml(enhancedMetadata)
 
       // Merge original metadata with enhancements (enhanced takes precedence)
       const mergedMetadata = {
@@ -44,8 +36,12 @@ class FrontmatterEnhancerTool {
         original_title: parsed.data.title || 'Untitled',
       }
 
-      // Reconstruct the file with enhanced frontmatter
-      const enhancedFile = matter.stringify(parsed.content, mergedMetadata)
+      // Reconstruct the file with enhanced frontmatter using clean YAML
+      const enhancedFile = matter.stringify(parsed.content, mergedMetadata, {
+        // Force simple YAML output - no references, no complex syntax
+        noRefs: true,
+        flowLevel: -1,
+      })
 
       // Write the enhanced file back
       await fs.writeFile(filePath, enhancedFile, 'utf8')
@@ -71,6 +67,100 @@ class FrontmatterEnhancerTool {
         error: error.message,
       }
     }
+  }
+
+  /**
+   * Clean metadata to ensure simple, compatible YAML output
+   */
+  cleanMetadataForSimpleYaml(enhancedMetadata) {
+    const cleaned = {}
+
+    // Clean description - ensure it's a simple string
+    if (enhancedMetadata.description) {
+      cleaned.description = enhancedMetadata.description
+        .replace(/\n/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/"/g, "'") // Replace quotes to avoid YAML escaping issues
+    }
+
+    // Clean arrays - ensure they're simple string arrays
+    ;['tags', 'keywords', 'topics', 'related'].forEach(field => {
+      if (enhancedMetadata[field] && Array.isArray(enhancedMetadata[field])) {
+        cleaned[field] = enhancedMetadata[field]
+          .filter(item => item && typeof item === 'string' && item.trim())
+          .map(item => item.trim().replace(/"/g, "'"))
+          .slice(0, 10) // Limit array size
+
+        // Ensure at least one value for critical fields
+        if (
+          (field === 'tags' || field === 'keywords') &&
+          cleaned[field].length === 0
+        ) {
+          cleaned[field] = ['documentation']
+        }
+      }
+    })
+
+    // Clean improvements array - ensure simple strings
+    if (
+      enhancedMetadata.rag_improvements &&
+      Array.isArray(enhancedMetadata.rag_improvements)
+    ) {
+      cleaned.ragImprovements = enhancedMetadata.rag_improvements
+        .filter(item => item && typeof item === 'string')
+        .map(item =>
+          item
+            .replace(/\n/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .replace(/"/g, "'"),
+        )
+        .slice(0, 5) // Limit to 5 improvements
+    } else if (
+      enhancedMetadata.ragImprovements &&
+      Array.isArray(enhancedMetadata.ragImprovements)
+    ) {
+      cleaned.ragImprovements = enhancedMetadata.ragImprovements
+        .filter(item => item && typeof item === 'string')
+        .map(item =>
+          item
+            .replace(/\n/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .replace(/"/g, "'"),
+        )
+        .slice(0, 5)
+    }
+
+    // Simple scalar values - avoid any complex types
+    if (
+      enhancedMetadata.category &&
+      typeof enhancedMetadata.category === 'string'
+    ) {
+      cleaned.category = enhancedMetadata.category.trim()
+    }
+
+    if (
+      enhancedMetadata.difficulty &&
+      typeof enhancedMetadata.difficulty === 'string'
+    ) {
+      cleaned.difficulty = enhancedMetadata.difficulty.trim()
+    }
+
+    // Use ONLY camelCase for scores - avoid duplicates
+    if (typeof enhancedMetadata.ragScore === 'number') {
+      cleaned.ragScore = enhancedMetadata.ragScore
+    } else if (typeof enhancedMetadata.rag_score === 'number') {
+      cleaned.ragScore = enhancedMetadata.rag_score
+    }
+
+    // Ensure title is clean
+    if (enhancedMetadata.title && typeof enhancedMetadata.title === 'string') {
+      cleaned.title = enhancedMetadata.title.trim()
+    }
+
+    return cleaned
   }
 
   /**
