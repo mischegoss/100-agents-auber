@@ -1,21 +1,32 @@
 ---
 sidebar_position: 1
-title: Authentication Token Management
+title: 'JWT Authentication: Token Management & Security'
 keywords:
-  - JWT
-  - JSON Web Token
-  - OAuth 2.0
-  - PKCE
-  - Token Refresh
-  - RSA-256
-  - Access Token
-  - Authorization Code Flow
+  - jwt authentication
+  - token management
+  - oauth 2.0 pkce
+  - refresh token rotation
+  - access token security
+  - api security
+  - json web token
 tags:
+  - jwt
   - authentication
   - security
+  - oauth2
+  - api security
+  - tokens
 ai-enhanced: '2025-06-24T01:35:11.645Z'
 ai-keywords-added: 8
 ai-tags-added: 2
+description: >-
+  Master JWT token management! Learn OAuth 2.0, PKCE, refresh token rotation &
+  session timeout configurations for secure microservices. Optimize access token
+  s...
+category: Security
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:31:48.991Z'
+original_title: Authentication Token Management
 ---
 
 # Authentication Token Management
