@@ -5,6 +5,7 @@
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
 import { themes as prismThemes } from 'prism-react-renderer'
+import path from 'path'
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -65,8 +66,14 @@ const config = {
           'https://github.com/yourusername/rag-plugin-demo-site/tree/main/',
       },
     ],
-    // Your RAG plugin will go here
-    // ['./src/plugins/rag-prep-plugin', {}],
+    // RAG Prep Plugin
+    [
+      path.resolve('./src/plugins/rag-prep-plugin'),
+      {
+        enabled: true,
+        verbose: true,
+      },
+    ],
   ],
 
   presets: [

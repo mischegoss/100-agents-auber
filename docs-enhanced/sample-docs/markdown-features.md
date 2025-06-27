@@ -1,5 +1,45 @@
 ---
 sidebar_position: 6
+title: Markdown Features
+description: >-
+  This document outlines the Markdown features supported by Docusaurus,
+  including front matter, links, images, code blocks, and admonitions. Learn how
+  to enhance your Docusaurus documentation with standard Markdown and MDX
+  syntax, and integrate React components for interactive content.
+tags:
+  - markdown
+  - docusaurus
+  - mdx
+  - front-matter
+  - code-blocks
+  - admonitions
+  - react-components
+  - markdown-syntax
+  - docusaurus-documentation
+  - interactive-documentation
+keywords:
+  - markdown-syntax
+  - docusaurus-documentation
+  - interactive-documentation
+category: Documentation
+difficulty: beginner
+topics:
+  - markdown
+  - docusaurus
+related:
+  - MDX
+  - React
+rag_score: 92
+rag_improvements: &ref_0
+  - Add more detailed examples of using MDX for interactive components.
+  - >-
+    Include a section on best practices for image optimization within Docusaurus
+    Markdown.
+ragScore: 92
+ragImprovements: *ref_0
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T04:31:33.281Z'
+original_title: Markdown Features
 ---
 
 # Markdown Features
