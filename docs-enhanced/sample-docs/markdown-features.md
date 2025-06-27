@@ -1,5 +1,29 @@
 ---
 sidebar_position: 6
+description: >-
+  Learn Docusaurus Markdown: Front matter, links, images, code blocks,
+  admonitions, and MDX/React components. Enhance documentation with interactive
+  elements!
+tags:
+  - docusaurus
+  - markdown
+  - mdx
+  - react
+  - documentation
+keywords:
+  - docusaurus
+  - markdown
+  - mdx
+  - react components
+  - documentation
+  - front matter
+  - code blocks
+  - admonitions
+category: Documentation
+title: 'Docusaurus Markdown Features: Syntax, Front Matter & MDX'
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:32:02.197Z'
+original_title: Untitled
 ---
 
 # Markdown Features
