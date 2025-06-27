@@ -1,6 +1,27 @@
 ---
 sidebar_position: 3
-title: System Integration Endpoints
+title: 'API Integration Guide: Endpoints & Examples'
+description: >-
+  Integrate seamlessly with our system using these endpoints. Learn about
+  authentication, data retrieval (JSON), user profile updates, and error
+  handling. Incl...
+tags:
+  - api
+  - integration
+  - endpoints
+  - rest
+  - json
+  - http
+keywords:
+  - api integration
+  - system integration
+  - rest api
+  - json api
+  - http endpoints
+category: API Documentation
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:28:10.760Z'
+original_title: System Integration Endpoints
 ---
 
 # System Integration Endpoints
