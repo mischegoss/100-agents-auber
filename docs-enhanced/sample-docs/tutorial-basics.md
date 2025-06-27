@@ -1,6 +1,27 @@
 ---
 sidebar_position: 3
-title: Basic Tutorial
+title: 'Project Creation Tutorial: API Guide & Examples'
+description: >-
+  Learn how to create a new project via the API. Step-by-step tutorial covers
+  project setup, data upload, settings configuration, and status monitoring with
+  ex...
+tags:
+  - api
+  - tutorial
+  - project
+  - data
+  - configuration
+keywords:
+  - project creation
+  - api tutorial
+  - rest api
+  - data upload
+  - json configuration
+  - asynchronous processing
+category: API Documentation
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:32:08.091Z'
+original_title: Basic Tutorial
 ---
 
 # Basic Tutorial
