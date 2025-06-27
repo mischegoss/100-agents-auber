@@ -1,7 +1,27 @@
 ---
 sidebar_position: 2
-title: Credential Lifecycle Operations
-
+title: 'Credential Management: Lifecycle Operations & Security'
+description: >-
+  Securely manage user credentials with our guide to lifecycle operations, reset
+  procedures, security protocols, and timeout considerations. Learn best
+  practices.
+tags:
+  - security
+  - credentials
+  - authentication
+  - iam
+  - password
+keywords:
+  - credential-management
+  - user-authentication
+  - access-control
+  - password-reset
+  - security-lifecycle
+  - credential operations
+category: Security
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:28:00.939Z'
+original_title: Credential Lifecycle Operations
 ---
 
 # Credential Lifecycle Operations
