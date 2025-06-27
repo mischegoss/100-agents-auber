@@ -1,6 +1,29 @@
 ---
 sidebar_position: 3
-title: Credential Policy
+title: 'Credential Policy: Secure User Account Management'
+description: >-
+  Understand our Credential Policy for robust security. Learn about password
+  requirements, user responsibilities, and governance guidelines to protect user
+  acc...
+tags:
+  - security
+  - policy
+  - credentials
+  - passwords
+  - authentication
+  - governance
+keywords:
+  - credential policy
+  - password security
+  - account management
+  - user authentication
+  - data protection
+  - security policy
+  - access control
+category: Security
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:28:02.838Z'
+original_title: Credential Policy
 ---
 
 # Credential Policy
