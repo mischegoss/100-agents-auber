@@ -1,6 +1,25 @@
 ---
 sidebar_position: 7
-title: Community Guidelines
+title: 'Community Forum Rules & Guidelines | [Software Name]'
+description: >-
+  Read the essential Community Guidelines for our forum. Contribute effectively,
+  find solutions, and avoid bans. Stay professional and on-topic!
+tags:
+  - forum
+  - guidelines
+  - rules
+  - community
+  - policy
+keywords:
+  - community guidelines
+  - forum rules
+  - acceptable use policy
+  - online forum
+  - community standards
+category: Community
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:31:50.833Z'
+original_title: Community Guidelines
 ---
 
 # Community Guidelines
