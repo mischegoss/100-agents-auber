@@ -1,6 +1,27 @@
 ---
 sidebar_position: 7
-title: Community Guidelines
+title: Community Forum Rules & Guidelines | Software Support
+description: >-
+  Read our community guidelines for helpful software forum engagement. Learn our
+  rules for posting, asking questions & contributing solutions. Join the
+  community!
+tags:
+  - forum
+  - guidelines
+  - rules
+  - community
+  - support
+keywords:
+  - community guidelines
+  - forum rules
+  - software support
+  - online forum
+  - posting guidelines
+  - community standards
+category: Community
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:27:55.083Z'
+original_title: Community Guidelines
 ---
 
 # Community Guidelines
