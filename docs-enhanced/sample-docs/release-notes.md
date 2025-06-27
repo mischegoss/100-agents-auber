@@ -1,6 +1,26 @@
 ---
 sidebar_position: 9
-title: Release Notes
+title: 'Release Notes v3.2: Enhancements & Bug Fixes'
+description: >-
+  Discover the latest enhancements and bug fixes in Release v3.2! Improve
+  performance, stability, and user experience with these key updates. Learn
+  what's new ...
+tags:
+  - release
+  - version
+  - updates
+  - bug fixes
+  - enhancements
+keywords:
+  - release notes
+  - version 3.2
+  - bug fixes
+  - performance enhancements
+  - software updates
+category: Documentation
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:32:04.421Z'
+original_title: Release Notes
 ---
 
 # Release Notes Version 3.2
