@@ -1,6 +1,26 @@
 ---
 sidebar_position: 3
-title: System Integration Endpoints
+title: 'API Integration: System Endpoints & Examples'
+description: >-
+  Integrate systems seamlessly with our API! Learn about endpoints, methods
+  (GET, PUT), error handling, and usage examples in JSON, JavaScript & cURL.
+tags:
+  - api
+  - integration
+  - rest
+  - json
+  - http
+  - endpoints
+keywords:
+  - api integration
+  - system integration
+  - rest api
+  - http endpoints
+  - json api
+category: API Documentation
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:32:06.170Z'
+original_title: System Integration Endpoints
 ---
 
 # System Integration Endpoints
