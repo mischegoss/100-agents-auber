@@ -1,38 +1,6 @@
 ---
 sidebar_position: 4
 title: Account Lockout Procedures
-description: >-
-  This document outlines the procedures for account lockouts, including user
-  actions and administrator resolution.
-tags:
-  - account lockout
-  - security
-  - access control
-  - administrator
-  - end-user
-  - failed login attempts
-  - unlock account
-  - identity verification
-keywords:
-  - failed login attempts
-  - unlock account
-  - identity verification
-topics:
-  - Account Management
-  - Security Procedures
-related:
-  - Password Policies
-  - Access Control Lists
-ragImprovements:
-  - Add specific lockout duration
-  - Clarify integrated services
-  - Link to security team documentation
-category: Security
-difficulty: beginner
-ragScore: 85
-enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T22:11:09.621Z'
-original_title: Account Lockout Procedures
 ---
 
 # Account Lockout Procedures

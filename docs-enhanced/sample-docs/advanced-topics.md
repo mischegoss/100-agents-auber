@@ -1,42 +1,6 @@
 ---
 sidebar_position: 6
 title: Advanced Concepts
-description: >-
-  This document details advanced system architecture, memory management, and
-  network configuration concepts.
-tags:
-  - architecture
-  - scalability
-  - memory
-  - network
-  - JVM
-  - message queue
-  - state machine
-  - garbage collection
-  - containerization
-  - redis cache
-keywords:
-  - message queue
-  - state machine
-  - garbage collection
-  - containerization
-  - redis cache
-topics:
-  - System Architecture
-  - Memory Management
-related:
-  - Basic Concepts
-  - Troubleshooting
-ragImprovements:
-  - Add diagrams for architecture
-  - Elaborate on locking strategies
-  - Provide example configurations
-category: System Design
-difficulty: advanced
-ragScore: 85
-enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T22:11:09.625Z'
-original_title: Advanced Concepts
 ---
 
 # Advanced Concepts

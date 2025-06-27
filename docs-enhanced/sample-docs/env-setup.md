@@ -1,38 +1,6 @@
 ---
 sidebar_position: 4
 title: Environmental Configuration Framework
-description: >-
-  This document details the environmental configuration framework, covering
-  initial setup, service dependencies, and runtime parameters.
-tags:
-  - configuration
-  - environment
-  - setup
-  - YAML
-  - variables
-  - application configuration
-  - service deployment
-  - runtime environment
-keywords:
-  - application configuration
-  - service deployment
-  - runtime environment
-topics:
-  - Configuration
-  - Deployment
-related:
-  - YAML
-  - Environment Variables
-ragImprovements:
-  - Add versioning info
-  - Expand on security implications
-  - Provide troubleshooting steps
-category: Configuration Management
-difficulty: intermediate
-ragScore: 85
-enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T22:11:09.630Z'
-original_title: Environmental Configuration Framework
 ---
 
 # Environment Configuration Framework

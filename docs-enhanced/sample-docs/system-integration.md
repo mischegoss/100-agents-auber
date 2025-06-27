@@ -1,42 +1,6 @@
 ---
 sidebar_position: 3
 title: System Integration Endpoints
-description: >-
-  This document outlines the network interfaces for client applications to
-  interact with backend services, including data retrieval and modification.
-tags:
-  - API
-  - endpoints
-  - integration
-  - REST
-  - HTTP
-  - system integration
-  - API endpoints
-  - data retrieval
-  - data modification
-  - HTTP methods
-keywords:
-  - system integration
-  - API endpoints
-  - data retrieval
-  - data modification
-  - HTTP methods
-topics:
-  - API
-  - System Integration
-related:
-  - Authentication
-  - Error Handling
-ragImprovements:
-  - Add specific error code examples
-  - Include versioning information
-  - Clarify rate limiting details
-category: API Documentation
-difficulty: intermediate
-ragScore: 85
-enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T22:11:09.632Z'
-original_title: System Integration Endpoints
 ---
 
 # System Integration Endpoints

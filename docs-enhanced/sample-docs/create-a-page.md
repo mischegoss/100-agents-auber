@@ -1,41 +1,6 @@
 ---
 sidebar_position: 5
 title: System Diagnostic Procedures
-description: >-
-  This document details methods for diagnosing system irregularities and
-  performance anomalies using monitoring, logs, and scenario-specific
-  investigations.
-tags:
-  - diagnostics
-  - troubleshooting
-  - performance
-  - logging
-  - monitoring
-  - system diagnostics
-  - performance degradation
-  - database connectivity
-  - log analysis
-keywords:
-  - system diagnostics
-  - performance degradation
-  - database connectivity
-  - log analysis
-topics:
-  - System Monitoring
-  - Troubleshooting
-related:
-  - Log Analysis
-  - Database Performance
-ragImprovements:
-  - Add specific command examples
-  - Expand on root cause analysis
-  - Include more detailed metrics
-category: System Administration
-difficulty: intermediate
-ragScore: 85
-enhanced_by: rag-prep-plugin
-enhanced_at: '2025-06-27T22:11:09.628Z'
-original_title: System Diagnostic Procedures
 ---
 
 # System Diagnostic Procedures
