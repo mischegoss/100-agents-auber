@@ -1,6 +1,30 @@
 ---
 sidebar_position: 6
-title: Advanced Concepts
+title: Advanced System Architecture & Tuning Guide
+description: >-
+  Explore advanced system concepts: message queues, state machines, JVM tuning
+  (G1GC), Redis caching, and network configuration. Enhance performance and
+  scalab...
+tags:
+  - architecture
+  - jvm
+  - redis
+  - rabbitmq
+  - networking
+  - performance
+keywords:
+  - system architecture
+  - jvm tuning
+  - redis caching
+  - message queues
+  - g1gc garbage collector
+  - state machine
+  - rabbitmq
+  - performance optimization
+category: System Administration
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:31:44.996Z'
+original_title: Advanced Concepts
 ---
 
 # Advanced Concepts
