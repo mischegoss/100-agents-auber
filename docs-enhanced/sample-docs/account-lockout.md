@@ -1,6 +1,26 @@
 ---
 sidebar_position: 4
-title: Account Lockout Procedures
+title: 'Account Lockout: Procedures, Resolution & Prevention'
+description: >-
+  Learn how to handle account lockouts: understand the process, end-user
+  actions, and administrator resolution. Prevent unauthorized access. Get back
+  online fast!
+tags:
+  - security
+  - account management
+  - troubleshooting
+  - lockout
+  - unlock
+keywords:
+  - account lockout
+  - user lockout
+  - failed login
+  - security lockout
+  - account unlock
+category: Security
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:27:47.635Z'
+original_title: Account Lockout Procedures
 ---
 
 # Account Lockout Procedures
