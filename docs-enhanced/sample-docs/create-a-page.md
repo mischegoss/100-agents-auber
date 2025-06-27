@@ -1,6 +1,27 @@
 ---
 sidebar_position: 5
-title: System Diagnostic Procedures
+title: 'System Diagnostic Guide: Troubleshooting & Procedures'
+description: >-
+  Comprehensive guide to system diagnostics: monitoring, log analysis, and
+  troubleshooting. Resolve performance issues, database errors, and
+  authentication fai...
+tags:
+  - diagnostics
+  - troubleshooting
+  - performance
+  - logs
+  - errors
+keywords:
+  - system diagnostics
+  - troubleshooting
+  - log analysis
+  - performance monitoring
+  - error resolution
+  - system monitoring
+category: System Administration
+enhanced_by: rag-prep-plugin
+enhanced_at: '2025-06-27T22:31:54.534Z'
+original_title: System Diagnostic Procedures
 ---
 
 # System Diagnostic Procedures
