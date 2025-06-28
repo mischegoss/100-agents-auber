@@ -100,12 +100,17 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'RAG Plugin Demo',
+        title: '',
         logo: {
           alt: 'RAG Plugin Logo',
           src: 'img/logo.svg',
         },
         items: [
+          {
+            to: '/demo',
+            label: 'Demo',
+            position: 'left',
+          },
           {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
@@ -121,7 +126,7 @@ const config = {
             label: 'Original Docs',
           },
           {
-            href: 'https://github.com/yourusername/rag-plugin-demo-site',
+            href: 'https://github.com/mischegoss/ragsaurus',
             label: 'GitHub',
             position: 'right',
           },
@@ -144,15 +149,25 @@ const config = {
             ],
           },
           {
+            title: 'Demo',
+            items: [
+              {
+                label: 'Watch Agents in Action',
+                to: '/demo',
+              },
+            
+            ],
+          },
+          {
             title: 'Development',
             items: [
               {
-                label: 'GitHub Repository',
-                href: 'https://github.com/yourusername/rag-plugin-demo-site',
+                label: 'Docusaurus Repository',
+                href: 'https://github.com/mischegoss/100-agents-auber',
               },
               {
-                label: 'Plugin Source',
-                href: 'https://github.com/yourusername/docusaurus-rag-prep-plugin',
+                label: 'Plugin Repository',
+                href: 'https://github.com/mischegoss/ragsaurus',
               },
             ],
           },

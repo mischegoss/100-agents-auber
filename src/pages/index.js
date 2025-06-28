@@ -10,25 +10,35 @@ import styles from './index.module.css'
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext()
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header
+      className={clsx('hero', styles.heroBanner)}
+      style={{
+        background: 'linear-gradient(135deg, #2980b9 0%, #3498db 100%)',
+        color: 'white',
+      }}
+    >
       <div className='container'>
-        <Heading as='h1' className='hero__title'>
-          {siteConfig.title}
+        <Heading as='h1' className='hero__title' style={{ color: 'white' }}>
+          Ragsaurus for Docusaurus
         </Heading>
-        <p className='hero__subtitle'>{siteConfig.tagline}</p>
+        <p className='hero__subtitle' style={{ color: '#ecf0f1' }}>
+          Transform legacy documentation into intelligent, RAG-ready knowledge
+          systems
+        </p>
         <div className={styles.buttons}>
           <Link
-            className='button button--secondary button--lg'
-            to='/docs-enhanced/intro'
+            className='button button--lg'
+            to='/demo'
+            style={{
+              backgroundColor: '#e67e22',
+              color: 'white',
+              border: 'none',
+              fontWeight: '600',
+              fontSize: '1.1rem',
+              padding: '1rem 2rem',
+            }}
           >
-            ✨ Experience Enhanced Docs
-          </Link>
-          <Link
-            className='button button--outline button--secondary button--lg'
-            to='/docs-original/intro'
-            style={{ marginLeft: '1rem' }}
-          >
-            📚 Compare with Original
+            🎬 Watch Agents in Action
           </Link>
         </div>
       </div>
@@ -55,21 +65,49 @@ function SearchComparison() {
               fontWeight: '700',
             }}
           >
-            🚀 Transform Your Documentation ROI
+            🚀 Autonomous Documentation Intelligence
           </Heading>
           <p
             style={{
               fontSize: '1.2rem',
               color: '#2c3e50',
-              maxWidth: '600px',
+              maxWidth: '700px',
               margin: '0 auto',
               lineHeight: '1.6',
               fontWeight: '500',
             }}
           >
-            Reduce support costs by 40% and boost user satisfaction with
-            AI-powered documentation search that actually understands what users
-            need.
+            Ragsaurus automatically optimizes your documentation with AI agents
+            - reducing support costs by 40% while solving real business
+            challenges.
+          </p>
+        </div>
+
+        {/* Interactive Try It Section */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <Heading
+            as='h2'
+            style={{
+              fontSize: '2rem',
+              marginBottom: '0.5rem',
+              color: '#1a1a1a',
+              fontWeight: '700',
+            }}
+          >
+            ✨ Try It to See the Difference!
+          </Heading>
+          <p
+            style={{
+              fontSize: '1.1rem',
+              color: '#2c3e50',
+              maxWidth: '600px',
+              margin: '0 auto',
+              lineHeight: '1.5',
+              fontWeight: '500',
+            }}
+          >
+            These are live, interactive search widgets. Try the same search in
+            both to experience the intelligence gap.
           </p>
         </div>
 
@@ -197,7 +235,7 @@ function SearchComparison() {
                 textTransform: 'uppercase',
               }}
             >
-              AI-Enhanced
+              Ragsaurus Enhanced
             </div>
 
             <div
@@ -216,7 +254,7 @@ function SearchComparison() {
                   fontWeight: '700',
                 }}
               >
-                ✨ RAG-Optimized Documentation
+                🦕 RAG-Optimized Documentation
               </Heading>
               <p
                 style={{
@@ -232,7 +270,7 @@ function SearchComparison() {
 
             <SearchWidget
               mode='enhanced'
-              title='RAG-AI Enhanced Search'
+              title='Ragsaurus Enhanced Search'
               compact={true}
             />
 
@@ -282,54 +320,193 @@ function SearchComparison() {
             as='h3'
             style={{
               fontSize: '1.5rem',
-              marginBottom: '1rem',
+              marginBottom: '1.5rem',
               color: '#1a1a1a',
               fontWeight: '700',
             }}
           >
-            💡 Experience the Intelligence Gap
+            💡 Real Multi-Agent Transformation Results
           </Heading>
+
+          {/* RAG Score Improvement */}
           <div
             style={{
               display: 'flex',
               justifyContent: 'center',
-              gap: '1rem',
+              alignItems: 'center',
+              gap: '2rem',
+              marginBottom: '2rem',
               flexWrap: 'wrap',
+            }}
+          >
+            <div style={{ textAlign: 'center' }}>
+              <div
+                style={{
+                  fontSize: '2.5rem',
+                  fontWeight: 'bold',
+                  color: '#e67e22',
+                  lineHeight: '1',
+                }}
+              >
+                30/100
+              </div>
+              <div
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#7f8c8d',
+                  marginTop: '0.5rem',
+                }}
+              >
+                Legacy Docs
+              </div>
+            </div>
+
+            <div
+              style={{
+                fontSize: '2rem',
+                color: '#2980b9',
+                fontWeight: 'bold',
+              }}
+            >
+              →
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <div
+                style={{
+                  fontSize: '2.5rem',
+                  fontWeight: 'bold',
+                  color: '#2980b9',
+                  lineHeight: '1',
+                }}
+              >
+                81/100
+              </div>
+              <div
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#2980b9',
+                  marginTop: '0.5rem',
+                  fontWeight: '600',
+                }}
+              >
+                Ragsaurus Enhanced
+              </div>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: '#e8f5e8',
+                color: '#27ae60',
+                padding: '0.5rem 1rem',
+                borderRadius: '20px',
+                fontSize: '1.1rem',
+                fontWeight: 'bold',
+                border: '2px solid #27ae60',
+              }}
+            >
+              +170% Improvement
+            </div>
+          </div>
+
+          {/* Multi-Agent Stats */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '1rem',
               marginBottom: '1.5rem',
             }}
           >
-            {[
-              'authentication',
-              'api tokens',
-              'configuration',
-              'getting started',
-            ].map(term => (
-              <span
-                key={term}
+            <div
+              style={{
+                backgroundColor: '#f8f9fa',
+                padding: '1rem',
+                borderRadius: '8px',
+                border: '1px solid #e9ecef',
+              }}
+            >
+              <div
                 style={{
-                  backgroundColor: '#2980b9',
-                  color: '#ffffff',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '20px',
-                  fontSize: '0.9rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  border: 'none',
-                }}
-                onMouseEnter={e => {
-                  e.target.style.backgroundColor = '#1f4e79'
-                  e.target.style.transform = 'translateY(-1px)'
-                }}
-                onMouseLeave={e => {
-                  e.target.style.backgroundColor = '#2980b9'
-                  e.target.style.transform = 'translateY(0)'
+                  fontSize: '1.5rem',
+                  fontWeight: 'bold',
+                  color: '#2980b9',
                 }}
               >
-                "{term}"
-              </span>
-            ))}
+                361
+              </div>
+              <div style={{ fontSize: '0.85rem', color: '#6c757d' }}>
+                Total Improvements
+              </div>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: '#f8f9fa',
+                padding: '1rem',
+                borderRadius: '8px',
+                border: '1px solid #e9ecef',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 'bold',
+                  color: '#2980b9',
+                }}
+              >
+                4
+              </div>
+              <div style={{ fontSize: '0.85rem', color: '#6c757d' }}>
+                AI Agents
+              </div>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: '#f8f9fa',
+                padding: '1rem',
+                borderRadius: '8px',
+                border: '1px solid #e9ecef',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 'bold',
+                  color: '#2980b9',
+                }}
+              >
+                56
+              </div>
+              <div style={{ fontSize: '0.85rem', color: '#6c757d' }}>
+                Agent Collaborations
+              </div>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: '#f8f9fa',
+                padding: '1rem',
+                borderRadius: '8px',
+                border: '1px solid #e9ecef',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 'bold',
+                  color: '#27ae60',
+                }}
+              >
+                100%
+              </div>
+              <div style={{ fontSize: '0.85rem', color: '#6c757d' }}>
+                Success Rate
+              </div>
+            </div>
           </div>
+
           <p
             style={{
               color: '#2c3e50',
@@ -338,8 +515,69 @@ function SearchComparison() {
               fontWeight: '500',
             }}
           >
-            Try identical searches in both widgets above to see how AI
-            enhancement transforms user discovery and reduces time-to-answer.
+            Try identical searches in both widgets above to experience how
+            Ragsaurus transforms documentation intelligence.
+          </p>
+        </div>
+
+        {/* GitHub Repository Section */}
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: '3rem',
+            padding: '2rem',
+            backgroundColor: '#2c3e50',
+            borderRadius: '12px',
+            maxWidth: '600px',
+            margin: '3rem auto 0',
+            color: 'white',
+          }}
+        >
+          <Heading
+            as='h3'
+            style={{
+              fontSize: '1.3rem',
+              marginBottom: '1rem',
+              color: '#ffffff',
+              fontWeight: '700',
+            }}
+          >
+            🦕 Ready to Transform Your Docs?
+          </Heading>
+          <Link
+            href='https://github.com/mischegoss/ragsaurus'
+            style={{
+              display: 'inline-block',
+              backgroundColor: '#e67e22',
+              color: 'white',
+              padding: '1rem 2rem',
+              borderRadius: '8px',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              textDecoration: 'none',
+              transition: 'all 0.2s',
+              border: 'none',
+            }}
+            onMouseEnter={e => {
+              e.target.style.backgroundColor = '#d35400'
+              e.target.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={e => {
+              e.target.style.backgroundColor = '#e67e22'
+              e.target.style.transform = 'translateY(0)'
+            }}
+          >
+            🚀 View on GitHub
+          </Link>
+          <p
+            style={{
+              color: '#bdc3c7',
+              fontSize: '0.9rem',
+              margin: '1rem 0 0 0',
+            }}
+          >
+            Join developers who've eliminated support ticket chaos with
+            intelligent documentation.
           </p>
         </div>
       </div>
@@ -351,8 +589,8 @@ export default function Home() {
   const { siteConfig } = useDocusaurusContext()
   return (
     <Layout
-      title={`${siteConfig.title} - AI-Enhanced Documentation`}
-      description='Transform your Docusaurus documentation with AI-powered search. Reduce support costs, improve user experience, and boost productivity with intelligent semantic search capabilities.'
+      title='Ragsaurus - AI Documentation Intelligence for Docusaurus'
+      description='Transform your Docusaurus documentation with Ragsaurus. Reduce support costs, improve user experience, and boost productivity with intelligent AI-powered documentation optimization.'
     >
       <HomepageHeader />
       <SearchComparison />

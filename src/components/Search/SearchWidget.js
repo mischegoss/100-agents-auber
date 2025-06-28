@@ -59,7 +59,7 @@ function SearchWidget({
       'What are JWT token security best practices and common pitfalls?',
       'How do I troubleshoot authentication timeout problems?',
       'What is the difference between credential policies and token management?',
-      'How do I configure SSO integration with LDAP?',
+    
     ],
     enhanced: [
       'authentication setup',
@@ -71,7 +71,7 @@ function SearchWidget({
       'What are JWT token security best practices and common pitfalls?',
       'How do I troubleshoot authentication timeout problems?',
       'What is the difference between credential policies and token management?',
-      'How do I configure SSO integration with LDAP?',
+  
     ],
   }
 
@@ -764,7 +764,6 @@ Please provide a helpful answer based on these documents. Start your response wi
 
       {config.isEnhanced && (
         <div style={widgetStyles.disclaimer}>
-          ⚠️ Demo only - Direct API calls not production ready
         </div>
       )}
 
