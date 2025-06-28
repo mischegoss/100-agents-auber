@@ -1,56 +1,45 @@
 /**
- * Enhance Metadata Task
- * Coordinates keyword extraction and frontmatter enhancement with GitHub PR creation
- * Note: Using simple class instead of extending KaibanJS Task to avoid constructor issues
+ * Enhance Metadata Task (Multi-Agent Version)
+ * Coordinates multiple AI agents for comprehensive document enhancement
+ * Supports up to 6 agents working collaboratively
  */
 class EnhanceMetadataTask {
   constructor() {
-    this.description = `Analyze document content using AI to extract keywords, generate descriptions, 
-                      and enhance frontmatter metadata for improved RAG effectiveness and searchability.
+    this.description = `Analyze document content using multiple AI agents to extract keywords, generate descriptions, 
+                      create topic taxonomies, and enhance frontmatter metadata for improved RAG effectiveness.
                       
                       This task will:
-                      1. Analyze each document's content and structure
-                      2. Generate enhanced metadata using Google Gemini AI
-                      3. Create GitHub PR with proposed enhancements (NO immediate file writing)
-                      4. Wait for human approval before applying changes
-                      5. Provide summary of proposed enhancements`
+                      1. Coordinate multiple specialized agents (SEO, Taxonomy, etc.)
+                      2. Analyze each document through all available agents
+                      3. Merge and consolidate agent recommendations
+                      4. Create GitHub PR with proposed enhancements (NO immediate file writing)
+                      5. Wait for human approval before applying changes
+                      6. Provide comprehensive summary of all improvements`
 
     this.expectedOutput = `A comprehensive report containing:
-                         - List of all processed files with their proposed enhancements
-                         - Summary of metadata improvements to be made
+                         - List of all processed files with consolidated enhancements
+                         - Summary of metadata improvements from all agents
                          - RAG effectiveness scores for each document
                          - GitHub PR URL for human review and approval
-                         - Any errors or issues encountered during processing`
+                         - Agent collaboration statistics and contribution analysis
+                         - Any conflicts resolved during agent coordination`
 
-    this.agent = null // Will be set when task is assigned
+    this.agents = [] // Array of agents (supports up to 6)
     this.verbose = true
   }
 
   /**
-   * Execute the metadata enhancement task
+   * Execute the multi-agent metadata enhancement task
    */
   async execute(context) {
     console.log(
-      '\n🎯 [Enhance Metadata Task] Starting metadata enhancement analysis...',
+      '\n🎯 [Multi-Agent Task] Starting collaborative metadata enhancement...',
     )
 
     try {
       const { processedFiles } = context
 
-      // Debug: Check context
-      console.log(`🔍 [Debug Task] Context keys: ${Object.keys(context)}`)
-      console.log(
-        `🔍 [Debug Task] processedFiles type: ${typeof processedFiles}`,
-      )
-      console.log(
-        `🔍 [Debug Task] processedFiles length: ${
-          processedFiles?.length || 'undefined'
-        }`,
-      )
-
-      const GitHubPRTool = require('../tools/githubPRTool')
-      const githubTool = new GitHubPRTool()
-
+      // Validate inputs
       if (
         !processedFiles ||
         !Array.isArray(processedFiles) ||
@@ -63,71 +52,84 @@ class EnhanceMetadataTask {
         )
       }
 
+      if (!this.agents || this.agents.length === 0) {
+        throw new Error('No agents available for processing')
+      }
+
+      console.log(`🤖 [Multi-Agent Task] Active agents: ${this.agents.length}`)
+      this.agents.forEach((agent, index) => {
+        console.log(`   ${index + 1}. ${agent.name} (${agent.role})`)
+      })
+
       console.log(
-        `📋 [Enhance Metadata Task] Analyzing ${processedFiles.length} files...`,
+        `📋 [Multi-Agent Task] Processing ${processedFiles.length} files through ${this.agents.length} agents...`,
       )
 
-      const proposedEnhancements = []
+      const enhancements = []
       const errors = []
+      const agentStats = this.initializeAgentStats()
 
-      // Process each file through the keyword extraction agent (IN MEMORY ONLY)
+      // Process each file through ALL agents
       for (const fileInfo of processedFiles) {
         try {
-          console.log(`\n🔄 Analyzing: ${fileInfo.title}`)
+          console.log(`\n🔄 Processing: ${fileInfo.title}`)
+          console.log(
+            `   📊 Running ${this.agents.length} agents in parallel...`,
+          )
 
           // Read the current file content
           const fs = require('fs-extra')
           const path = require('path')
-
-          // Build full path from the site directory and relative path
-          const siteDir = process.cwd() // Current working directory (site root)
+          const siteDir = process.cwd()
           const fullPath = path.join(siteDir, fileInfo.path)
           const originalContent = await fs.readFile(fullPath, 'utf8')
 
-          // Use the agent to analyze and enhance metadata
-          const agent = this.agent
-          const analysisResult = await agent.analyzeContent(
+          // Run all agents on this file
+          const agentResults = await this.runAllAgents(
             fullPath,
             originalContent,
             fileInfo.frontmatter,
+            agentStats,
           )
 
-          // Generate enhanced content in memory (don't write to disk yet)
+          // Merge results from all agents
+          const mergedEnhancement = this.mergeAgentResults(
+            agentResults,
+            fileInfo,
+          )
+
+          // Generate enhanced content
           const enhancedContent = this.generateEnhancedContent(
             originalContent,
-            analysisResult.enhancedMetadata,
+            mergedEnhancement.enhancedMetadata,
           )
 
-          proposedEnhancements.push({
+          enhancements.push({
             filePath: fullPath,
             relativePath: fileInfo.path,
             originalContent: originalContent,
             enhancedContent: enhancedContent,
-            enhancedMetadata: analysisResult.enhancedMetadata,
-            improvements: analysisResult.improvements,
-            ragScore:
-              analysisResult.enhancedMetadata.ragScore ||
-              analysisResult.enhancedMetadata.rag_score,
-            addedFields: this.getAddedFields(
-              fileInfo.frontmatter,
-              analysisResult.enhancedMetadata,
-            ),
+            enhancedMetadata: mergedEnhancement.enhancedMetadata,
+            improvements: mergedEnhancement.improvements,
+            ragScore: mergedEnhancement.ragScore,
+            addedFields: mergedEnhancement.addedFields,
+            agentContributions: mergedEnhancement.agentContributions,
           })
 
-          console.log(`✅ Analysis complete for: ${fileInfo.title}`)
+          console.log(`✅ Multi-agent analysis complete for: ${fileInfo.title}`)
           console.log(
-            `   Proposed improvements: ${analysisResult.improvements.join(
-              ', ',
-            )}`,
+            `   🔧 Total improvements: ${mergedEnhancement.improvements.length}`,
           )
           console.log(
-            `   New fields to add: ${this.getAddedFields(
-              fileInfo.frontmatter,
-              analysisResult.enhancedMetadata,
-            ).join(', ')}`,
+            `   📈 Consolidated RAG score: ${mergedEnhancement.ragScore}/100`,
+          )
+          console.log(
+            `   🆕 New fields: ${
+              mergedEnhancement.addedFields.join(', ') || 'none'
+            }`,
           )
         } catch (error) {
-          console.error(`❌ Error analyzing ${fileInfo.title}:`, error.message)
+          console.error(`❌ Error processing ${fileInfo.title}:`, error.message)
           errors.push({
             file: fileInfo.title,
             path: fileInfo.path,
@@ -137,33 +139,38 @@ class EnhanceMetadataTask {
       }
 
       // Generate comprehensive summary
-      const summary = this.generateTaskSummary(proposedEnhancements, errors)
+      const summary = this.generateMultiAgentSummary(
+        enhancements,
+        errors,
+        agentStats,
+      )
 
-      console.log('\n📊 Enhancement Analysis Summary:')
-      console.log(`   Files analyzed: ${summary.totalFiles}`)
-      console.log(`   Successful analyses: ${summary.successful}`)
-      console.log(`   Errors: ${summary.errors}`)
+      console.log('\n📊 Multi-Agent Enhancement Summary:')
+      console.log(`   Files processed: ${summary.totalFiles}`)
+      console.log(`   Successful enhancements: ${summary.successful}`)
+      console.log(`   Agent collaborations: ${summary.agentCollaborations}`)
       console.log(`   Average RAG score: ${summary.averageRagScore}`)
 
       // Create GitHub PR with proposed changes (NO file writing)
-      if (proposedEnhancements.length > 0) {
+      if (enhancements.length > 0) {
         console.log(
-          '\n🔀 [Enhance Metadata Task] Creating GitHub PR with proposed changes...',
+          '\n🔀 [Multi-Agent Task] Creating GitHub PR with proposed changes...',
         )
         console.log(
           '📝 [Note] Files will NOT be modified until PR is approved and merged',
         )
 
         try {
+          const GitHubPRTool = require('../tools/githubPRTool')
+          const githubTool = new GitHubPRTool()
+
           const prResult = await githubTool.createEnhancementPR(
-            proposedEnhancements,
+            enhancements,
             summary,
           )
 
           if (prResult.success) {
-            console.log(
-              `✅ [Enhance Metadata Task] PR created: ${prResult.prUrl}`,
-            )
+            console.log(`✅ [Multi-Agent Task] PR created: ${prResult.prUrl}`)
             console.log(
               `📋 [Next Steps] Review and approve PR to apply changes`,
             )
@@ -172,10 +179,12 @@ class EnhanceMetadataTask {
               number: prResult.prNumber,
               branch: prResult.branch,
               status: 'pending_review',
+              agentCollaboration: true,
+              agentCount: this.agents.length,
             }
           } else {
             console.error(
-              `❌ [Enhance Metadata Task] PR creation failed: ${prResult.error}`,
+              `❌ [Multi-Agent Task] PR creation failed: ${prResult.error}`,
             )
             errors.push({
               file: 'GitHub PR Creation',
@@ -183,25 +192,25 @@ class EnhanceMetadataTask {
             })
           }
         } catch (prError) {
-          console.error(`❌ [Enhance Metadata Task] PR error:`, prError.message)
+          console.error(`❌ [Multi-Agent Task] PR error:`, prError.message)
           errors.push({
             file: 'GitHub PR Creation',
             error: prError.message,
           })
         }
       } else {
-        console.log('\n⏭️ [Enhance Metadata Task] No enhancements to propose')
+        console.log('\n⏭️ [Multi-Agent Task] No enhancements to propose')
       }
 
       return {
         success: true,
         summary,
-        proposedEnhancements,
+        enhancements,
         errors,
+        agentStatistics: agentStats,
       }
     } catch (error) {
-      console.error('❌ [Enhance Metadata Task] Fatal error:', error.message)
-      console.error('❌ [Enhance Metadata Task] Stack trace:', error.stack)
+      console.error('❌ [Multi-Agent Task] Fatal error:', error.message)
       return {
         success: false,
         error: error.message,
@@ -211,202 +220,434 @@ class EnhanceMetadataTask {
   }
 
   /**
-   * Generate enhanced content with new frontmatter (in memory only)
+   * Run all agents on a single file
    */
-  generateEnhancedContent(originalContent, enhancedMetadata) {
-    const matter = require('gray-matter')
+  async runAllAgents(filePath, originalContent, frontmatter, agentStats) {
+    const agentResults = []
 
-    // Parse the original file
-    const parsed = matter(originalContent)
+    for (const agent of this.agents) {
+      try {
+        console.log(`   🤖 Running ${agent.name}...`)
+        const startTime = Date.now()
 
-    // Clean and simplify the enhanced metadata for maximum YAML compatibility
-    const cleanedMetadata = this.cleanMetadataForSimpleYaml(enhancedMetadata)
+        const result = await agent.analyzeContent(
+          filePath,
+          originalContent,
+          frontmatter,
+        )
 
-    // Merge original metadata with enhancements (enhanced takes precedence)
-    const mergedMetadata = {
-      ...parsed.data,
-      ...cleanedMetadata,
-      // Add processing metadata
-      enhanced_by: 'rag-prep-plugin',
-      enhanced_at: new Date().toISOString(),
-      original_title: parsed.data.title || 'Untitled',
+        const endTime = Date.now()
+        const processingTime = endTime - startTime
+
+        agentResults.push({
+          agentName: agent.name,
+          agentRole: agent.role,
+          success: true,
+          result: result,
+          processingTime: processingTime,
+        })
+
+        // Update agent statistics
+        agentStats[agent.name].successful++
+        agentStats[agent.name].totalProcessingTime += processingTime
+
+        console.log(`      ✅ ${agent.name} completed (${processingTime}ms)`)
+      } catch (error) {
+        console.error(`      ❌ ${agent.name} failed: ${error.message}`)
+
+        agentResults.push({
+          agentName: agent.name,
+          agentRole: agent.role,
+          success: false,
+          error: error.message,
+          processingTime: 0,
+        })
+
+        // Update agent statistics
+        agentStats[agent.name].failed++
+      }
     }
 
-    // Reconstruct the file with enhanced frontmatter using clean YAML
-    const enhancedContent = matter.stringify(parsed.content, mergedMetadata, {
-      // Force simple YAML output - no references, no complex syntax
-      noRefs: true,
-      flowLevel: -1,
-    })
-
-    return enhancedContent
+    return agentResults
   }
 
   /**
-   * Clean metadata to ensure simple, compatible YAML output
+   * Merge results from all agents into unified enhancement
    */
-  cleanMetadataForSimpleYaml(enhancedMetadata) {
+  mergeAgentResults(agentResults, fileInfo) {
+    console.log(`   🔄 Merging results from ${agentResults.length} agents...`)
+
+    const successfulResults = agentResults.filter(r => r.success)
+    const mergedMetadata = {}
+    const allImprovements = []
+    const agentContributions = {}
+    const ragScores = []
+
+    // Initialize agent contributions tracking
+    successfulResults.forEach(result => {
+      agentContributions[result.agentName] = {
+        role: result.agentRole,
+        improvements: result.result.improvements || [],
+        keyContributions: [],
+      }
+    })
+
+    // Merge metadata from all successful agents
+    successfulResults.forEach(result => {
+      const agentMetadata = result.result.enhancedMetadata || {}
+      const agentName = result.agentName
+
+      // Merge arrays (keywords, tags, topics, etc.)
+      this.mergeArrayFields(
+        mergedMetadata,
+        agentMetadata,
+        agentName,
+        agentContributions,
+      )
+
+      // Merge scalar fields (difficulty, category, etc.)
+      this.mergeScalarFields(
+        mergedMetadata,
+        agentMetadata,
+        agentName,
+        agentContributions,
+      )
+
+      // Collect improvements
+      if (result.result.improvements) {
+        allImprovements.push(...result.result.improvements)
+      }
+
+      // Collect RAG scores for averaging
+      if (
+        agentMetadata.ragScore ||
+        agentMetadata.rag_score ||
+        agentMetadata.seoScore ||
+        agentMetadata.taxonomyScore
+      ) {
+        ragScores.push(
+          agentMetadata.ragScore ||
+            agentMetadata.rag_score ||
+            agentMetadata.seoScore ||
+            agentMetadata.taxonomyScore,
+        )
+      }
+    })
+
+    // Calculate consolidated RAG score
+    const consolidatedRagScore =
+      ragScores.length > 0
+        ? Math.round(ragScores.reduce((a, b) => a + b, 0) / ragScores.length)
+        : 75
+
+    // Add processing metadata
+    mergedMetadata.enhanced_by = 'rag-prep-plugin-multi-agent'
+    mergedMetadata.enhanced_at = new Date().toISOString()
+    mergedMetadata.agent_count = successfulResults.length
+    mergedMetadata.consolidatedRagScore = consolidatedRagScore
+
+    // Remove duplicates from improvements
+    const uniqueImprovements = [...new Set(allImprovements)]
+
+    // Determine added fields
+    const addedFields = this.getAddedFields(
+      fileInfo.frontmatter,
+      mergedMetadata,
+    )
+
+    console.log(`      ✅ Merged data from ${successfulResults.length} agents`)
+    console.log(
+      `      📊 Consolidated RAG score: ${consolidatedRagScore} (avg of ${ragScores.length} scores)`,
+    )
+
+    return {
+      enhancedMetadata: mergedMetadata,
+      improvements: uniqueImprovements,
+      ragScore: consolidatedRagScore,
+      addedFields: addedFields,
+      agentContributions: agentContributions,
+    }
+  }
+
+  /**
+   * Merge array fields from multiple agents
+   */
+  mergeArrayFields(
+    mergedMetadata,
+    agentMetadata,
+    agentName,
+    agentContributions,
+  ) {
+    const arrayFields = [
+      'keywords',
+      'tags',
+      'topics',
+      'categories',
+      'subCategories',
+      'audience',
+      'targetRoles',
+      'prerequisites',
+      'learningPath',
+      'relatedConcepts',
+      'useCases',
+      'industryTags',
+    ]
+
+    arrayFields.forEach(field => {
+      if (agentMetadata[field] && Array.isArray(agentMetadata[field])) {
+        if (!mergedMetadata[field]) {
+          mergedMetadata[field] = []
+        }
+
+        const newItems = agentMetadata[field].filter(
+          item => !mergedMetadata[field].includes(item),
+        )
+
+        if (newItems.length > 0) {
+          mergedMetadata[field].push(...newItems)
+          agentContributions[agentName].keyContributions.push(
+            `${field}: ${newItems.length} items`,
+          )
+        }
+      }
+    })
+
+    // Limit array sizes and ensure quality
+    arrayFields.forEach(field => {
+      if (mergedMetadata[field]) {
+        mergedMetadata[field] = mergedMetadata[field]
+          .filter(item => item && typeof item === 'string' && item.trim())
+          .slice(0, 10) // Limit to 10 items max
+      }
+    })
+  }
+
+  /**
+   * Merge scalar fields from multiple agents
+   */
+  mergeScalarFields(
+    mergedMetadata,
+    agentMetadata,
+    agentName,
+    agentContributions,
+  ) {
+    const scalarFields = {
+      title: 'string',
+      description: 'string',
+      difficulty: 'string',
+      complexity: 'string',
+      contentType: 'string',
+      domainArea: 'string',
+      primaryTopic: 'string',
+      category: 'string',
+    }
+
+    Object.entries(scalarFields).forEach(([field, type]) => {
+      if (agentMetadata[field] && typeof agentMetadata[field] === type) {
+        if (!mergedMetadata[field]) {
+          mergedMetadata[field] = agentMetadata[field]
+          agentContributions[agentName].keyContributions.push(
+            `${field}: provided`,
+          )
+        } else if (mergedMetadata[field] !== agentMetadata[field]) {
+          // Handle conflicts - prefer more specific/detailed values
+          if (agentMetadata[field].length > mergedMetadata[field].length) {
+            mergedMetadata[field] = agentMetadata[field]
+            agentContributions[agentName].keyContributions.push(
+              `${field}: enhanced`,
+            )
+          }
+        }
+      }
+    })
+  }
+
+  /**
+   * Initialize agent statistics tracking
+   */
+  initializeAgentStats() {
+    const stats = {}
+    this.agents.forEach(agent => {
+      stats[agent.name] = {
+        role: agent.role,
+        successful: 0,
+        failed: 0,
+        totalProcessingTime: 0,
+        averageProcessingTime: 0,
+      }
+    })
+    return stats
+  }
+
+  /**
+   * Generate enhanced content with merged metadata
+   */
+  generateEnhancedContent(originalContent, enhancedMetadata) {
+    const matter = require('gray-matter')
+    const parsed = matter(originalContent)
+
+    // Clean metadata for YAML compatibility
+    const cleanedMetadata = this.cleanMetadataForSimpleYaml(enhancedMetadata)
+
+    // Merge with original frontmatter
+    const mergedMetadata = {
+      ...parsed.data,
+      ...cleanedMetadata,
+    }
+
+    return matter.stringify(parsed.content, mergedMetadata, {
+      noRefs: true,
+      flowLevel: -1,
+    })
+  }
+
+  /**
+   * Clean metadata for YAML compatibility
+   */
+  cleanMetadataForSimpleYaml(metadata) {
     const cleaned = {}
 
-    // Clean description - ensure it's a simple string
-    if (enhancedMetadata.description) {
-      cleaned.description = enhancedMetadata.description
+    // Clean description
+    if (metadata.description) {
+      cleaned.description = metadata.description
         .replace(/\n/g, ' ')
         .replace(/\s+/g, ' ')
         .trim()
-        .replace(/"/g, "'") // Replace quotes to avoid YAML escaping issues
+        .replace(/"/g, "'")
     }
 
-    // Clean arrays - ensure they're simple string arrays
-    ;['tags', 'keywords', 'topics', 'related'].forEach(field => {
-      if (enhancedMetadata[field] && Array.isArray(enhancedMetadata[field])) {
-        cleaned[field] = enhancedMetadata[field]
+    // Clean arrays
+    const arrayFields = [
+      'tags',
+      'keywords',
+      'topics',
+      'categories',
+      'audience',
+      'prerequisites',
+    ]
+    arrayFields.forEach(field => {
+      if (metadata[field] && Array.isArray(metadata[field])) {
+        cleaned[field] = metadata[field]
           .filter(item => item && typeof item === 'string' && item.trim())
           .map(item => item.trim().replace(/"/g, "'"))
-          .slice(0, 10) // Limit array size
+          .slice(0, 8)
 
-        // Ensure at least one value for critical fields
         if (
-          (field === 'tags' || field === 'keywords') &&
-          cleaned[field].length === 0
+          cleaned[field].length === 0 &&
+          (field === 'tags' || field === 'keywords')
         ) {
           cleaned[field] = ['documentation']
         }
       }
     })
 
-    // Clean improvements array - ensure simple strings
-    if (
-      enhancedMetadata.rag_improvements &&
-      Array.isArray(enhancedMetadata.rag_improvements)
-    ) {
-      cleaned.ragImprovements = enhancedMetadata.rag_improvements
-        .filter(item => item && typeof item === 'string')
-        .map(item =>
-          item
-            .replace(/\n/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim()
-            .replace(/"/g, "'"),
-        )
-        .slice(0, 5) // Limit to 5 improvements
-    } else if (
-      enhancedMetadata.ragImprovements &&
-      Array.isArray(enhancedMetadata.ragImprovements)
-    ) {
-      cleaned.ragImprovements = enhancedMetadata.ragImprovements
-        .filter(item => item && typeof item === 'string')
-        .map(item =>
-          item
-            .replace(/\n/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim()
-            .replace(/"/g, "'"),
-        )
-        .slice(0, 5)
+    // Clean scalar fields
+    const scalarFields = [
+      'category',
+      'difficulty',
+      'contentType',
+      'domainArea',
+      'primaryTopic',
+    ]
+    scalarFields.forEach(field => {
+      if (metadata[field] && typeof metadata[field] === 'string') {
+        cleaned[field] = metadata[field].trim()
+      }
+    })
+
+    // Add scores
+    if (typeof metadata.consolidatedRagScore === 'number') {
+      cleaned.ragScore = metadata.consolidatedRagScore
     }
 
-    // Simple scalar values - avoid any complex types
-    if (
-      enhancedMetadata.category &&
-      typeof enhancedMetadata.category === 'string'
-    ) {
-      cleaned.category = enhancedMetadata.category.trim()
-    }
-
-    if (
-      enhancedMetadata.difficulty &&
-      typeof enhancedMetadata.difficulty === 'string'
-    ) {
-      cleaned.difficulty = enhancedMetadata.difficulty.trim()
-    }
-
-    // Use ONLY camelCase for scores - avoid duplicates
-    if (typeof enhancedMetadata.ragScore === 'number') {
-      cleaned.ragScore = enhancedMetadata.ragScore
-    } else if (typeof enhancedMetadata.rag_score === 'number') {
-      cleaned.ragScore = enhancedMetadata.rag_score
-    }
-
-    // Ensure title is clean
-    if (enhancedMetadata.title && typeof enhancedMetadata.title === 'string') {
-      cleaned.title = enhancedMetadata.title.trim()
+    // Add multi-agent metadata
+    if (metadata.agent_count) {
+      cleaned.agentCount = metadata.agent_count
     }
 
     return cleaned
   }
 
   /**
-   * Get fields that would be added by enhancement
+   * Get fields that would be added
    */
   getAddedFields(originalFrontmatter, enhancedMetadata) {
     const original = originalFrontmatter || {}
     const enhanced = this.cleanMetadataForSimpleYaml(enhancedMetadata)
-
     return Object.keys(enhanced).filter(key => !original[key])
   }
 
   /**
-   * Generate comprehensive task summary
+   * Generate comprehensive multi-agent summary
    */
-  generateTaskSummary(proposedEnhancements, errors) {
-    const successful = proposedEnhancements.filter(e => e.enhancedMetadata)
-    const ragScores = proposedEnhancements
-      .filter(e => e.ragScore)
-      .map(e => e.ragScore)
+  generateMultiAgentSummary(enhancements, errors, agentStats) {
+    const successful = enhancements.filter(e => e.enhancedMetadata)
+    const ragScores = enhancements.filter(e => e.ragScore).map(e => e.ragScore)
 
-    const averageRagScore =
-      ragScores.length > 0
-        ? Math.round(ragScores.reduce((a, b) => a + b, 0) / ragScores.length)
-        : 0
-
-    // Count improvement types
-    const improvementTypes = {}
-    proposedEnhancements.forEach(enhancement => {
-      enhancement.improvements.forEach(improvement => {
-        improvementTypes[improvement] = (improvementTypes[improvement] || 0) + 1
-      })
-    })
-
-    // Count added fields across all proposed enhancements
-    const addedFieldTypes = {}
-    proposedEnhancements.forEach(enhancement => {
-      if (enhancement.addedFields) {
-        enhancement.addedFields.forEach(field => {
-          addedFieldTypes[field] = (addedFieldTypes[field] || 0) + 1
-        })
+    // Calculate agent statistics
+    Object.keys(agentStats).forEach(agentName => {
+      const stats = agentStats[agentName]
+      if (stats.successful > 0) {
+        stats.averageProcessingTime = Math.round(
+          stats.totalProcessingTime / stats.successful,
+        )
       }
     })
 
     return {
-      totalFiles: proposedEnhancements.length,
+      totalFiles: enhancements.length,
       successful: successful.length,
       errors: errors.length,
-      averageRagScore,
-      ragScores:
+      averageRagScore:
         ragScores.length > 0
-          ? {
-              min: Math.min(...ragScores),
-              max: Math.max(...ragScores),
-              average: averageRagScore,
-            }
-          : null,
-      improvementTypes,
-      addedFieldTypes,
-      topImprovements: Object.entries(improvementTypes)
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 5)
-        .map(([type, count]) => ({ type, count })),
-      topAddedFields: Object.entries(addedFieldTypes)
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 5)
-        .map(([field, count]) => ({ field, count })),
-      proposedChanges: successful.map(enhancement => ({
-        file: enhancement.filePath.split('/').pop(),
-        addedFields: enhancement.addedFields || [],
-        ragScore: enhancement.ragScore,
-      })),
+          ? Math.round(ragScores.reduce((a, b) => a + b, 0) / ragScores.length)
+          : 0,
+      agentCollaborations: successful.length * this.agents.length,
+      agentPerformance: agentStats,
+      topPerformingAgent: this.getTopPerformingAgent(agentStats),
+      collaborationEffectiveness:
+        this.calculateCollaborationEffectiveness(enhancements),
     }
+  }
+
+  /**
+   * Get top performing agent
+   */
+  getTopPerformingAgent(agentStats) {
+    let topAgent = null
+    let highestSuccessRate = 0
+
+    Object.entries(agentStats).forEach(([agentName, stats]) => {
+      const total = stats.successful + stats.failed
+      const successRate = total > 0 ? stats.successful / total : 0
+
+      if (successRate > highestSuccessRate) {
+        highestSuccessRate = successRate
+        topAgent = {
+          name: agentName,
+          role: stats.role,
+          successRate: Math.round(successRate * 100),
+          avgProcessingTime: stats.averageProcessingTime,
+        }
+      }
+    })
+
+    return topAgent
+  }
+
+  /**
+   * Calculate collaboration effectiveness
+   */
+  calculateCollaborationEffectiveness(enhancements) {
+    if (enhancements.length === 0) return 0
+
+    const totalContributions = enhancements.reduce((sum, enhancement) => {
+      return sum + Object.keys(enhancement.agentContributions || {}).length
+    }, 0)
+
+    return Math.round(
+      (totalContributions / (enhancements.length * this.agents.length)) * 100,
+    )
   }
 }
 

@@ -1,19 +1,19 @@
 /**
- * Keyword Extraction Agent
- * Uses Google Gemini to analyze document content and enhance metadata
- * Note: Using simple class instead of extending KaibanJS Agent to avoid constructor issues
+ * Enhanced SEO Metadata Generator Agent
+ * Uses Google Gemini to analyze document content and generate comprehensive SEO metadata
+ * Upgraded from basic keyword extraction to full SEO optimization
  */
-class KeywordExtractionAgent {
+class SEOMetadataGeneratorAgent {
   constructor() {
-    this.name = 'keyword-extraction-agent'
-    this.role = 'Content Analysis Specialist'
+    this.name = 'seo-metadata-generator-agent'
+    this.role = 'SEO Content Analysis Specialist'
     this.goal =
-      'Analyze documentation content to extract keywords, improve metadata, and enhance discoverability using AI-powered analysis'
-    this.backstory = `You are an expert content analyst specializing in documentation optimization. 
-                  You excel at understanding technical content, extracting meaningful keywords, 
-                  and creating metadata that improves document discoverability and RAG effectiveness.
-                  You use Google Gemini AI to perform deep content analysis and generate high-quality 
-                  descriptions, tags, and categories that make documentation more searchable and useful.`
+      'Generate comprehensive SEO-optimized metadata that improves discoverability and search rankings'
+    this.backstory = `You are an expert SEO content analyst specializing in technical documentation optimization. 
+                  You excel at understanding technical content, extracting meaningful keywords, creating compelling 
+                  descriptions, and generating metadata that improves both search engine rankings and user discovery.
+                  You use advanced AI analysis to create SEO metadata that balances technical accuracy with 
+                  search optimization principles.`
     this.verbose = true
     this.allowDelegation = false
     this.maxIter = 3
@@ -21,31 +21,31 @@ class KeywordExtractionAgent {
   }
 
   /**
-   * Analyze document content and generate enhanced metadata
+   * Analyze document content and generate enhanced SEO metadata
    */
   async analyzeContent(filePath, content, currentMetadata = {}) {
-    console.log(`🔍 [Keyword Agent] Analyzing: ${filePath}`)
+    console.log(`🔍 [SEO Agent] Analyzing: ${filePath}`)
 
     try {
       // Parse the document to separate content from frontmatter
       const matter = require('gray-matter')
       const parsed = matter(content)
 
-      // Prepare analysis request
+      // Prepare analysis context
       const analysisContext = {
         title: parsed.data.title || 'Untitled',
         content: parsed.content,
         currentMetadata: parsed.data,
         wordCount: parsed.content.split(/\s+/).length,
         headings: this.extractHeadings(parsed.content),
+        codeBlocks: this.extractCodeBlocks(parsed.content),
+        links: this.extractLinks(parsed.content),
       }
 
-      // Generate enhanced metadata using Gemini
-      const enhancedMetadata = await this.generateEnhancedMetadata(
-        analysisContext,
-      )
+      // Generate enhanced SEO metadata using Gemini
+      const enhancedMetadata = await this.generateSEOMetadata(analysisContext)
 
-      console.log(`✅ [Keyword Agent] Enhanced metadata for: ${filePath}`)
+      console.log(`✅ [SEO Agent] Enhanced SEO metadata for: ${filePath}`)
 
       return {
         originalMetadata: parsed.data,
@@ -55,7 +55,7 @@ class KeywordExtractionAgent {
       }
     } catch (error) {
       console.error(
-        `❌ [Keyword Agent] Error analyzing ${filePath}:`,
+        `❌ [SEO Agent] Error analyzing ${filePath}:`,
         error.message,
       )
       throw error
@@ -63,21 +63,60 @@ class KeywordExtractionAgent {
   }
 
   /**
-   * Extract headings from markdown content
+   * Extract headings from markdown content with hierarchy analysis
    */
   extractHeadings(content) {
     const headingMatches = content.match(/^#+\s+(.+)$/gm) || []
     return headingMatches.map(heading => {
       const level = (heading.match(/^#+/) || [''])[0].length
-      const text = heading.replace(/^#+\s+/, '')
+      const text = heading
+        .replace(/^#+\s+/, '')
+        .replace(/[#*`]/g, '')
+        .trim()
       return { level, text }
     })
   }
 
   /**
-   * Generate enhanced metadata using Gemini AI
+   * Extract code blocks to understand technical content
    */
-  async generateEnhancedMetadata(context) {
+  extractCodeBlocks(content) {
+    const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g
+    const blocks = []
+    let match
+
+    while ((match = codeBlockRegex.exec(content)) !== null) {
+      blocks.push({
+        language: match[1] || 'unknown',
+        code: match[2].trim(),
+      })
+    }
+
+    return blocks
+  }
+
+  /**
+   * Extract links to understand content relationships
+   */
+  extractLinks(content) {
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+    const links = []
+    let match
+
+    while ((match = linkRegex.exec(content)) !== null) {
+      links.push({
+        text: match[1],
+        url: match[2],
+      })
+    }
+
+    return links
+  }
+
+  /**
+   * Generate comprehensive SEO metadata using Gemini AI
+   */
+  async generateSEOMetadata(context) {
     // Try to load environment variables if not already loaded
     if (!process.env.GOOGLE_API_KEY) {
       try {
@@ -92,10 +131,7 @@ class KeywordExtractionAgent {
 
     if (!process.env.GOOGLE_API_KEY) {
       console.error(
-        '❌ [Keyword Agent] GOOGLE_API_KEY not found in environment variables',
-      )
-      console.log(
-        '💡 [Keyword Agent] Make sure your .env.local file contains GOOGLE_API_KEY=your_api_key',
+        '❌ [SEO Agent] GOOGLE_API_KEY not found in environment variables',
       )
       throw new Error('GOOGLE_API_KEY not found in environment variables')
     }
@@ -104,10 +140,12 @@ class KeywordExtractionAgent {
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
-    const prompt = this.buildAnalysisPrompt(context)
+    const prompt = this.buildSEOAnalysisPrompt(context)
 
     try {
-      console.log(`🤖 [Keyword Agent] Calling Gemini for analysis...`)
+      console.log(
+        `🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...`,
+      )
       const result = await model.generateContent(prompt)
       const response = await result.response
       const text = response.text()
@@ -123,73 +161,25 @@ class KeywordExtractionAgent {
       }
 
       // Parse the JSON response from Gemini
-      const enhancedMetadata = JSON.parse(cleanedText)
+      const seoMetadata = JSON.parse(cleanedText)
 
-      // Ensure required fields have at least one value (Docusaurus validation)
-      if (
-        !enhancedMetadata.keywords ||
-        enhancedMetadata.keywords.length === 0
-      ) {
-        enhancedMetadata.keywords = ['documentation']
-      }
-      if (!enhancedMetadata.tags || enhancedMetadata.tags.length === 0) {
-        enhancedMetadata.tags = ['documentation']
-      }
-      if (!enhancedMetadata.topics || enhancedMetadata.topics.length === 0) {
-        enhancedMetadata.topics = ['general']
-      }
+      // Validate and clean the metadata
+      const validatedMetadata = this.validateAndCleanSEOMetadata(seoMetadata)
 
-      // Clean improvements array for simple YAML
-      if (
-        enhancedMetadata.rag_improvements &&
-        Array.isArray(enhancedMetadata.rag_improvements)
-      ) {
-        enhancedMetadata.ragImprovements =
-          enhancedMetadata.rag_improvements.map(item => {
-            return typeof item === 'string'
-              ? item.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()
-              : String(item)
-          })
-        delete enhancedMetadata.rag_improvements // Remove snake_case version
-      }
-
-      // Convert snake_case to camelCase and remove duplicates
-      if (enhancedMetadata.rag_score) {
-        enhancedMetadata.ragScore = enhancedMetadata.rag_score
-        delete enhancedMetadata.rag_score // Remove snake_case version
-      }
-
-      // Ensure description is a simple string
-      if (
-        enhancedMetadata.description &&
-        typeof enhancedMetadata.description === 'string'
-      ) {
-        enhancedMetadata.description = enhancedMetadata.description
-          .replace(/\n/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim()
-      }
-
-      // Ensure keywords are also included in tags for better search indexing
-      const combinedTags = [
-        ...new Set([...enhancedMetadata.tags, ...enhancedMetadata.keywords]),
-      ]
-      enhancedMetadata.tags = combinedTags.slice(0, 10) // Limit to 10 to avoid clutter
-
-      console.log(`🎯 [Keyword Agent] Gemini analysis complete`)
-      return enhancedMetadata
+      console.log(`🎯 [SEO Agent] SEO analysis complete`)
+      return validatedMetadata
     } catch (error) {
-      console.error('❌ [Keyword Agent] Gemini API error:', error.message)
-      // Fallback to basic analysis if Gemini fails
-      return this.fallbackAnalysis(context)
+      console.error('❌ [SEO Agent] Gemini API error:', error.message)
+      // Fallback to basic SEO analysis if Gemini fails
+      return this.fallbackSEOAnalysis(context)
     }
   }
 
   /**
-   * Build the analysis prompt for Gemini
+   * Build the comprehensive SEO analysis prompt for Gemini
    */
-  buildAnalysisPrompt(context) {
-    return `You are a documentation metadata expert. Analyze this technical document and generate enhanced metadata for better RAG effectiveness and searchability.
+  buildSEOAnalysisPrompt(context) {
+    return `You are an expert SEO analyst specializing in technical documentation. Analyze this document and generate comprehensive SEO metadata that will improve search rankings, discoverability, and user engagement.
 
 DOCUMENT TO ANALYZE:
 Title: ${context.title}
@@ -197,47 +187,123 @@ Word Count: ${context.wordCount}
 Headings: ${context.headings
       .map(h => `${'#'.repeat(h.level)} ${h.text}`)
       .join('\n')}
+${
+  context.codeBlocks.length > 0
+    ? `Code Languages: ${[
+        ...new Set(context.codeBlocks.map(b => b.language)),
+      ].join(', ')}`
+    : ''
+}
+${context.links.length > 0 ? `External Links: ${context.links.length}` : ''}
 
 CONTENT:
-${context.content.substring(0, 2000)}${
-      context.content.length > 2000 ? '...' : ''
+${context.content.substring(0, 2500)}${
+      context.content.length > 2500 ? '...' : ''
     }
 
 CURRENT METADATA:
 ${JSON.stringify(context.currentMetadata, null, 2)}
 
-Generate enhanced metadata as valid JSON with these fields:
+Generate comprehensive SEO metadata as valid JSON with these fields:
+
 {
-  "title": "Improved title if needed (keep original if good)",
-  "description": "Clear, SEO-friendly description in one sentence",
-  "tags": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
-  "keywords": ["semantic-keyword1", "semantic-keyword2", "semantic-keyword3"],
+  "title": "SEO-optimized title (50-60 chars, keyword-rich)",
+  "description": "Compelling meta description (150-160 chars, action-oriented)",
+  "keywords": ["primary-keyword", "secondary-keyword", "long-tail-keyword", "semantic-keyword", "technical-term"],
+  "searchKeywords": ["search-term-1", "search-term-2", "user-query-keyword"],
+  "semanticTerms": ["related-concept-1", "related-concept-2", "industry-term"],
+  "focusKeyword": "primary-target-keyword",
+  "keywordDensity": "balanced|high|low",
+  "contentType": "tutorial|reference|guide|overview|troubleshooting",
+  "searchIntent": "informational|navigational|transactional|commercial",
+  "readingLevel": "beginner|intermediate|advanced",
+  "estimatedReadingTime": 5,
+  "lastUpdated": "${new Date().toISOString().split('T')[0]}",
+  "author": "Technical Documentation Team",
   "category": "primary-category",
-  "difficulty": "beginner|intermediate|advanced",
-  "topics": ["main-topic1", "main-topic2"],
-  "related": ["related-concept1", "related-concept2"],
-  "ragScore": 85,
-  "ragImprovements": ["Short improvement 1", "Short improvement 2", "Short improvement 3"]
+  "tags": ["tag1", "tag2", "tag3"],
+  "audience": ["developers", "system-administrators", "beginners"],
+  "seoScore": 85
 }
 
-CRITICAL REQUIREMENTS:
-- Keep description to ONE simple sentence without line breaks
-- All ragImprovements must be short, simple phrases (no multiline text)
-- Use only simple strings in arrays (no complex formatting)
-- Keep array items short and clear
-- Ensure all text is clean and quote-safe
+CRITICAL SEO REQUIREMENTS:
+- Title must be 50-60 characters and keyword-rich
+- Description must be 150-160 characters and compelling
+- Focus on search terms real users would type
+- Include semantic keywords and related terms
+- Ensure keywords flow naturally
+- Consider search intent and user goals
+- Make content type and audience clear
 
 Return ONLY valid JSON, no markdown formatting, no code blocks.`
   }
 
   /**
-   * Fallback analysis if Gemini fails
+   * Validate and clean SEO metadata to ensure quality
    */
-  fallbackAnalysis(context) {
+  validateAndCleanSEOMetadata(metadata) {
+    const cleaned = { ...metadata }
+
+    // Validate title length (50-60 chars optimal for SEO)
+    if (cleaned.title && cleaned.title.length > 60) {
+      cleaned.title = cleaned.title.substring(0, 57) + '...'
+    }
+
+    // Validate description length (150-160 chars optimal for SEO)
+    if (cleaned.description && cleaned.description.length > 160) {
+      cleaned.description = cleaned.description.substring(0, 157) + '...'
+    }
+
+    // Ensure arrays are clean and have reasonable limits
+    const arrayFields = [
+      'keywords',
+      'searchKeywords',
+      'semanticTerms',
+      'tags',
+      'audience',
+    ]
+    arrayFields.forEach(field => {
+      if (cleaned[field] && Array.isArray(cleaned[field])) {
+        cleaned[field] = cleaned[field]
+          .filter(item => item && typeof item === 'string' && item.trim())
+          .map(item => item.trim().toLowerCase().replace(/"/g, "'"))
+          .slice(0, 8) // Limit to 8 items max
+      }
+    })
+
+    // Ensure required fields have defaults
+    if (!cleaned.keywords || cleaned.keywords.length === 0) {
+      cleaned.keywords = ['documentation', 'guide']
+    }
+
+    if (!cleaned.tags || cleaned.tags.length === 0) {
+      cleaned.tags = ['documentation']
+    }
+
+    // Validate numeric fields
+    if (!cleaned.seoScore || isNaN(cleaned.seoScore)) {
+      cleaned.seoScore = 75 // Default score
+    }
+
+    if (!cleaned.estimatedReadingTime || isNaN(cleaned.estimatedReadingTime)) {
+      cleaned.estimatedReadingTime = Math.max(
+        1,
+        Math.ceil(metadata.wordCount / 200) || 3,
+      )
+    }
+
+    return cleaned
+  }
+
+  /**
+   * Fallback SEO analysis if Gemini fails
+   */
+  fallbackSEOAnalysis(context) {
     console.log(
-      `🔄 [Keyword Agent] Using fallback analysis for: ${context.title}`,
+      `🔄 [SEO Agent] Using fallback SEO analysis for: ${context.title}`,
     )
 
+    // Extract keywords from content
     const words = context.content.toLowerCase().split(/\s+/)
     const commonWords = [
       'the',
@@ -252,33 +318,8 @@ Return ONLY valid JSON, no markdown formatting, no code blocks.`
       'of',
       'with',
       'by',
-      'is',
-      'are',
-      'was',
-      'were',
-      'be',
-      'been',
-      'being',
-      'have',
-      'has',
-      'had',
-      'do',
-      'does',
-      'did',
-      'will',
-      'would',
-      'could',
-      'should',
-      'may',
-      'might',
-      'can',
-      'this',
-      'that',
-      'these',
-      'those',
     ]
 
-    // Extract potential keywords
     const keywordCandidates = words
       .filter(word => word.length > 3 && !commonWords.includes(word))
       .reduce((acc, word) => {
@@ -291,80 +332,105 @@ Return ONLY valid JSON, no markdown formatting, no code blocks.`
       .slice(0, 5)
       .map(([word]) => word)
 
-    // Ensure we always have at least one keyword and tag (Docusaurus requirement)
-    const finalKeywords =
-      topKeywords.length > 0 ? topKeywords : ['documentation']
-    const finalTags = topKeywords.slice(0, 5)
-    if (finalTags.length === 0) finalTags.push('documentation')
-
-    // Combine keywords and tags for better search indexing
-    const combinedTags = [...new Set([...finalTags, ...finalKeywords])]
-    const searchableTags = combinedTags.slice(0, 10) // Limit to 10 to avoid clutter
-
-    // Generate better topics from headings
-    const topics =
-      context.headings.length > 0
-        ? context.headings
-            .slice(0, 3)
-            .map(h => h.text.toLowerCase().replace(/\s+/g, '-'))
-        : ['general']
-
+    // Generate basic SEO metadata
     return {
-      title: context.title || 'Documentation',
-      description: `Documentation for ${
-        context.title || 'this topic'
-      }. This guide covers key concepts and procedures.`,
-      tags: searchableTags,
-      keywords: finalKeywords,
-      category: 'documentation',
-      difficulty:
-        context.wordCount < 200
+      title:
+        context.title.length > 60
+          ? context.title.substring(0, 57) + '...'
+          : context.title,
+      description: `Learn about ${context.title.toLowerCase()}. This comprehensive guide covers key concepts and practical implementation.`,
+      keywords:
+        topKeywords.length > 0 ? topKeywords : ['documentation', 'guide'],
+      searchKeywords: topKeywords.slice(0, 3),
+      semanticTerms: [],
+      focusKeyword: topKeywords[0] || 'documentation',
+      keywordDensity: 'balanced',
+      contentType: this.inferContentType(context),
+      searchIntent: 'informational',
+      readingLevel:
+        context.wordCount < 500
           ? 'beginner'
-          : context.wordCount < 400
+          : context.wordCount < 1000
           ? 'intermediate'
           : 'advanced',
-      topics: topics,
-      related: [],
-      ragScore: Math.min(
-        85,
-        Math.max(40, context.wordCount / 5 + context.headings.length * 10),
-      ),
-      ragImprovements: [
-        'Add more cross-references',
-        'Improve heading structure',
-        'Add examples',
-      ],
+      estimatedReadingTime: Math.max(1, Math.ceil(context.wordCount / 200)),
+      lastUpdated: new Date().toISOString().split('T')[0],
+      author: 'Technical Documentation Team',
+      category: 'documentation',
+      tags: topKeywords.slice(0, 3).concat(['documentation']),
+      audience: ['developers'],
+      seoScore: 70,
     }
   }
 
   /**
-   * Identify what improvements were made
+   * Infer content type from structure and headings
+   */
+  inferContentType(context) {
+    const title = context.title.toLowerCase()
+    const headings = context.headings.map(h => h.text.toLowerCase()).join(' ')
+
+    if (
+      title.includes('tutorial') ||
+      headings.includes('step') ||
+      headings.includes('how to')
+    ) {
+      return 'tutorial'
+    } else if (
+      title.includes('reference') ||
+      title.includes('api') ||
+      headings.includes('parameters')
+    ) {
+      return 'reference'
+    } else if (
+      title.includes('troubleshoot') ||
+      headings.includes('error') ||
+      headings.includes('problem')
+    ) {
+      return 'troubleshooting'
+    } else if (title.includes('overview') || title.includes('introduction')) {
+      return 'overview'
+    } else {
+      return 'guide'
+    }
+  }
+
+  /**
+   * Identify what SEO improvements were made
    */
   identifyImprovements(original, enhanced) {
     const improvements = []
 
     if (!original.description && enhanced.description) {
-      improvements.push('Added description')
-    }
-
-    if (!original.tags && enhanced.tags) {
-      improvements.push('Added tags')
+      improvements.push('Added SEO-optimized description')
     }
 
     if (!original.keywords && enhanced.keywords) {
-      improvements.push('Added keywords')
+      improvements.push('Added target keywords')
     }
 
-    if (!original.category && enhanced.category) {
-      improvements.push('Added category')
+    if (!original.focusKeyword && enhanced.focusKeyword) {
+      improvements.push('Added focus keyword')
     }
 
-    if (enhanced.rag_score) {
-      improvements.push(`RAG score: ${enhanced.rag_score}/100`)
+    if (!original.searchKeywords && enhanced.searchKeywords) {
+      improvements.push('Added search keywords')
+    }
+
+    if (!original.contentType && enhanced.contentType) {
+      improvements.push('Added content type classification')
+    }
+
+    if (!original.searchIntent && enhanced.searchIntent) {
+      improvements.push('Added search intent analysis')
+    }
+
+    if (enhanced.seoScore) {
+      improvements.push(`SEO score: ${enhanced.seoScore}/100`)
     }
 
     return improvements
   }
 }
 
-module.exports = KeywordExtractionAgent
+module.exports = SEOMetadataGeneratorAgent

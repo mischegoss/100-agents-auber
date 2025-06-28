@@ -1,4 +1,3 @@
-
 import clsx from 'clsx'
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
@@ -68,8 +67,9 @@ function SearchComparison() {
               fontWeight: '500',
             }}
           >
-            Reduce support costs by 40% and boost user satisfaction with AI-powered 
-            documentation search that actually understands what users need.
+            Reduce support costs by 40% and boost user satisfaction with
+            AI-powered documentation search that actually understands what users
+            need.
           </p>
         </div>
 
@@ -162,7 +162,13 @@ function SearchComparison() {
               }}
             >
               <strong>⚠️ Business Impact:</strong>
-              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem', color: '#2c3e50' }}>
+              <ul
+                style={{
+                  margin: '0.5rem 0 0 0',
+                  paddingLeft: '1.2rem',
+                  color: '#2c3e50',
+                }}
+              >
                 <li>Users struggle to find relevant information</li>
                 <li>Higher support ticket volume</li>
                 <li>Poor developer experience</li>
@@ -250,7 +256,13 @@ function SearchComparison() {
               }}
             >
               <strong>🎯 Proven Results:</strong>
-              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem', color: '#1a1a1a' }}>
+              <ul
+                style={{
+                  margin: '0.5rem 0 0 0',
+                  paddingLeft: '1.2rem',
+                  color: '#1a1a1a',
+                }}
+              >
                 <li>Semantic search finds answers instantly</li>
                 <li>40% reduction in support tickets</li>
                 <li>Improved user onboarding experience</li>
@@ -334,8 +346,8 @@ function SearchComparison() {
               fontWeight: '500',
             }}
           >
-            Try identical searches in both widgets above to see how AI enhancement 
-            transforms user discovery and reduces time-to-answer.
+            Try identical searches in both widgets above to see how AI
+            enhancement transforms user discovery and reduces time-to-answer.
           </p>
         </div>
       </div>
