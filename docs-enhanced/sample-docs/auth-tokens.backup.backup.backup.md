@@ -2,7 +2,7 @@
 sidebar_position: 1
 title: Authentication Token Management
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T16:53:15.226Z'
+chunkingDate: '2025-06-28T16:52:45.531Z'
 structureImprovements: 0
 optimalChunkSize: 350
 chunkingScore: 70
@@ -10,7 +10,7 @@ headingsAdded: 0
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T16:53:15.226Z'
+enhanced_at: '2025-06-28T16:52:45.531Z'
 ---
 
 # Authentication Token Management

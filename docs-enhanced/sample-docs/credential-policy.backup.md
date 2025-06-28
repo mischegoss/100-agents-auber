@@ -2,7 +2,7 @@
 sidebar_position: 3
 title: Credential Policy
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T16:55:35.015Z'
+chunkingDate: '2025-06-28T16:55:27.634Z'
 structureImprovements: 0
 optimalChunkSize: 350
 chunkingScore: 70
@@ -10,7 +10,7 @@ headingsAdded: 0
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T16:55:35.015Z'
+enhanced_at: '2025-06-28T16:55:27.634Z'
 ---
 
 # Credential Policy

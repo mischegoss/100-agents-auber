@@ -2,7 +2,7 @@
 sidebar_position: 2
 title: Credential Lifecycle Operations
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T16:55:19.673Z'
+chunkingDate: '2025-06-28T16:54:55.453Z'
 structureImprovements: 0
 optimalChunkSize: 350
 chunkingScore: 70
@@ -10,7 +10,7 @@ headingsAdded: 0
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T16:55:19.673Z'
+enhanced_at: '2025-06-28T16:54:55.453Z'
 ---
 
 # Credential Lifecycle Operations

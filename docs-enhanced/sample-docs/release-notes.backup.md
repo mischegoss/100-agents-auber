@@ -2,7 +2,7 @@
 sidebar_position: 9
 title: Release Notes
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T16:56:43.626Z'
+chunkingDate: '2025-06-28T16:56:35.726Z'
 structureImprovements: 0
 optimalChunkSize: 350
 chunkingScore: 70
@@ -10,7 +10,7 @@ headingsAdded: 0
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T16:56:43.626Z'
+enhanced_at: '2025-06-28T16:56:35.726Z'
 ---
 
 # Release Notes Version 3.2

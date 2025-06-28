@@ -2,7 +2,7 @@
 sidebar_position: 3
 title: System Integration Endpoints
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T16:57:02.769Z'
+chunkingDate: '2025-06-28T16:56:53.244Z'
 structureImprovements: 0
 optimalChunkSize: 350
 chunkingScore: 70
@@ -10,7 +10,7 @@ headingsAdded: 0
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T16:57:02.769Z'
+enhanced_at: '2025-06-28T16:56:53.244Z'
 ---
 
 # System Integration Endpoints

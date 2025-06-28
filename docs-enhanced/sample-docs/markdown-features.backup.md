@@ -1,7 +1,7 @@
 ---
 sidebar_position: 6
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T16:56:27.149Z'
+chunkingDate: '2025-06-28T16:56:12.280Z'
 structureImprovements: 0
 optimalChunkSize: 350
 chunkingScore: 70
@@ -9,7 +9,7 @@ headingsAdded: 0
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T16:56:27.149Z'
+enhanced_at: '2025-06-28T16:56:12.280Z'
 ---
 
 # Markdown Features
