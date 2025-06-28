@@ -1,14 +1,30 @@
 ---
 sidebar_position: 6
+chunkingEnhanced: true
+chunkingDate: '2025-06-28T18:05:53.540Z'
+structureImprovements: 12
+optimalChunkSize: 350
+chunkingScore: 85
+headingsAdded: 12
+sectionsRestructured: 0
+semanticBridges: 0
+enhanced_by: rag-prep-plugin-chunking-restructurer
+enhanced_at: '2025-06-28T18:05:53.540Z'
 ---
 
 # Markdown Features
+
+## Front Matter Metadata
+
 
 Docusaurus supports **[Markdown](https://daringfireball.net/projects/markdown/syntax)** and a few **additional features**.
 
 ## Front Matter
 
 Markdown documents have metadata at the top called [Front Matter](https://jekyllrb.com/docs/front-matter/):
+
+### Example Front Matter
+
 
 ```text title="my-doc.md"
 // highlight-start
@@ -22,12 +38,21 @@ slug: /my-custom-url
 
 ## Markdown heading
 
+## Linking in Markdown
+
+
 Markdown text with [links](./hello.md)
 ```
 
 ## Links
 
+## Image Inclusion
+
+
 Regular Markdown links are supported, using url paths or relative file paths.
+
+### URL Paths and Relative File Paths
+
 
 ```md
 Let's see how to [Create a page](/create-a-page).
@@ -41,7 +66,16 @@ Let's see how to [Create a page](./create-a-page.md).
 
 ## Images
 
+## Code Blocks with Syntax Highlighting
+
+## Using Admonitions for Callouts
+
+
+
 Regular Markdown images are supported.
+
+### Absolute and Relative Image Paths
+
 
 You can use absolute paths to reference images in the static directory (`static/img/docusaurus.png`):
 
@@ -61,6 +95,9 @@ You can reference images relative to the current file as well. This is particula
 
 Markdown code blocks are supported with Syntax highlighting.
 
+### Example Code Block
+
+
 ````md
 ```jsx title="src/components/HelloDocusaurus.js"
 function HelloDocusaurus() {
@@ -77,7 +114,13 @@ function HelloDocusaurus() {
 
 ## Admonitions
 
+## Enhancing Documentation with MDX and React
+
+
 Docusaurus has a special syntax to create admonitions and callouts:
+
+### Example Admonitions
+
 
 ```md
 :::tip My tip
@@ -108,6 +151,9 @@ This action is dangerous
 ## MDX and React Components
 
 [MDX](https://mdxjs.com/) can make your documentation more **interactive** and allows using any **React components inside Markdown**:
+
+### Example React Component
+
 
 ```jsx
 export const Highlight = ({children, color}) => (
