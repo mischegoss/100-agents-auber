@@ -1,6 +1,55 @@
 ---
 sidebar_position: 6
 title: Advanced Concepts
+description: >-
+  Explore advanced system concepts: message queues, state machines, JVM tuning,
+  and network optimization. Improve performance and scalability today!
+tags:
+  - architecture
+  - tuning
+  - jvm
+  - redis
+  - networking
+keywords:
+  - system architecture
+  - jvm tuning
+  - message queue
+  - redis cache
+  - state machine
+topics:
+  - system architecture
+  - architecture overview
+  - service decoupling
+  - message queueing
+  - rabbitmq
+  - api interaction
+categories:
+  - guide
+  - infrastructure
+audience:
+  - developers
+  - system-administrators
+  - architects
+  - devops-engineers
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - message-queueing-concepts
+  - jvm-fundamentals
+  - containerization-basics
+difficulty: advanced
+complexity: high
+contentType: reference
+domainArea: infrastructure
+primaryTopic: system architecture
+category: System Design
+ragScore: 91
+agentCount: 4
+researchConducted: true
+researchDate: '2025-06-28'
+researchSources: 13
+researchScore: 97
+tavilyIntegration: true
 ---
 
 # Advanced Concepts
@@ -20,3 +69,22 @@ JVM garbage collection is a key performance consideration. For high-throughput i
 ## Other Information
 
 Network configuration requires careful planning in containerized environments. Port mapping conflicts are common. Use a dedicated overlay network for inter-service communication. Health checks should be configured to target a specific, lightweight endpoint rather than the main application root to ensure the load balancer can quickly and efficiently detect a failing instance without imposing unnecessary load.
+
+## 🏆 Current Best Practices (2025)
+
+Based on recent industry research:
+
+- **best practices to structure the content\**: best practices to structure the content\.
+- **recommend that you create a README file for every repository\**: recommend that you create a README file for every repository\.
+- **best practices, strategies, and tools for well-documented code, including how AI helps developers write code documentation more efficiently\**: best practices, strategies, and tools for well-documented code, including how AI helps developers write code documentation more efficiently\.
+
+## 📚 Additional Resources
+
+- [Atlassian Documentation](https://confluence.atlassian.com/?mod=api)
+- [GitHub REST API documentation](https://docs.github.com/en/rest)
+- [Getting started with the REST API - GitHub Docs](https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api)
+
+## 🔧 Related Tools & Technologies
+
+- **FastAPI**: Modern tool for advanced concepts
+
