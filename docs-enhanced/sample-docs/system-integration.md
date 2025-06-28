@@ -1,6 +1,51 @@
 ---
 sidebar_position: 3
 title: System Integration Endpoints
+description: >-
+  Integrate with our backend services using documented API endpoints. Learn
+  about authentication, data retrieval, error handling, and advanced usage.
+  Example c...
+tags:
+  - api
+  - integration
+  - endpoints
+  - rest
+  - json
+  - http
+  - developers
+keywords:
+  - api integration
+  - system endpoints
+  - rest api
+  - json api
+  - http methods
+  - api documentation
+topics:
+  - system integration
+  - api endpoints
+  - rest api
+  - endpoint documentation
+  - data retrieval
+  - data modification
+categories:
+  - reference
+  - integration
+audience:
+  - developers
+  - system-administrators
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - authentication-concepts
+  - rest-principles
+  - json-syntax
+category: API Reference
+difficulty: intermediate
+contentType: reference
+domainArea: integration
+primaryTopic: api endpoints
+ragScore: 88
+agentCount: 2
 ---
 
 # System Integration Endpoints
