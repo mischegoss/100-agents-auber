@@ -1,0 +1,109 @@
+[2025-06-28T16:42:04.790Z] INFO: 📋 [Run Logger] Capturing console output to: ./logs/runs/run-1751128924790.log
+[2025-06-28T16:42:04.791Z] INFO: 🤖 [Multi-Agent Task] Processing with 4 agents in sequence
+[2025-06-28T16:42:04.791Z] INFO:    1. seo-metadata-generator-agent (SEO Content Analysis Specialist)
+[2025-06-28T16:42:04.791Z] INFO:    2. topic-taxonomy-agent (Content Categorization Specialist)
+[2025-06-28T16:42:04.791Z] INFO:    3. document-chunking-optimizer-agent (Document Structure Enhancement Specialist)
+[2025-06-28T16:42:04.791Z] INFO:    4. content-research-agent (Content Validation & Research Specialist)
+[2025-06-28T16:42:04.792Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:42:04.792Z] INFO:    📖 Original content: 168 words
+[2025-06-28T16:42:04.792Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:42:04.792Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:04.795Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:42:06.651Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:42:06.651Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:06.651Z] INFO:       ✅ seo-metadata-generator-agent completed (1859ms)
+[2025-06-28T16:42:06.652Z] INFO:       📝 7 improvements made
+[2025-06-28T16:42:06.652Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:42:06.652Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:06.653Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:42:08.832Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:42:08.832Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:08.832Z] INFO:       ✅ topic-taxonomy-agent completed (2180ms)
+[2025-06-28T16:42:08.833Z] INFO:       📝 7 improvements made
+[2025-06-28T16:42:08.833Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:42:08.834Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:08.835Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:42:08.835Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:42:08.835Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:42:08.836Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:42:08.837Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:08.837Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:42:08.837Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:08.838Z] INFO:       ✅ document-chunking-optimizer-agent completed (5ms)
+[2025-06-28T16:42:08.838Z] INFO:       📝 0 improvements made
+[2025-06-28T16:42:08.838Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:42:08.838Z] INFO:    🤖 Running content-research-agent (4/4)...
+[2025-06-28T16:42:08.839Z] INFO: 🔍 [Research Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:08.839Z] INFO: 🔍 [Research Agent] Conducting validation research with Tavily...
+[2025-06-28T16:42:08.898Z] INFO:    🔎 Validating: "Account Lockout Procedures compliance requirements GDPR SOC2 2024"
+[2025-06-28T16:42:08.899Z] INFO: 🎯 [Research Agent] Validation research complete - 0 questions answered
+[2025-06-28T16:42:08.899Z] INFO:    📋 Validation log saved: logs/validation/account-lockout-backup-backup-backup-validation-2025-06-28.md
+[2025-06-28T16:42:08.899Z] INFO: ✅ [Research Agent] Validation complete: APPROVED
+[2025-06-28T16:42:08.900Z] INFO: 📋 [Research Agent] Log saved: logs/validation/account-lockout-backup-backup-backup-validation-2025-06-28.md
+[2025-06-28T16:42:08.900Z] INFO:       ✅ content-research-agent completed (62ms)
+[2025-06-28T16:42:08.900Z] INFO:       📝 2 improvements made
+[2025-06-28T16:42:08.900Z] INFO:    📊 Content evolution: 168 → 189 words
+[2025-06-28T16:42:08.900Z] INFO:    🎯 Consolidated RAG score: 79/100
+[2025-06-28T16:42:08.900Z] INFO: ✅ Multi-agent analysis complete for: Account Lockout Procedures
+[2025-06-28T16:42:08.900Z] INFO:    🔧 Total improvements: 16
+[2025-06-28T16:42:08.900Z] INFO:    📈 Final RAG score: 79/100
+[2025-06-28T16:42:08.900Z] INFO:    🔍 Processing time: 4106ms
+[2025-06-28T16:42:08.900Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:42:08.901Z] INFO:    📖 Original content: 189 words
+[2025-06-28T16:42:08.901Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:42:08.901Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:42:08.901Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:42:10.800Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:42:10.801Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:42:10.801Z] INFO:       ✅ seo-metadata-generator-agent completed (1900ms)
+[2025-06-28T16:42:10.801Z] INFO:       📝 7 improvements made
+[2025-06-28T16:42:10.802Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:42:10.802Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:42:10.803Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:42:13.080Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:42:13.080Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:42:13.081Z] INFO:       ✅ topic-taxonomy-agent completed (2279ms)
+[2025-06-28T16:42:13.081Z] INFO:       📝 7 improvements made
+[2025-06-28T16:42:13.081Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:42:13.082Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:42:13.082Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:42:13.082Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:42:13.083Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:42:13.083Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:42:13.084Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:42:13.084Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:42:13.084Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:42:13.084Z] INFO:       ✅ document-chunking-optimizer-agent completed (3ms)
+[2025-06-28T16:42:13.084Z] INFO:       📝 0 improvements made
+[2025-06-28T16:42:13.084Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:42:13.085Z] INFO:    🤖 Running content-research-agent (4/4)...
+[2025-06-28T16:42:13.085Z] INFO: 🔍 [Research Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:42:13.085Z] INFO: 🔍 [Research Agent] Conducting validation research with Tavily...
+[2025-06-28T16:42:13.085Z] INFO:    🔎 Validating: "Account Lockout Procedures compliance requirements GDPR SOC2 2024"
+[2025-06-28T16:42:13.086Z] INFO: 🎯 [Research Agent] Validation research complete - 0 questions answered
+[2025-06-28T16:42:13.086Z] INFO:    📋 Validation log saved: logs/validation/account-lockout-backup-backup-validation-2025-06-28.md
+[2025-06-28T16:42:13.086Z] INFO: ✅ [Research Agent] Validation complete: APPROVED
+[2025-06-28T16:42:13.087Z] INFO: 📋 [Research Agent] Log saved: logs/validation/account-lockout-backup-backup-validation-2025-06-28.md
+[2025-06-28T16:42:13.087Z] INFO:       ✅ content-research-agent completed (2ms)
+[2025-06-28T16:42:13.087Z] INFO:       📝 2 improvements made
+[2025-06-28T16:42:13.087Z] INFO:    📊 Content evolution: 189 → 189 words
+[2025-06-28T16:42:13.087Z] INFO:    🎯 Consolidated RAG score: 80/100
+[2025-06-28T16:42:13.087Z] INFO: ✅ Multi-agent analysis complete for: Account Lockout Procedures
+[2025-06-28T16:42:13.087Z] INFO:    🔧 Total improvements: 16
+[2025-06-28T16:42:13.088Z] INFO:    📈 Final RAG score: 80/100
+[2025-06-28T16:42:13.088Z] INFO:    🔍 Processing time: 4184ms
+[2025-06-28T16:42:13.088Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:42:13.088Z] INFO:    📖 Original content: 189 words
+[2025-06-28T16:42:13.088Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:42:13.088Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:42:13.089Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:42:14.949Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:42:14.950Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:42:14.950Z] INFO:       ✅ seo-metadata-generator-agent completed (1862ms)
+[2025-06-28T16:42:14.951Z] INFO:       📝 7 improvements made
+[2025-06-28T16:42:14.951Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:42:14.952Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:42:14.953Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...

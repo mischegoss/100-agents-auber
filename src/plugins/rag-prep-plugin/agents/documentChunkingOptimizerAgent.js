@@ -1,18 +1,17 @@
 /**
- * Document Chunking Optimizer Agent
- * Uses Google Gemini to analyze document structure and optimize content chunking for RAG effectiveness
- * Focuses on semantic segmentation, contextual bridges, and optimal chunk sizing
+ * Enhanced Document Chunking Optimizer Agent
+ * Actually restructures content for optimal chunking rather than just analyzing
+ * Uses Google Gemini to rewrite sections, add headings, and improve flow
  */
 class DocumentChunkingOptimizerAgent {
   constructor() {
     this.name = 'document-chunking-optimizer-agent'
-    this.role = 'Document Structure Analysis Specialist'
+    this.role = 'Document Structure Enhancement Specialist'
     this.goal =
-      'Optimize document structure and chunking for maximum RAG retrieval effectiveness'
-    this.backstory = `You are an expert document structure analyst specializing in optimizing content organization for AI retrieval systems. 
-                        You excel at analyzing document flow, creating semantic boundaries, generating contextual bridges between sections,
-                        and optimizing heading hierarchies for both human readability and AI comprehension. Your chunking strategies 
-                        balance context preservation with retrieval precision.`
+      'Actively restructure documents for optimal chunking and RAG retrieval effectiveness'
+    this.backstory = `You are an expert document restructuring specialist who doesn't just analyze - you actually improve content organization. 
+                          You excel at breaking up wall-of-text sections, adding missing headings, creating semantic bridges between concepts,
+                          and rewriting content for both human readability and AI comprehension. You work like a professional editor.`
     this.verbose = true
     this.allowDelegation = false
     this.maxIter = 3
@@ -20,7 +19,7 @@ class DocumentChunkingOptimizerAgent {
   }
 
   /**
-   * Analyze document content and generate optimized chunking metadata
+   * Main entry point - analyze and RESTRUCTURE document content
    */
   async analyzeContent(filePath, content, currentMetadata = {}) {
     console.log(`✂️ [Chunking Agent] Analyzing: ${filePath}`)
@@ -30,7 +29,7 @@ class DocumentChunkingOptimizerAgent {
       const matter = require('gray-matter')
       const parsed = matter(content)
 
-      // Prepare analysis context
+      // Analyze current structure
       const analysisContext = {
         title: parsed.data.title || 'Untitled',
         content: parsed.content,
@@ -39,529 +38,575 @@ class DocumentChunkingOptimizerAgent {
         headings: this.extractHeadingStructure(parsed.content),
         sections: this.analyzeSectionLengths(parsed.content),
         codeBlocks: this.extractCodeBlocks(parsed.content),
-        lists: this.extractLists(parsed.content),
-        linkStructure: this.analyzeInternalLinks(parsed.content),
-        contentFlow: this.analyzeContentFlow(parsed.content),
+        structuralIssues: this.identifyStructuralIssues(parsed.content),
       }
 
-      // Generate chunking optimization using Gemini
-      const chunkingMetadata = await this.generateChunkingStrategy(
+      console.log(
+        `🤖 [Chunking Agent] Calling Gemini for content restructuring...`,
+      )
+
+      // Generate restructuring plan
+      const restructuringPlan = await this.generateRestructuringPlan(
         analysisContext,
       )
 
+      // Actually restructure the content
+      const restructuredContent = await this.applyRestructuring(
+        parsed.content,
+        restructuringPlan,
+      )
+
+      // Update frontmatter with chunking metadata
+      const enhancedMetadata = this.generateChunkingMetadata(
+        analysisContext,
+        restructuringPlan,
+      )
+
+      // Create final document with enhanced frontmatter and restructured content
+      const finalContent = matter.stringify(restructuredContent, {
+        ...parsed.data,
+        ...enhancedMetadata,
+      })
+
+      // Write the improved content back to the file
+      await this.writeImprovedContent(filePath, finalContent)
+
       console.log(
-        `✅ [Chunking Agent] Optimized document structure for: ${filePath}`,
+        `🎯 [Chunking Agent] Document structure enhanced and rewritten: ${filePath}`,
       )
 
       return {
         originalMetadata: parsed.data,
-        enhancedMetadata: chunkingMetadata,
-        content: parsed.content,
-        improvements: this.identifyImprovements(parsed.data, chunkingMetadata),
+        enhancedMetadata,
+        originalContent: parsed.content,
+        restructuredContent,
+        improvements: this.calculateImprovements(
+          analysisContext,
+          restructuringPlan,
+        ),
+        structureScoreImprovement: restructuringPlan.scoreImprovement || 0,
       }
     } catch (error) {
       console.error(
-        `❌ [Chunking Agent] Error analyzing ${filePath}:`,
+        `❌ [Chunking Agent] Error restructuring ${filePath}:`,
         error.message,
       )
+      // Fallback to original analysis-only behavior
+      return this.fallbackAnalysis(content)
+    }
+  }
+
+  /**
+   * Identify structural issues that need fixing
+   */
+  identifyStructuralIssues(content) {
+    const issues = []
+    const lines = content.split('\n')
+
+    // Find oversized sections (sections with >500 words between headings)
+    const sections = this.analyzeSectionLengths(content)
+    sections.forEach((section, index) => {
+      if (section.wordCount > 500) {
+        issues.push({
+          type: 'oversized_section',
+          heading: section.heading,
+          wordCount: section.wordCount,
+          startLine: section.startLine,
+          severity: section.wordCount > 700 ? 'high' : 'medium',
+        })
+      }
+    })
+
+    // Find missing heading hierarchy (large gaps in heading levels)
+    const headings = this.extractHeadingStructure(content)
+    for (let i = 0; i < headings.length - 1; i++) {
+      const currentLevel = headings[i].level
+      const nextLevel = headings[i + 1].level
+      if (nextLevel - currentLevel > 1) {
+        issues.push({
+          type: 'heading_hierarchy_gap',
+          from: currentLevel,
+          to: nextLevel,
+          line: headings[i + 1].line,
+        })
+      }
+    }
+
+    // Find code blocks without proper context
+    const codeBlocks = this.extractCodeBlocks(content)
+    codeBlocks.forEach(block => {
+      if (!block.hasContext) {
+        issues.push({
+          type: 'orphaned_code_block',
+          language: block.language,
+          line: block.line,
+        })
+      }
+    })
+
+    return issues
+  }
+
+  /**
+   * Generate restructuring plan using Gemini
+   */
+  async generateRestructuringPlan(context) {
+    try {
+      const geminiPrompt = this.buildRestructuringPrompt(context)
+      const response = await this.callGemini(geminiPrompt)
+      return this.parseRestructuringResponse(response)
+    } catch (error) {
+      console.warn(
+        `⚠️ [Chunking Agent] Gemini restructuring failed: ${error.message}`,
+      )
+      return this.generateFallbackPlan(context)
+    }
+  }
+
+  /**
+   * Build comprehensive prompt for content restructuring
+   */
+  buildRestructuringPrompt(context) {
+    return `You are a professional technical documentation editor. Restructure this document for optimal readability and AI retrieval.
+  
+  DOCUMENT ANALYSIS:
+  Title: "${context.title}"
+  Word Count: ${context.wordCount}
+  Current Headings: ${context.headings.length}
+  Structural Issues: ${context.structuralIssues.length}
+  
+  CONTENT:
+  ${context.content}
+  
+  RESTRUCTURING TASKS:
+  1. Add missing H2/H3 headings to break up sections >400 words
+  2. Split oversized sections into logical subsections
+  3. Add semantic bridges between major sections
+  4. Improve heading hierarchy and consistency
+  5. Add contextual anchors around code blocks
+  6. Ensure each section has a clear, focused purpose
+  
+  REQUIREMENTS:
+  - Preserve all original information and technical accuracy
+  - Maintain the author's voice and style
+  - Add headings, don't move content around extensively
+  - Focus on organization improvements, not content rewrites
+  - Ensure each section is 200-400 words for optimal chunking
+  
+  OUTPUT FORMAT:
+  {
+    "actions": [
+      {
+        "type": "add_heading",
+        "level": 2,
+        "text": "New Heading Text",
+        "insertAfter": "existing content to find",
+        "reason": "explanation"
+      },
+      {
+        "type": "split_section", 
+        "originalHeading": "Current Section",
+        "newSubsections": ["Subsection 1", "Subsection 2"],
+        "splitPoints": ["content marker 1", "content marker 2"]
+      },
+      {
+        "type": "add_bridge",
+        "insertAfter": "section ending content",
+        "bridgeText": "transition sentence connecting concepts"
+      }
+    ],
+    "scoreImprovement": 15,
+    "summary": "Brief description of improvements"
+  }`
+  }
+
+  /**
+   * Apply restructuring actions to content
+   */
+  async applyRestructuring(originalContent, plan) {
+    let content = originalContent
+
+    // Sort actions by line position (reverse order to maintain positions)
+    const sortedActions = [...plan.actions].sort((a, b) => {
+      const posA = this.findContentPosition(
+        content,
+        a.insertAfter || a.originalHeading || '',
+      )
+      const posB = this.findContentPosition(
+        content,
+        b.insertAfter || b.originalHeading || '',
+      )
+      return posB - posA
+    })
+
+    // Apply each restructuring action
+    for (const action of sortedActions) {
+      switch (action.type) {
+        case 'add_heading':
+          content = this.addHeading(content, action)
+          break
+        case 'split_section':
+          content = this.splitSection(content, action)
+          break
+        case 'add_bridge':
+          content = this.addSemanticBridge(content, action)
+          break
+        case 'add_context':
+          content = this.addCodeContext(content, action)
+          break
+      }
+    }
+
+    return content
+  }
+
+  /**
+   * Add a new heading at specified location
+   */
+  addHeading(content, action) {
+    const insertPoint = this.findContentPosition(content, action.insertAfter)
+    if (insertPoint === -1) return content
+
+    const lines = content.split('\n')
+    const headingPrefix = '#'.repeat(action.level)
+    const newHeading = `\n${headingPrefix} ${action.text}\n`
+
+    lines.splice(insertPoint + 1, 0, newHeading)
+
+    console.log(
+      `   ✅ Added ${action.level === 2 ? 'H2' : 'H3'} heading: "${
+        action.text
+      }"`,
+    )
+    return lines.join('\n')
+  }
+
+  /**
+   * Split an oversized section into subsections
+   */
+  splitSection(content, action) {
+    const sectionStart = content.indexOf(action.originalHeading)
+    if (sectionStart === -1) return content
+
+    let result = content
+    action.newSubsections.forEach((subsection, index) => {
+      if (action.splitPoints[index]) {
+        const splitPoint = this.findContentPosition(
+          result,
+          action.splitPoints[index],
+        )
+        if (splitPoint !== -1) {
+          result = this.addHeading(result, {
+            level: 3,
+            text: subsection,
+            insertAfter: action.splitPoints[index],
+          })
+        }
+      }
+    })
+
+    console.log(
+      `   ✂️ Split section "${action.originalHeading}" into ${action.newSubsections.length} subsections`,
+    )
+    return result
+  }
+
+  /**
+   * Add semantic bridge between sections
+   */
+  addSemanticBridge(content, action) {
+    const insertPoint = this.findContentPosition(content, action.insertAfter)
+    if (insertPoint === -1) return content
+
+    const lines = content.split('\n')
+    lines.splice(insertPoint + 1, 0, '', action.bridgeText, '')
+
+    console.log(`   🌉 Added semantic bridge`)
+    return lines.join('\n')
+  }
+
+  /**
+   * Write improved content back to file
+   */
+  async writeImprovedContent(filePath, content) {
+    const fs = require('fs').promises
+    const path = require('path')
+
+    try {
+      // Create backup of original
+      const backupPath = filePath.replace('.md', '.backup.md')
+      const originalContent = await fs.readFile(filePath, 'utf8')
+      await fs.writeFile(backupPath, originalContent)
+
+      // Write improved content
+      await fs.writeFile(filePath, content, 'utf8')
+
+      console.log(`   💾 Content restructured and saved to ${filePath}`)
+      console.log(`   📄 Original backed up to ${backupPath}`)
+    } catch (error) {
+      console.error(`   ❌ Failed to write improved content: ${error.message}`)
       throw error
     }
   }
 
   /**
-   * Extract heading structure with depth analysis
+   * Calculate improvements made
    */
-  extractHeadingStructure(content) {
-    const headingMatches = content.match(/^#+\s+(.+)$/gm) || []
-    const structure = []
+  calculateImprovements(originalContext, plan) {
+    const improvements = []
 
-    headingMatches.forEach((heading, index) => {
-      const level = (heading.match(/^#+/) || [''])[0].length
-      const text = heading
-        .replace(/^#+\s+/, '')
-        .replace(/[#*`]/g, '')
-        .trim()
-      const nextHeading = headingMatches[index + 1]
-
-      // Calculate section content (rough approximation)
-      const currentPos = content.indexOf(heading)
-      const nextPos = nextHeading
-        ? content.indexOf(nextHeading)
-        : content.length
-      const sectionContent = content.substring(currentPos, nextPos)
-      const wordCount = sectionContent.split(/\s+/).length
-
-      structure.push({
-        level,
-        text,
-        wordCount,
-        hasCodeBlocks: /```/.test(sectionContent),
-        hasList: /^\s*[-*+]\s+/.test(sectionContent),
-        position: index,
-      })
+    plan.actions.forEach(action => {
+      switch (action.type) {
+        case 'add_heading':
+          improvements.push(
+            `Added ${action.level === 2 ? 'H2' : 'H3'} heading: "${
+              action.text
+            }"`,
+          )
+          break
+        case 'split_section':
+          improvements.push(
+            `Split "${action.originalHeading}" into ${action.newSubsections.length} subsections`,
+          )
+          break
+        case 'add_bridge':
+          improvements.push('Added semantic bridge between sections')
+          break
+      }
     })
 
-    return structure
+    if (plan.scoreImprovement) {
+      improvements.push(
+        `Structure score improved by ${plan.scoreImprovement} points`,
+      )
+    }
+
+    return improvements
   }
 
   /**
-   * Analyze section lengths and distribution
+   * Generate chunking metadata for frontmatter
    */
-  analyzeSectionLengths(content) {
-    const sections = content.split(/^#+\s+/gm).filter(section => section.trim())
-
+  generateChunkingMetadata(context, plan) {
     return {
-      count: sections.length,
-      lengths: sections.map(section => section.split(/\s+/).length),
-      averageLength:
-        sections.reduce(
-          (acc, section) => acc + section.split(/\s+/).length,
-          0,
-        ) / sections.length,
-      varianceHigh:
-        this.calculateVariance(sections.map(s => s.split(/\s+/).length)) > 1000,
+      chunkingEnhanced: true,
+      chunkingDate: new Date().toISOString(),
+      structureImprovements: plan.actions.length,
+      optimalChunkSize: 350, // Target chunk size after restructuring
+      chunkingScore: Math.min(90, 70 + (plan.scoreImprovement || 0)),
+      headingsAdded: plan.actions.filter(a => a.type === 'add_heading').length,
+      sectionsRestructured: plan.actions.filter(a => a.type === 'split_section')
+        .length,
+      semanticBridges: plan.actions.filter(a => a.type === 'add_bridge').length,
+      enhanced_by: 'rag-prep-plugin-chunking-restructurer',
+      enhanced_at: new Date().toISOString(),
     }
   }
 
   /**
-   * Calculate variance for section length analysis
+   * Utility functions
    */
-  calculateVariance(numbers) {
-    const mean = numbers.reduce((a, b) => a + b, 0) / numbers.length
-    return (
-      numbers.reduce((acc, num) => acc + Math.pow(num - mean, 2), 0) /
-      numbers.length
-    )
+  findContentPosition(content, searchText) {
+    const lines = content.split('\n')
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].includes(searchText)) {
+        return i
+      }
+    }
+    return -1
   }
 
-  /**
-   * Extract and analyze code blocks for context
-   */
+  extractHeadingStructure(content) {
+    const headingMatches = content.match(/^#+\s+(.+)$/gm) || []
+    return headingMatches.map((heading, index) => ({
+      level: (heading.match(/^#+/) || [''])[0].length,
+      text: heading.replace(/^#+\s+/, '').trim(),
+      line: index,
+    }))
+  }
+
+  analyzeSectionLengths(content) {
+    const lines = content.split('\n')
+    const sections = []
+    let currentSection = { heading: 'Introduction', startLine: 0, content: [] }
+
+    lines.forEach((line, index) => {
+      if (line.match(/^#+\s+/)) {
+        // End current section
+        if (currentSection.content.length > 0) {
+          currentSection.wordCount = currentSection.content
+            .join(' ')
+            .split(/\s+/).length
+          sections.push(currentSection)
+        }
+        // Start new section
+        currentSection = {
+          heading: line.replace(/^#+\s+/, ''),
+          startLine: index,
+          content: [],
+        }
+      } else {
+        currentSection.content.push(line)
+      }
+    })
+
+    // Add final section
+    if (currentSection.content.length > 0) {
+      currentSection.wordCount = currentSection.content
+        .join(' ')
+        .split(/\s+/).length
+      sections.push(currentSection)
+    }
+
+    return sections
+  }
+
   extractCodeBlocks(content) {
-    const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g
+    const codeBlockRegex = /```(\w*)\n([\s\S]*?)```/g
     const blocks = []
     let match
 
     while ((match = codeBlockRegex.exec(content)) !== null) {
       blocks.push({
-        language: match[1] || 'unknown',
-        lineCount: (match[2].match(/\n/g) || []).length + 1,
-        hasComments: /\/\/|\/\*|\#|<!--/.test(match[2]),
+        language: match[1] || 'text',
+        code: match[2],
+        hasContext: this.checkCodeContext(content, match.index),
       })
     }
 
-    return {
-      count: blocks.length,
-      languages: [...new Set(blocks.map(b => b.language))],
-      totalLines: blocks.reduce((acc, block) => acc + block.lineCount, 0),
-      contextual: blocks.some(b => b.hasComments),
+    return blocks
+  }
+
+  checkCodeContext(content, codePosition) {
+    const beforeCode = content.substring(
+      Math.max(0, codePosition - 200),
+      codePosition,
+    )
+    const afterCode = content.substring(codePosition + 100, codePosition + 300)
+
+    // Check if there's explanatory text near the code block
+    const hasExplanation =
+      beforeCode.match(/example|following|shows|demonstrates/i) ||
+      afterCode.match(/above|previous|this code|example/i)
+
+    return !!hasExplanation
+  }
+
+  parseRestructuringResponse(response) {
+    try {
+      return JSON.parse(response)
+    } catch (error) {
+      console.warn('⚠️ Failed to parse Gemini response, using fallback plan')
+      return {
+        actions: [],
+        scoreImprovement: 0,
+        summary: 'Fallback restructuring',
+      }
     }
   }
 
-  /**
-   * Extract and analyze list structures
-   */
-  extractLists(content) {
-    const bulletPoints = (content.match(/^\s*[-*+]\s+/gm) || []).length
-    const numberedItems = (content.match(/^\s*\d+\.\s+/gm) || []).length
-    const nestedLists = (content.match(/^\s{2,}[-*+\d]/gm) || []).length
+  generateFallbackPlan(context) {
+    const actions = []
+
+    // Add basic heading improvements for oversized sections
+    context.structuralIssues.forEach(issue => {
+      if (issue.type === 'oversized_section' && issue.severity === 'high') {
+        actions.push({
+          type: 'add_heading',
+          level: 3,
+          text: `${issue.heading} Details`,
+          insertAfter: issue.heading,
+          reason: 'Break up oversized section',
+        })
+      }
+    })
 
     return {
-      bulletPoints,
-      numberedItems,
-      nestedLists,
-      hasComplexStructure: nestedLists > 0 || bulletPoints + numberedItems > 10,
+      actions,
+      scoreImprovement: actions.length * 5,
+      summary: `Fallback restructuring: ${actions.length} improvements`,
     }
   }
 
-  /**
-   * Analyze internal link structure
-   */
-  analyzeInternalLinks(content) {
-    const internalLinks =
-      content.match(/\[([^\]]+)\]\((?!https?:\/\/)([^)]+)\)/g) || []
-    const externalLinks =
-      content.match(/\[([^\]]+)\]\(https?:\/\/[^)]+\)/g) || []
-    const crossReferences = content.match(/see \[([^\]]+)\]/gi) || []
-
-    return {
-      internal: internalLinks.length,
-      external: externalLinks.length,
-      crossReferences: crossReferences.length,
-      isInterconnected: internalLinks.length > 2,
-    }
-  }
-
-  /**
-   * Analyze content flow and transitions
-   */
-  analyzeContentFlow(content) {
-    const transitionWords = [
-      'however',
-      'therefore',
-      'furthermore',
-      'additionally',
-      'meanwhile',
-      'consequently',
-      'moreover',
-      'nevertheless',
-      'subsequently',
-      'finally',
-    ]
-
-    const transitions = transitionWords.reduce((count, word) => {
-      const regex = new RegExp(`\\b${word}\\b`, 'gi')
-      return count + (content.match(regex) || []).length
-    }, 0)
-
-    const paragraphs = content.split('\n\n').filter(p => p.trim().length > 50)
-
-    return {
-      transitionCount: transitions,
-      paragraphCount: paragraphs.length,
-      averageParagraphLength:
-        paragraphs.reduce((acc, p) => acc + p.split(/\s+/).length, 0) /
-        paragraphs.length,
-      hasGoodFlow: transitions > 0 && paragraphs.length > 3,
-    }
-  }
-
-  /**
-   * Generate comprehensive chunking strategy using Gemini AI
-   */
-  async generateChunkingStrategy(context) {
-    // Try to load environment variables if not already loaded
-    if (!process.env.GOOGLE_API_KEY) {
+  // Google API call (exactly matching your existing agents' pattern)
+  async callGemini(prompt) {
+    // Load environment variables (same pattern as Tavily agent)
+    if (!process.env.GEMINI_API_KEY) {
       try {
         const path = require('path')
+        const envPath = path.join(process.cwd(), '.env.local')
+        console.log('🔍 [Chunking Agent] Loading env from:', envPath)
         require('dotenv').config({
-          path: path.join(process.cwd(), '.env.local'),
+          path: envPath,
         })
+        console.log(
+          '🔍 [Chunking Agent] After loading, GOOGLE_API_KEY exists:',
+          !!process.env.GOOGLE_API_KEY,
+        )
       } catch (error) {
-        console.warn('⚠️  Could not load .env.local file')
+        console.warn(
+          '⚠️ [Chunking Agent] Could not load .env.local file:',
+          error.message,
+        )
       }
     }
 
-    if (!process.env.GOOGLE_API_KEY) {
-      console.error(
-        '❌ [Chunking Agent] GOOGLE_API_KEY not found in environment variables',
-      )
-      throw new Error('GOOGLE_API_KEY not found in environment variables')
-    }
-
-    const { GoogleGenerativeAI } = require('@google/generative-ai')
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
-
-    const prompt = this.buildChunkingPrompt(context)
+    // Also try common alternative names
+    const geminiKey =
+      process.env.GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
+      process.env.GOOGLE_GEMINI_API_KEY ||
+      process.env.GOOGLE_GENERATIVE_AI_API_KEY
 
     try {
-      console.log(
-        `🤖 [Chunking Agent] Calling Gemini for chunking optimization...`,
-      )
-      const result = await model.generateContent(prompt)
-      const response = await result.response
-      const text = response.text()
+      const { GoogleGenerativeAI } = require('@google/generative-ai')
 
-      // Clean the response
-      let cleanedText = text.trim()
-      if (cleanedText.startsWith('```json')) {
-        cleanedText = cleanedText
-          .replace(/^```json\s*/, '')
-          .replace(/\s*```$/, '')
-      } else if (cleanedText.startsWith('```')) {
-        cleanedText = cleanedText.replace(/^```\s*/, '').replace(/\s*```$/, '')
+      if (!geminiKey) {
+        console.error('❌ [Chunking Agent] No Gemini API key found. Checked:')
+        console.error('   - GEMINI_API_KEY:', !!process.env.GEMINI_API_KEY)
+        console.error('   - GOOGLE_API_KEY:', !!process.env.GOOGLE_API_KEY)
+        console.error(
+          '   - GOOGLE_GEMINI_API_KEY:',
+          !!process.env.GOOGLE_GEMINI_API_KEY,
+        )
+        console.error(
+          '   - GOOGLE_GENERATIVE_AI_API_KEY:',
+          !!process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+        )
+        console.error(
+          '❌ [Chunking Agent] All env vars starting with GEMINI or GOOGLE:',
+          Object.keys(process.env).filter(
+            k => k.includes('GEMINI') || k.includes('GOOGLE'),
+          ),
+        )
+        throw new Error('No Gemini API key found in environment variables')
       }
 
-      // Parse the JSON response from Gemini
-      const chunkingMetadata = JSON.parse(cleanedText)
+      console.log('🔑 [Chunking Agent] Found Gemini API key, calling Gemini...')
 
-      // Validate and clean the metadata
-      const validatedMetadata = this.validateAndCleanChunking(chunkingMetadata)
+      const genAI = new GoogleGenerativeAI(geminiKey)
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
-      console.log(
-        `🎯 [Chunking Agent] Document structure optimization complete`,
-      )
-      return validatedMetadata
+      const result = await model.generateContent(prompt)
+      const response = await result.response
+      return response.text()
     } catch (error) {
       console.error('❌ [Chunking Agent] Gemini API error:', error.message)
-      // Fallback to basic chunking analysis if Gemini fails
-      return this.fallbackChunkingAnalysis(context)
+      throw error
     }
   }
 
-  /**
-   * Build the chunking optimization prompt for Gemini
-   */
-  buildChunkingPrompt(context) {
-    return `You are an expert document structure analyst specializing in optimizing content organization for AI retrieval systems.
-  
-  Analyze this technical document and create an optimal chunking strategy that maximizes RAG effectiveness while preserving semantic coherence.
-  
-  DOCUMENT TO ANALYZE:
-  Title: ${context.title}
-  Word Count: ${context.wordCount}
-  Sections: ${context.sections.count} (avg: ${Math.round(
-      context.sections.averageLength,
-    )} words)
-  Headings: ${context.headings.length} (levels: ${[
-      ...new Set(context.headings.map(h => h.level)),
-    ].join(', ')})
-  ${
-    context.codeBlocks.count > 0
-      ? `Code Blocks: ${
-          context.codeBlocks.count
-        } (${context.codeBlocks.languages.join(', ')})`
-      : ''
-  }
-  ${
-    context.lists.bulletPoints + context.lists.numberedItems > 0
-      ? `Lists: ${context.lists.bulletPoints} bullets, ${context.lists.numberedItems} numbered`
-      : ''
-  }
-  Content Flow: ${context.contentFlow.paragraphCount} paragraphs, ${
-      context.contentFlow.transitionCount
-    } transitions
-  
-  HEADING STRUCTURE:
-  ${context.headings
-    .map(
-      h =>
-        `${'  '.repeat(h.level - 1)}${h.level}. ${h.text} (${
-          h.wordCount
-        } words)`,
-    )
-    .join('\n')}
-  
-  SECTION ANALYSIS:
-  ${context.sections.lengths
-    .map((length, i) => `Section ${i + 1}: ${length} words`)
-    .join('\n')}
-  
-  CONTENT PREVIEW:
-  ${context.content.substring(0, 1500)}${
-      context.content.length > 1500 ? '...' : ''
-    }
-  
-  CURRENT METADATA:
-  ${JSON.stringify(context.currentMetadata, null, 2)}
-  
-  Generate optimal chunking strategy as valid JSON:
-  
-  {
-    "chunkingStrategy": "semantic|structural|hybrid",
-    "optimalChunkSize": 400,
-    "chunkOverlap": 50,
-    "totalChunks": 8,
-    "chunkBoundaries": ["heading-based", "semantic-breaks", "code-blocks"],
-    "semanticBridges": ["intro-to-setup", "config-to-usage", "troubleshooting-links"],
-    "headingOptimization": {
-      "currentDepth": 3,
-      "recommendedDepth": 3,
-      "missingHeadings": ["Prerequisites", "Next Steps"],
-      "restructuringNeeded": false
-    },
-    "contextualAnchors": ["authentication-flow", "error-handling", "configuration"],
-    "crossReferences": ["related-auth-docs", "troubleshooting-guide"],
-    "retrievalTags": ["quick-reference", "detailed-guide", "troubleshooting"],
-    "chunkMetadata": {
-      "preserveCodeContext": true,
-      "maintainListCohesion": true,
-      "respectHeadingHierarchy": true
-    },
-    "ragOptimizations": {
-      "vectorSearchKeywords": ["authentication", "lockout", "timeout", "security"],
-      "semanticClusters": ["auth-concepts", "implementation", "troubleshooting"],
-      "retrievalHints": "Focus on procedural steps and error scenarios"
-    },
-    "structureScore": 85,
-    "chunkingScore": 90
-  }
-  
-  CHUNKING REQUIREMENTS:
-  - Optimal chunk size: 300-600 words for technical documentation
-  - Maintain semantic coherence within chunks
-  - Preserve code block integrity
-  - Create meaningful overlaps for context continuity
-  - Generate contextual bridges between major sections
-  - Optimize heading structure for both readability and retrieval
-  - Tag chunks for specific retrieval scenarios
-  - Balance detail preservation with searchability
-  - Ensure cross-references are maintained and enhanced`
-  }
-
-  /**
-   * Validate and clean chunking metadata
-   */
-  validateAndCleanChunking(metadata) {
+  fallbackAnalysis(content) {
+    // Return analysis-only result if restructuring fails
     return {
-      chunkingStrategy: metadata.chunkingStrategy || 'hybrid',
-      optimalChunkSize: Math.min(
-        Math.max(metadata.optimalChunkSize || 400, 200),
-        800,
-      ),
-      chunkOverlap: Math.min(Math.max(metadata.chunkOverlap || 50, 20), 150),
-      totalChunks: Math.max(metadata.totalChunks || 5, 1),
-      chunkBoundaries: Array.isArray(metadata.chunkBoundaries)
-        ? metadata.chunkBoundaries.slice(0, 5)
-        : ['heading-based'],
-      semanticBridges: Array.isArray(metadata.semanticBridges)
-        ? metadata.semanticBridges.slice(0, 8)
-        : [],
-      headingOptimization: {
-        currentDepth: metadata.headingOptimization?.currentDepth || 3,
-        recommendedDepth: metadata.headingOptimization?.recommendedDepth || 3,
-        missingHeadings: Array.isArray(
-          metadata.headingOptimization?.missingHeadings,
-        )
-          ? metadata.headingOptimization.missingHeadings.slice(0, 5)
-          : [],
-        restructuringNeeded: Boolean(
-          metadata.headingOptimization?.restructuringNeeded,
-        ),
+      originalMetadata: {},
+      enhancedMetadata: {
+        chunkingEnhanced: false,
+        chunkingScore: 60,
+        enhanced_by: 'rag-prep-plugin-chunking-fallback',
       },
-      contextualAnchors: Array.isArray(metadata.contextualAnchors)
-        ? metadata.contextualAnchors.slice(0, 10)
-        : [],
-      crossReferences: Array.isArray(metadata.crossReferences)
-        ? metadata.crossReferences.slice(0, 8)
-        : [],
-      retrievalTags: Array.isArray(metadata.retrievalTags)
-        ? metadata.retrievalTags.slice(0, 6)
-        : ['documentation'],
-      chunkMetadata: {
-        preserveCodeContext: Boolean(
-          metadata.chunkMetadata?.preserveCodeContext ?? true,
-        ),
-        maintainListCohesion: Boolean(
-          metadata.chunkMetadata?.maintainListCohesion ?? true,
-        ),
-        respectHeadingHierarchy: Boolean(
-          metadata.chunkMetadata?.respectHeadingHierarchy ?? true,
-        ),
-      },
-      ragOptimizations: {
-        vectorSearchKeywords: Array.isArray(
-          metadata.ragOptimizations?.vectorSearchKeywords,
-        )
-          ? metadata.ragOptimizations.vectorSearchKeywords.slice(0, 10)
-          : ['documentation'],
-        semanticClusters: Array.isArray(
-          metadata.ragOptimizations?.semanticClusters,
-        )
-          ? metadata.ragOptimizations.semanticClusters.slice(0, 5)
-          : ['general'],
-        retrievalHints:
-          typeof metadata.ragOptimizations?.retrievalHints === 'string'
-            ? metadata.ragOptimizations.retrievalHints.substring(0, 500)
-            : 'General documentation content',
-      },
-      structureScore: Math.min(Math.max(metadata.structureScore || 70, 0), 100),
-      chunkingScore: Math.min(Math.max(metadata.chunkingScore || 70, 0), 100),
-      enhanced_by: 'rag-prep-plugin-chunking-agent',
-      enhanced_at: new Date().toISOString(),
+      improvements: ['Analysis completed (restructuring failed)'],
     }
-  }
-
-  /**
-   * Fallback chunking analysis when Gemini fails
-   */
-  fallbackChunkingAnalysis(context) {
-    const averageWordsPerChunk = 450
-    const estimatedChunks = Math.max(
-      Math.ceil(context.wordCount / averageWordsPerChunk),
-      1,
-    )
-
-    return {
-      chunkingStrategy: 'structural',
-      optimalChunkSize: averageWordsPerChunk,
-      chunkOverlap: 75,
-      totalChunks: estimatedChunks,
-      chunkBoundaries: ['heading-based'],
-      semanticBridges: [],
-      headingOptimization: {
-        currentDepth: Math.max(...context.headings.map(h => h.level), 1),
-        recommendedDepth: 3,
-        missingHeadings: [],
-        restructuringNeeded: false,
-      },
-      contextualAnchors: context.headings.slice(0, 5).map(h =>
-        h.text
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^\w-]/g, ''),
-      ),
-      crossReferences: [],
-      retrievalTags: ['documentation'],
-      chunkMetadata: {
-        preserveCodeContext: context.codeBlocks.count > 0,
-        maintainListCohesion: context.lists.hasComplexStructure,
-        respectHeadingHierarchy: true,
-      },
-      ragOptimizations: {
-        vectorSearchKeywords: [context.title.toLowerCase()],
-        semanticClusters: ['general'],
-        retrievalHints: 'Standard technical documentation',
-      },
-      structureScore: 60,
-      chunkingScore: 65,
-      enhanced_by: 'rag-prep-plugin-chunking-agent-fallback',
-      enhanced_at: new Date().toISOString(),
-    }
-  }
-
-  /**
-   * Identify what chunking improvements were made
-   */
-  identifyImprovements(original, enhanced) {
-    const improvements = []
-
-    if (!original.chunkingStrategy && enhanced.chunkingStrategy) {
-      improvements.push(`Added ${enhanced.chunkingStrategy} chunking strategy`)
-    }
-
-    if (!original.optimalChunkSize && enhanced.optimalChunkSize) {
-      improvements.push(
-        `Optimized chunk size: ${enhanced.optimalChunkSize} words`,
-      )
-    }
-
-    if (!original.semanticBridges && enhanced.semanticBridges?.length) {
-      improvements.push(
-        `Created ${enhanced.semanticBridges.length} semantic bridges`,
-      )
-    }
-
-    if (!original.contextualAnchors && enhanced.contextualAnchors?.length) {
-      improvements.push(
-        `Added ${enhanced.contextualAnchors.length} contextual anchors`,
-      )
-    }
-
-    if (!original.ragOptimizations && enhanced.ragOptimizations) {
-      improvements.push('Added RAG-specific optimizations')
-    }
-
-    if (enhanced.headingOptimization?.missingHeadings?.length) {
-      improvements.push(
-        `Identified ${enhanced.headingOptimization.missingHeadings.length} missing headings`,
-      )
-    }
-
-    if (enhanced.chunkingScore) {
-      improvements.push(
-        `Chunking optimization score: ${enhanced.chunkingScore}/100`,
-      )
-    }
-
-    if (enhanced.structureScore) {
-      improvements.push(
-        `Document structure score: ${enhanced.structureScore}/100`,
-      )
-    }
-
-    return improvements
   }
 }
 

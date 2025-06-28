@@ -1,0 +1,666 @@
+[2025-06-28T16:46:46.807Z] INFO: 📋 [Run Logger] Capturing console output to: ./logs/runs/run-1751129206807.log
+[2025-06-28T16:46:46.807Z] INFO: 🤖 [Multi-Agent Task] Processing with 4 agents in sequence
+[2025-06-28T16:46:46.807Z] INFO:    1. seo-metadata-generator-agent (SEO Content Analysis Specialist)
+[2025-06-28T16:46:46.808Z] INFO:    2. topic-taxonomy-agent (Content Categorization Specialist)
+[2025-06-28T16:46:46.808Z] INFO:    3. document-chunking-optimizer-agent (Document Structure Enhancement Specialist)
+[2025-06-28T16:46:46.808Z] INFO:    4. document-chunking-optimizer-agent (Document Structure Enhancement Specialist)
+[2025-06-28T16:46:46.808Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:46:46.808Z] INFO:    📖 Original content: 189 words
+[2025-06-28T16:46:46.808Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:46:46.808Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:46.811Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:46:49.076Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:46:49.076Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:49.076Z] INFO:       ✅ seo-metadata-generator-agent completed (2268ms)
+[2025-06-28T16:46:49.076Z] INFO:       📝 7 improvements made
+[2025-06-28T16:46:49.077Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:46:49.078Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:49.078Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:46:51.209Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:46:51.210Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:51.210Z] INFO:       ✅ topic-taxonomy-agent completed (2133ms)
+[2025-06-28T16:46:51.211Z] INFO:       📝 7 improvements made
+[2025-06-28T16:46:51.211Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:46:51.212Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:51.212Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:46:51.213Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:46:51.213Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:46:51.214Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:46:51.218Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:51.218Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:51.218Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:51.219Z] INFO:       ✅ document-chunking-optimizer-agent completed (8ms)
+[2025-06-28T16:46:51.219Z] INFO:       📝 0 improvements made
+[2025-06-28T16:46:51.219Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:46:51.220Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:46:51.220Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:51.221Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:46:51.221Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:46:51.222Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:46:51.222Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:46:51.222Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:46:55.015Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:55.015Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:55.015Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:55.015Z] INFO:       ✅ document-chunking-optimizer-agent completed (3795ms)
+[2025-06-28T16:46:55.015Z] INFO:       📝 0 improvements made
+[2025-06-28T16:46:55.016Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:46:55.016Z] INFO:    📊 Content evolution: 189 → 189 words
+[2025-06-28T16:46:55.016Z] INFO:    🎯 Consolidated RAG score: 75/100
+[2025-06-28T16:46:55.016Z] INFO: ✅ Multi-agent analysis complete for: Account Lockout Procedures
+[2025-06-28T16:46:55.016Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:46:55.016Z] INFO:    📈 Final RAG score: 75/100
+[2025-06-28T16:46:55.016Z] INFO:    🔍 Processing time: 8204ms
+[2025-06-28T16:46:55.016Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:46:55.017Z] INFO:    📖 Original content: 189 words
+[2025-06-28T16:46:55.017Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:46:55.017Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:46:55.017Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:46:56.945Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:46:56.946Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:46:56.946Z] INFO:       ✅ seo-metadata-generator-agent completed (1929ms)
+[2025-06-28T16:46:56.946Z] INFO:       📝 7 improvements made
+[2025-06-28T16:46:56.947Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:46:56.947Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:46:56.948Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:46:59.206Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:46:59.206Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:46:59.206Z] INFO:       ✅ topic-taxonomy-agent completed (2259ms)
+[2025-06-28T16:46:59.206Z] INFO:       📝 7 improvements made
+[2025-06-28T16:46:59.207Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:46:59.207Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:46:59.207Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:46:59.207Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:46:59.207Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:46:59.207Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:46:59.208Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:46:59.208Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:46:59.209Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:46:59.209Z] INFO:       ✅ document-chunking-optimizer-agent completed (2ms)
+[2025-06-28T16:46:59.209Z] INFO:       📝 0 improvements made
+[2025-06-28T16:46:59.209Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:46:59.209Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:46:59.209Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:46:59.209Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:46:59.209Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:46:59.210Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:46:59.210Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:46:59.210Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:47:04.123Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:47:04.124Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.backup.md
+[2025-06-28T16:47:04.124Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:47:04.124Z] INFO:       ✅ document-chunking-optimizer-agent completed (4915ms)
+[2025-06-28T16:47:04.124Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:04.124Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:04.124Z] INFO:    📊 Content evolution: 189 → 189 words
+[2025-06-28T16:47:04.125Z] INFO:    🎯 Consolidated RAG score: 75/100
+[2025-06-28T16:47:04.125Z] INFO: ✅ Multi-agent analysis complete for: Account Lockout Procedures
+[2025-06-28T16:47:04.125Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:47:04.125Z] INFO:    📈 Final RAG score: 75/100
+[2025-06-28T16:47:04.125Z] INFO:    🔍 Processing time: 9105ms
+[2025-06-28T16:47:04.125Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:47:04.125Z] INFO:    📖 Original content: 189 words
+[2025-06-28T16:47:04.125Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:47:04.125Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:04.126Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:47:06.273Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:47:06.274Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:06.274Z] INFO:       ✅ seo-metadata-generator-agent completed (2149ms)
+[2025-06-28T16:47:06.274Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:06.275Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:47:06.275Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:06.276Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:47:08.223Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:47:08.223Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:08.223Z] INFO:       ✅ topic-taxonomy-agent completed (1948ms)
+[2025-06-28T16:47:08.223Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:08.224Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:47:08.224Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:08.224Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:08.224Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:08.224Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:47:08.224Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:08.225Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:08.225Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:47:08.225Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:08.225Z] INFO:       ✅ document-chunking-optimizer-agent completed (1ms)
+[2025-06-28T16:47:08.225Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:08.225Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:08.225Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:47:08.226Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:08.226Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:08.226Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:47:08.226Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:47:08.226Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:47:08.226Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:47:12.040Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:12.041Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.backup.md
+[2025-06-28T16:47:12.041Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:12.041Z] INFO:       ✅ document-chunking-optimizer-agent completed (3815ms)
+[2025-06-28T16:47:12.041Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:12.042Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:12.042Z] INFO:    📊 Content evolution: 189 → 189 words
+[2025-06-28T16:47:12.043Z] INFO:    🎯 Consolidated RAG score: 75/100
+[2025-06-28T16:47:12.043Z] INFO: ✅ Multi-agent analysis complete for: Account Lockout Procedures
+[2025-06-28T16:47:12.043Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:47:12.043Z] INFO:    📈 Final RAG score: 75/100
+[2025-06-28T16:47:12.043Z] INFO:    🔍 Processing time: 7913ms
+[2025-06-28T16:47:12.043Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:47:12.044Z] INFO:    📖 Original content: 189 words
+[2025-06-28T16:47:12.044Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:47:12.044Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:12.044Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:47:14.060Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:47:14.060Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:14.061Z] INFO:       ✅ seo-metadata-generator-agent completed (2017ms)
+[2025-06-28T16:47:14.061Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:14.061Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:47:14.062Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:14.062Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:47:16.103Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:47:16.104Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:16.104Z] INFO:       ✅ topic-taxonomy-agent completed (2042ms)
+[2025-06-28T16:47:16.104Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:16.105Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:47:16.105Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:16.106Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:16.107Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:16.107Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:47:16.108Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:16.110Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:16.110Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:16.110Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:16.110Z] INFO:       ✅ document-chunking-optimizer-agent completed (5ms)
+[2025-06-28T16:47:16.110Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:16.111Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:16.111Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:47:16.111Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:16.111Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:16.111Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:47:16.111Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:47:16.112Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:47:16.112Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:47:20.098Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:20.099Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.backup.md
+[2025-06-28T16:47:20.099Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:20.099Z] INFO:       ✅ document-chunking-optimizer-agent completed (3988ms)
+[2025-06-28T16:47:20.099Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:20.100Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:20.100Z] INFO:    📊 Content evolution: 189 → 189 words
+[2025-06-28T16:47:20.100Z] INFO:    🎯 Consolidated RAG score: 75/100
+[2025-06-28T16:47:20.100Z] INFO: ✅ Multi-agent analysis complete for: Account Lockout Procedures
+[2025-06-28T16:47:20.100Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:47:20.100Z] INFO:    📈 Final RAG score: 75/100
+[2025-06-28T16:47:20.101Z] INFO:    🔍 Processing time: 8052ms
+[2025-06-28T16:47:20.101Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:47:20.101Z] INFO:    📖 Original content: 189 words
+[2025-06-28T16:47:20.102Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:47:20.102Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:20.102Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:47:21.942Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:47:21.943Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:21.943Z] INFO:       ✅ seo-metadata-generator-agent completed (1841ms)
+[2025-06-28T16:47:21.943Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:21.943Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:47:21.944Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:21.944Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:47:24.054Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:47:24.055Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:24.055Z] INFO:       ✅ topic-taxonomy-agent completed (2112ms)
+[2025-06-28T16:47:24.055Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:24.056Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:47:24.056Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:24.057Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:24.057Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:24.057Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:47:24.058Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:24.059Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:24.060Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:24.060Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:24.060Z] INFO:       ✅ document-chunking-optimizer-agent completed (4ms)
+[2025-06-28T16:47:24.060Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:24.060Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:24.060Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:47:24.061Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:24.061Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:24.061Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:47:24.062Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:47:24.062Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:47:24.062Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:47:27.677Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:27.678Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.backup.md
+[2025-06-28T16:47:27.678Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:27.678Z] INFO:       ✅ document-chunking-optimizer-agent completed (3618ms)
+[2025-06-28T16:47:27.678Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:27.678Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:27.679Z] INFO:    📊 Content evolution: 189 → 189 words
+[2025-06-28T16:47:27.679Z] INFO:    🎯 Consolidated RAG score: 76/100
+[2025-06-28T16:47:27.679Z] INFO: ✅ Multi-agent analysis complete for: Account Lockout Procedures
+[2025-06-28T16:47:27.679Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:47:27.679Z] INFO:    📈 Final RAG score: 76/100
+[2025-06-28T16:47:27.679Z] INFO:    🔍 Processing time: 7575ms
+[2025-06-28T16:47:27.679Z] INFO: 
+🔄 Processing: Account Lockout Procedures
+[2025-06-28T16:47:27.680Z] INFO:    📖 Original content: 189 words
+[2025-06-28T16:47:27.680Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:47:27.681Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:27.681Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:47:29.829Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:47:29.829Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:29.830Z] INFO:       ✅ seo-metadata-generator-agent completed (2149ms)
+[2025-06-28T16:47:29.830Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:29.830Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:47:29.831Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:29.831Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:47:31.937Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:47:31.938Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:31.938Z] INFO:       ✅ topic-taxonomy-agent completed (2108ms)
+[2025-06-28T16:47:31.938Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:31.938Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:47:31.939Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:31.939Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:31.940Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:31.940Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:47:31.940Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:31.941Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:31.941Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:31.942Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:31.942Z] INFO:       ✅ document-chunking-optimizer-agent completed (3ms)
+[2025-06-28T16:47:31.942Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:31.942Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:31.942Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:47:31.943Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:31.943Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:31.943Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:47:31.943Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:47:31.943Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:47:31.943Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:47:37.305Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:37.305Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.backup.md
+[2025-06-28T16:47:37.305Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/account-lockout.md
+[2025-06-28T16:47:37.306Z] INFO:       ✅ document-chunking-optimizer-agent completed (5363ms)
+[2025-06-28T16:47:37.306Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:37.306Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:37.307Z] INFO:    📊 Content evolution: 189 → 189 words
+[2025-06-28T16:47:37.307Z] INFO:    🎯 Consolidated RAG score: 75/100
+[2025-06-28T16:47:37.307Z] INFO: ✅ Multi-agent analysis complete for: Account Lockout Procedures
+[2025-06-28T16:47:37.307Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:47:37.308Z] INFO:    📈 Final RAG score: 75/100
+[2025-06-28T16:47:37.308Z] INFO:    🔍 Processing time: 9623ms
+[2025-06-28T16:47:37.308Z] INFO: 
+🔄 Processing: Advanced Concepts
+[2025-06-28T16:47:37.309Z] INFO:    📖 Original content: 289 words
+[2025-06-28T16:47:37.309Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:47:37.309Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:37.309Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:47:39.436Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:47:39.436Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:39.436Z] INFO:       ✅ seo-metadata-generator-agent completed (2127ms)
+[2025-06-28T16:47:39.437Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:39.437Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:47:39.437Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:39.438Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:47:42.902Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:47:42.903Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:42.903Z] INFO:       ✅ topic-taxonomy-agent completed (3466ms)
+[2025-06-28T16:47:42.903Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:42.904Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:47:42.904Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:42.904Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:42.904Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:42.905Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:47:42.905Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:42.906Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:42.906Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.backup.md
+[2025-06-28T16:47:42.906Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:42.906Z] INFO:       ✅ document-chunking-optimizer-agent completed (2ms)
+[2025-06-28T16:47:42.906Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:42.907Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:42.907Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:47:42.908Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:42.908Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:42.909Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:47:42.909Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:47:42.909Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:47:42.909Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:47:48.772Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:48.773Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.backup.md
+[2025-06-28T16:47:48.773Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:48.773Z] INFO:       ✅ document-chunking-optimizer-agent completed (5865ms)
+[2025-06-28T16:47:48.773Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:48.773Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:48.775Z] INFO:    📊 Content evolution: 289 → 309 words
+[2025-06-28T16:47:48.775Z] INFO:    🎯 Consolidated RAG score: 76/100
+[2025-06-28T16:47:48.775Z] INFO: ✅ Multi-agent analysis complete for: Advanced Concepts
+[2025-06-28T16:47:48.775Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:47:48.775Z] INFO:    📈 Final RAG score: 76/100
+[2025-06-28T16:47:48.775Z] INFO:    🔍 Processing time: 11460ms
+[2025-06-28T16:47:48.775Z] INFO: 
+🔄 Processing: Advanced Concepts
+[2025-06-28T16:47:48.776Z] INFO:    📖 Original content: 309 words
+[2025-06-28T16:47:48.776Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:47:48.776Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:47:48.776Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:47:51.139Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:47:51.139Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:47:51.139Z] INFO:       ✅ seo-metadata-generator-agent completed (2363ms)
+[2025-06-28T16:47:51.140Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:51.140Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:47:51.140Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:47:51.141Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:47:54.027Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:47:54.028Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:47:54.028Z] INFO:       ✅ topic-taxonomy-agent completed (2888ms)
+[2025-06-28T16:47:54.028Z] INFO:       📝 7 improvements made
+[2025-06-28T16:47:54.029Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:47:54.029Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:47:54.029Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:54.029Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:54.030Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:47:54.030Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:47:54.032Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:47:54.032Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:47:54.032Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:47:54.032Z] INFO:       ✅ document-chunking-optimizer-agent completed (3ms)
+[2025-06-28T16:47:54.032Z] INFO:       📝 0 improvements made
+[2025-06-28T16:47:54.032Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:47:54.033Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:47:54.033Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:47:54.034Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:47:54.034Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:47:54.035Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:47:54.035Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:47:54.035Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:48:03.421Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:48:03.422Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.backup.md
+[2025-06-28T16:48:03.422Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:48:03.422Z] INFO:       ✅ document-chunking-optimizer-agent completed (9389ms)
+[2025-06-28T16:48:03.422Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:03.422Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:03.423Z] INFO:    📊 Content evolution: 309 → 309 words
+[2025-06-28T16:48:03.423Z] INFO:    🎯 Consolidated RAG score: 75/100
+[2025-06-28T16:48:03.423Z] INFO: ✅ Multi-agent analysis complete for: Advanced Concepts
+[2025-06-28T16:48:03.423Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:48:03.423Z] INFO:    📈 Final RAG score: 75/100
+[2025-06-28T16:48:03.423Z] INFO:    🔍 Processing time: 14643ms
+[2025-06-28T16:48:03.423Z] INFO: 
+🔄 Processing: Advanced Concepts
+[2025-06-28T16:48:03.424Z] INFO:    📖 Original content: 309 words
+[2025-06-28T16:48:03.424Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:48:03.425Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:03.425Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:48:05.670Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:48:05.670Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:05.670Z] INFO:       ✅ seo-metadata-generator-agent completed (2245ms)
+[2025-06-28T16:48:05.670Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:05.671Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:48:05.671Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:05.671Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:48:08.326Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:48:08.326Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:08.326Z] INFO:       ✅ topic-taxonomy-agent completed (2655ms)
+[2025-06-28T16:48:08.326Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:08.328Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:48:08.328Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:08.328Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:08.329Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:08.329Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:48:08.329Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:08.330Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:08.331Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:48:08.331Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:08.332Z] INFO:       ✅ document-chunking-optimizer-agent completed (4ms)
+[2025-06-28T16:48:08.332Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:08.333Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:08.333Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:48:08.333Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:08.334Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:08.334Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:48:08.335Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:48:08.335Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:48:08.335Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:48:16.901Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:16.901Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.backup.md
+[2025-06-28T16:48:16.902Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/advanced-topics.md
+[2025-06-28T16:48:16.902Z] INFO:       ✅ document-chunking-optimizer-agent completed (8569ms)
+[2025-06-28T16:48:16.902Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:16.902Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:16.903Z] INFO:    📊 Content evolution: 309 → 309 words
+[2025-06-28T16:48:16.903Z] INFO:    🎯 Consolidated RAG score: 75/100
+[2025-06-28T16:48:16.903Z] INFO: ✅ Multi-agent analysis complete for: Advanced Concepts
+[2025-06-28T16:48:16.903Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:48:16.904Z] INFO:    📈 Final RAG score: 75/100
+[2025-06-28T16:48:16.904Z] INFO:    🔍 Processing time: 13473ms
+[2025-06-28T16:48:16.904Z] INFO: 
+🔄 Processing: Untitled
+[2025-06-28T16:48:16.904Z] INFO:    📖 Original content: 1 words
+[2025-06-28T16:48:16.905Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:48:16.905Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:16.905Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:48:18.950Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:48:18.951Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:18.951Z] INFO:       ✅ seo-metadata-generator-agent completed (2046ms)
+[2025-06-28T16:48:18.952Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:18.952Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:48:18.953Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:18.953Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:48:20.570Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:48:20.570Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:20.570Z] INFO:       ✅ topic-taxonomy-agent completed (1618ms)
+[2025-06-28T16:48:20.571Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:20.571Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:48:20.571Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:20.572Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:20.572Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:20.572Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:48:20.572Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:20.574Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:20.574Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.backup.md
+[2025-06-28T16:48:20.575Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:20.575Z] INFO:       ✅ document-chunking-optimizer-agent completed (4ms)
+[2025-06-28T16:48:20.575Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:20.576Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:20.577Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:48:20.579Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:20.580Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:20.580Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:48:20.580Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:48:20.581Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:48:20.581Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:48:25.901Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:25.901Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.backup.md
+[2025-06-28T16:48:25.901Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:25.902Z] INFO:       ✅ document-chunking-optimizer-agent completed (5325ms)
+[2025-06-28T16:48:25.902Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:25.902Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:25.902Z] INFO:    📊 Content evolution: 1 → 23 words
+[2025-06-28T16:48:25.903Z] INFO:    🎯 Consolidated RAG score: 71/100
+[2025-06-28T16:48:25.903Z] INFO: ✅ Multi-agent analysis complete for: Untitled
+[2025-06-28T16:48:25.903Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:48:25.903Z] INFO:    📈 Final RAG score: 71/100
+[2025-06-28T16:48:25.903Z] INFO:    🔍 Processing time: 8993ms
+[2025-06-28T16:48:25.903Z] INFO: 
+🔄 Processing: Untitled
+[2025-06-28T16:48:25.904Z] INFO:    📖 Original content: 23 words
+[2025-06-28T16:48:25.904Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:48:25.905Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:25.905Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:48:27.711Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:48:27.712Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:27.712Z] INFO:       ✅ seo-metadata-generator-agent completed (1808ms)
+[2025-06-28T16:48:27.712Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:27.713Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:48:27.713Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:27.713Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:48:29.423Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:48:29.424Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:29.424Z] INFO:       ✅ topic-taxonomy-agent completed (1711ms)
+[2025-06-28T16:48:29.424Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:29.425Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:48:29.425Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:29.425Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:29.426Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:29.426Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:48:29.426Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:29.427Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:29.427Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:29.428Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:29.428Z] INFO:       ✅ document-chunking-optimizer-agent completed (3ms)
+[2025-06-28T16:48:29.428Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:29.428Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:29.428Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:48:29.428Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:29.429Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:29.429Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:48:29.430Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:48:29.430Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:48:29.430Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:48:34.962Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:34.962Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.backup.md
+[2025-06-28T16:48:34.963Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:34.963Z] INFO:       ✅ document-chunking-optimizer-agent completed (5535ms)
+[2025-06-28T16:48:34.963Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:34.963Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:34.963Z] INFO:    📊 Content evolution: 23 → 23 words
+[2025-06-28T16:48:34.963Z] INFO:    🎯 Consolidated RAG score: 66/100
+[2025-06-28T16:48:34.963Z] INFO: ✅ Multi-agent analysis complete for: Untitled
+[2025-06-28T16:48:34.963Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:48:34.963Z] INFO:    📈 Final RAG score: 66/100
+[2025-06-28T16:48:34.963Z] INFO:    🔍 Processing time: 9057ms
+[2025-06-28T16:48:34.963Z] INFO: 
+🔄 Processing: Untitled
+[2025-06-28T16:48:34.964Z] INFO:    📖 Original content: 23 words
+[2025-06-28T16:48:34.964Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:48:34.964Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:34.964Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:48:36.797Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:48:36.798Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:36.799Z] INFO:       ✅ seo-metadata-generator-agent completed (1835ms)
+[2025-06-28T16:48:36.799Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:36.800Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:48:36.800Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:36.801Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:48:39.263Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:48:39.266Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:39.266Z] INFO:       ✅ topic-taxonomy-agent completed (2466ms)
+[2025-06-28T16:48:39.266Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:39.267Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:48:39.268Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:39.268Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:39.269Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:39.269Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:48:39.269Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:39.270Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:39.270Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:39.270Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:39.270Z] INFO:       ✅ document-chunking-optimizer-agent completed (3ms)
+[2025-06-28T16:48:39.270Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:39.270Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:39.271Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:48:39.271Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:39.271Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:39.271Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:48:39.271Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:48:39.271Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:48:39.271Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:48:45.201Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:45.201Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.backup.md
+[2025-06-28T16:48:45.201Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/audit-log-review.md
+[2025-06-28T16:48:45.201Z] INFO:       ✅ document-chunking-optimizer-agent completed (5930ms)
+[2025-06-28T16:48:45.201Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:45.202Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:45.202Z] INFO:    📊 Content evolution: 23 → 23 words
+[2025-06-28T16:48:45.202Z] INFO:    🎯 Consolidated RAG score: 59/100
+[2025-06-28T16:48:45.203Z] INFO: ✅ Multi-agent analysis complete for: Untitled
+[2025-06-28T16:48:45.203Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:48:45.203Z] INFO:    📈 Final RAG score: 59/100
+[2025-06-28T16:48:45.203Z] INFO:    🔍 Processing time: 10234ms
+[2025-06-28T16:48:45.203Z] INFO: 
+🔄 Processing: Authentication Token Management
+[2025-06-28T16:48:45.204Z] INFO:    📖 Original content: 322 words
+[2025-06-28T16:48:45.204Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:48:45.205Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:45.205Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:48:47.243Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:48:47.244Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:47.244Z] INFO:       ✅ seo-metadata-generator-agent completed (2040ms)
+[2025-06-28T16:48:47.244Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:47.245Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:48:47.245Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:47.246Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:48:50.055Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:48:50.056Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:50.056Z] INFO:       ✅ topic-taxonomy-agent completed (2811ms)
+[2025-06-28T16:48:50.056Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:50.057Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:48:50.057Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:50.058Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:50.058Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:50.058Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:48:50.058Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:50.060Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:50.060Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.backup.md
+[2025-06-28T16:48:50.060Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:50.061Z] INFO:       ✅ document-chunking-optimizer-agent completed (4ms)
+[2025-06-28T16:48:50.061Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:50.061Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:50.061Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:48:50.062Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:50.062Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:50.062Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:48:50.062Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:48:50.063Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:48:50.063Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...
+[2025-06-28T16:48:54.617Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:54.618Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.backup.md
+[2025-06-28T16:48:54.618Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:54.618Z] INFO:       ✅ document-chunking-optimizer-agent completed (4556ms)
+[2025-06-28T16:48:54.618Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:54.618Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:54.619Z] INFO:    📊 Content evolution: 322 → 342 words
+[2025-06-28T16:48:54.619Z] INFO:    🎯 Consolidated RAG score: 75/100
+[2025-06-28T16:48:54.619Z] INFO: ✅ Multi-agent analysis complete for: Authentication Token Management
+[2025-06-28T16:48:54.619Z] INFO:    🔧 Total improvements: 14
+[2025-06-28T16:48:54.619Z] INFO:    📈 Final RAG score: 75/100
+[2025-06-28T16:48:54.619Z] INFO:    🔍 Processing time: 9411ms
+[2025-06-28T16:48:54.620Z] INFO: 
+🔄 Processing: Authentication Token Management
+[2025-06-28T16:48:54.620Z] INFO:    📖 Original content: 342 words
+[2025-06-28T16:48:54.621Z] INFO:    🤖 Running seo-metadata-generator-agent (1/4)...
+[2025-06-28T16:48:54.621Z] INFO: 🔍 [SEO Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.md
+[2025-06-28T16:48:54.621Z] INFO: 🤖 [SEO Agent] Calling Gemini for comprehensive SEO analysis...
+[2025-06-28T16:48:56.757Z] INFO: 🎯 [SEO Agent] SEO analysis complete
+[2025-06-28T16:48:56.758Z] INFO: ✅ [SEO Agent] Enhanced SEO metadata for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.md
+[2025-06-28T16:48:56.758Z] INFO:       ✅ seo-metadata-generator-agent completed (2137ms)
+[2025-06-28T16:48:56.758Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:56.759Z] INFO:    🤖 Running topic-taxonomy-agent (2/4)...
+[2025-06-28T16:48:56.759Z] INFO: 🏷️ [Taxonomy Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.md
+[2025-06-28T16:48:56.760Z] INFO: 🤖 [Taxonomy Agent] Calling Gemini for taxonomy analysis...
+[2025-06-28T16:48:59.525Z] INFO: 🎯 [Taxonomy Agent] Taxonomy analysis complete
+[2025-06-28T16:48:59.525Z] INFO: ✅ [Taxonomy Agent] Generated topic taxonomy for: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.md
+[2025-06-28T16:48:59.526Z] INFO:       ✅ topic-taxonomy-agent completed (2767ms)
+[2025-06-28T16:48:59.526Z] INFO:       📝 7 improvements made
+[2025-06-28T16:48:59.526Z] INFO:    🤖 Running document-chunking-optimizer-agent (3/4)...
+[2025-06-28T16:48:59.526Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.md
+[2025-06-28T16:48:59.526Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:59.526Z] ERROR: ❌ [Chunking Agent] GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:59.526Z] ERROR: ❌ [Chunking Agent] Available env vars: 
+[2025-06-28T16:48:59.526Z] ERROR: ❌ [Chunking Agent] Gemini API error: GEMINI_API_KEY not found in environment variables or .env.local file
+[2025-06-28T16:48:59.527Z] INFO:    💾 Content restructured and saved to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.md
+[2025-06-28T16:48:59.527Z] INFO:    📄 Original backed up to /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.backup.md
+[2025-06-28T16:48:59.527Z] INFO: 🎯 [Chunking Agent] Document structure enhanced and rewritten: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.md
+[2025-06-28T16:48:59.527Z] INFO:       ✅ document-chunking-optimizer-agent completed (1ms)
+[2025-06-28T16:48:59.527Z] INFO:       📝 0 improvements made
+[2025-06-28T16:48:59.527Z] INFO:       ✂️ Content modified by document-chunking-optimizer-agent
+[2025-06-28T16:48:59.528Z] INFO:    🤖 Running document-chunking-optimizer-agent (4/4)...
+[2025-06-28T16:48:59.528Z] INFO: ✂️ [Chunking Agent] Analyzing: /Users/tamargrafana/Documents/100-agents/docs-enhanced/sample-docs/auth-tokens.backup.md
+[2025-06-28T16:48:59.528Z] INFO: 🤖 [Chunking Agent] Calling Gemini for content restructuring...
+[2025-06-28T16:48:59.528Z] INFO: 🔍 [Chunking Agent] Loading env from: /Users/tamargrafana/Documents/100-agents/.env.local
+[2025-06-28T16:48:59.528Z] INFO: [dotenv@16.6.0] injecting env (5) from .env.local
+[2025-06-28T16:48:59.528Z] INFO: 🔍 [Chunking Agent] After loading, GEMINI_API_KEY exists: false
+[2025-06-28T16:48:59.528Z] INFO: 🔑 [Chunking Agent] Found Gemini API key, calling Gemini...

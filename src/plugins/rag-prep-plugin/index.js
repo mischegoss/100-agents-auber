@@ -1,298 +1,212 @@
-const path = require('path')
-const fs = require('fs-extra')
-const matter = require('gray-matter')
-
-// Load environment variables from .env.local
-require('dotenv').config({ path: path.join(process.cwd(), '.env.local') })
-
 /**
- * Docusaurus RAG Prep Plugin
- * Enhances documentation for RAG effectiveness using KaibanJS agents
+ * RAG Prep Plugin with Interactive Prompt
+ * Asks user if they want to run AI enhancement to avoid wasting resources during development
  */
-class RagPrepPlugin {
-  constructor(context, options) {
-    this.context = context
-    this.options = options
-    this.siteDir = context.siteDir
-    this.docsDir = path.join(this.siteDir, 'docs-enhanced', 'sample-docs')
-    this.processedFiles = []
 
-    console.log('🚀 RAG Prep Plugin initialized')
-    console.log(`📁 Site directory: ${this.siteDir}`)
-    console.log(`📄 Target docs directory: ${this.docsDir}`)
-  }
+const readline = require('readline')
 
-  /**
-   * Main plugin entry point for Docusaurus
-   */
-  async loadContent() {
-    console.log('\n🔍 Starting document discovery...')
+async function promptUser(question, defaultAnswer = false) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
 
-    try {
-      // Find all markdown files in docs directory
-      const markdownFiles = await this.findMarkdownFiles(this.docsDir)
-      console.log(`📚 Found ${markdownFiles.length} markdown files:`)
+  return new Promise(resolve => {
+    const defaultText = defaultAnswer ? ' (Y/n)' : ' (y/N)'
+    rl.question(`${question}${defaultText}: `, answer => {
+      rl.close()
 
-      markdownFiles.forEach((file, index) => {
-        console.log(`  ${index + 1}. ${path.relative(this.siteDir, file)}`)
-      })
+      const normalizedAnswer = answer.toLowerCase().trim()
 
-      // Process each file and show basic analysis
-      console.log('\n📊 Analyzing documents...')
-      for (const filePath of markdownFiles) {
-        await this.analyzeDocument(filePath)
-      }
-
-      console.log(
-        `\n✅ Initial analysis complete! Processed ${this.processedFiles.length} files`,
-      )
-
-      // Show enhancement efficiency summary
-      const filesToEnhance = this.processedFiles.filter(
-        file => file.needsEnhancement,
-      )
-      const recentlyEnhanced = this.processedFiles.filter(
-        file => !file.needsEnhancement,
-      )
-
-      console.log('\n📊 ENHANCEMENT EFFICIENCY SUMMARY:')
-      console.log(`   📁 Total files: ${this.processedFiles.length}`)
-      console.log(`   🔄 Need enhancement: ${filesToEnhance.length}`)
-      console.log(`   ✅ Recently enhanced (skip): ${recentlyEnhanced.length}`)
-
-      if (recentlyEnhanced.length > 0) {
-        const efficiencyGain = Math.round(
-          (recentlyEnhanced.length / this.processedFiles.length) * 100,
-        )
-        console.log(`   ⚡ Processing time saved: ~${efficiencyGain}%`)
-      }
-
-      // Run AI agent processing only on files that need it
-      const agentResult = await this.runAgentProcessing()
-
-      return {
-        processedFiles: this.processedFiles,
-        totalFiles: markdownFiles.length,
-        agentProcessing: agentResult,
-      }
-    } catch (error) {
-      console.error('❌ Error during document processing:', error)
-      throw error
-    }
-  }
-
-  /**
-   * Recursively find all markdown files
-   */
-  async findMarkdownFiles(dir) {
-    const files = []
-
-    if (!(await fs.pathExists(dir))) {
-      console.warn(`⚠️  Directory not found: ${dir}`)
-      return files
-    }
-
-    const items = await fs.readdir(dir)
-
-    for (const item of items) {
-      const itemPath = path.join(dir, item)
-      const stat = await fs.stat(itemPath)
-
-      if (stat.isDirectory()) {
-        // Recursively search subdirectories
-        const subFiles = await this.findMarkdownFiles(itemPath)
-        files.push(...subFiles)
-      } else if (item.endsWith('.md') || item.endsWith('.mdx')) {
-        files.push(itemPath)
-      }
-    }
-
-    return files
-  }
-
-  /**
-   * Analyze a single document and show immediate feedback
-   */
-  async analyzeDocument(filePath) {
-    try {
-      const content = await fs.readFile(filePath, 'utf8')
-      const parsed = matter(content)
-      const relativePath = path.relative(this.siteDir, filePath)
-
-      // Check if document was recently enhanced (skip if within 24 hours)
-      const needsEnhancement = this.shouldEnhanceDocument(parsed.data)
-
-      const analysis = {
-        path: relativePath,
-        title: parsed.data.title || 'Untitled',
-        wordCount: parsed.content.split(/\s+/).length,
-        headingCount: (parsed.content.match(/^#+\s/gm) || []).length,
-        hasMetadata: Object.keys(parsed.data).length > 0,
-        frontmatter: parsed.data,
-        contentPreview: parsed.content.substring(0, 100) + '...',
-        needsEnhancement, // Flag to determine if processing is needed
-        lastEnhanced: parsed.data.enhanced_at || null,
-        enhancedBy: parsed.data.enhanced_by || null,
-      }
-
-      // Show status for each document
-      if (needsEnhancement) {
-        console.log(`📄 ${analysis.title}`)
-        console.log(`   Path: ${analysis.path}`)
-        console.log(
-          `   Words: ${analysis.wordCount} | Headings: ${analysis.headingCount}`,
-        )
-        console.log(`   Status: 🔄 Needs enhancement`)
+      if (defaultAnswer) {
+        // Default is Yes, so only No/n will return false
+        resolve(normalizedAnswer !== 'n' && normalizedAnswer !== 'no')
       } else {
-        console.log(`📄 ${analysis.title}`)
-        console.log(`   Path: ${analysis.path}`)
-        console.log(
-          `   Status: ✅ Recently enhanced (${this.getTimeSinceEnhancement(
-            parsed.data.enhanced_at,
-          )})`,
-        )
+        // Default is No, so only Yes/y will return true
+        resolve(normalizedAnswer === 'y' || normalizedAnswer === 'yes')
       }
-
-      this.processedFiles.push(analysis)
-    } catch (error) {
-      console.error(`❌ Error analyzing ${filePath}:`, error.message)
-    }
-  }
-
-  /**
-   * Determine if a document should be enhanced based on when it was last processed
-   */
-  shouldEnhanceDocument(frontmatter) {
-    // If never enhanced, definitely needs enhancement
-    if (!frontmatter.enhanced_by || !frontmatter.enhanced_at) {
-      return true
-    }
-
-    // If not enhanced by our plugin, needs enhancement
-    if (frontmatter.enhanced_by !== 'rag-prep-plugin') {
-      return true
-    }
-
-    // Check if enhanced within last 24 hours
-    try {
-      const enhancedAt = new Date(frontmatter.enhanced_at)
-      const now = new Date()
-      const hoursSinceEnhancement = (now - enhancedAt) / (1000 * 60 * 60)
-
-      // Skip if enhanced within last 24 hours
-      if (hoursSinceEnhancement < 24) {
-        return false
-      }
-
-      return true // Needs re-enhancement after 24 hours
-    } catch (error) {
-      console.warn(
-        `⚠️ Invalid enhanced_at timestamp, will re-enhance: ${frontmatter.enhanced_at}`,
-      )
-      return true
-    }
-  }
-
-  /**
-   * Get human-readable time since enhancement
-   */
-  getTimeSinceEnhancement(enhancedAt) {
-    if (!enhancedAt) return 'never'
-
-    try {
-      const enhanced = new Date(enhancedAt)
-      const now = new Date()
-      const hoursSince = (now - enhanced) / (1000 * 60 * 60)
-
-      if (hoursSince < 1) {
-        const minutesSince = Math.round(hoursSince * 60)
-        return `${minutesSince}m ago`
-      } else if (hoursSince < 24) {
-        return `${Math.round(hoursSince)}h ago`
-      } else {
-        const daysSince = Math.round(hoursSince / 24)
-        return `${daysSince}d ago`
-      }
-    } catch (error) {
-      return 'unknown'
-    }
-  }
-
-  /**
-   * Run AI agent processing on documents
-   */
-  async runAgentProcessing() {
-    console.log('\n🤖 Starting AI agent processing...')
-
-    try {
-      // Debug: Check if processedFiles exists
-      console.log(
-        `🔍 [Debug] processedFiles length: ${
-          this.processedFiles?.length || 'undefined'
-        }`,
-      )
-
-      if (!this.processedFiles || this.processedFiles.length === 0) {
-        console.error('❌ No processed files available for agent processing')
-        return {
-          success: false,
-          error: 'No processed files available',
-          summary: null,
-        }
-      }
-
-      // Import and initialize the Document Processing Team
-      const DocumentProcessingTeam = require('./teams/documentProcessingTeam')
-      const team = new DocumentProcessingTeam()
-
-      // Process documents through the AI team
-      const result = await team.processDocuments(this.processedFiles)
-
-      if (result.success) {
-        console.log('🎉 AI processing completed successfully!')
-        return result
-      } else {
-        console.error('❌ AI processing failed:', result.error)
-        return result
-      }
-    } catch (error) {
-      console.error('❌ Error in AI agent processing:', error.message)
-      console.error('❌ Stack trace:', error.stack)
-      return {
-        success: false,
-        error: error.message,
-        summary: null,
-      }
-    }
-  }
+    })
+  })
 }
 
-/**
- * Docusaurus plugin factory function
- */
-function ragPrepPlugin(context, options = {}) {
-  const plugin = new RagPrepPlugin(context, options)
-
+async function ragPrepPlugin(context, options) {
   return {
     name: 'rag-prep-plugin',
 
     async loadContent() {
-      return await plugin.loadContent()
+      // Check if we're in development mode and should prompt
+      const isDev =
+        process.env.NODE_ENV === 'development' || !process.env.NODE_ENV
+      const isProduction = process.env.NODE_ENV === 'production'
+
+      // Skip prompt in production or if RAG_SKIP_PROMPT env var is set
+      if (isProduction || process.env.RAG_SKIP_PROMPT === 'true') {
+        console.log('🚀 RAG Prep Plugin starting (production mode)...')
+        return await this.runRAGProcessing()
+      }
+
+      // In development, prompt the user
+      if (isDev) {
+        console.log('\n📋 RAG Documentation Enhancement Plugin')
+        console.log(
+          '💡 This will run AI agents to analyze and enhance documentation',
+        )
+        console.log(
+          '⚡ Tip: Set RAG_SKIP_PROMPT=true in .env.local to always skip this prompt',
+        )
+
+        const shouldRun = await promptUser(
+          '🤖 Do you want to run RAG documentation enhancement?',
+          false, // Default to No for development
+        )
+
+        if (shouldRun) {
+          console.log('✅ Starting RAG enhancement workflow...')
+          return await this.runRAGProcessing()
+        } else {
+          console.log('⏭️  Skipping RAG enhancement (faster startup)')
+          console.log(
+            '💡 You can run it later by restarting with "y" when prompted',
+          )
+          return null
+        }
+      }
+
+      // Fallback - run the processing
+      return await this.runRAGProcessing()
     },
 
+    async runRAGProcessing() {
+      try {
+        // Import your existing RAG processing logic
+        const DocumentProcessingTeam = require('./teams/documentProcessingTeam')
+        const EnhanceMetadataTask = require('./tasks/enhanceMetadataTask')
+        const fs = require('fs-extra')
+        const path = require('path')
+
+        console.log('🚀 RAG Prep Plugin initialized')
+        console.log('📁 Site directory:', process.cwd())
+
+        const siteDir = process.cwd()
+        const docsDir = path.join(siteDir, 'docs-enhanced/sample-docs')
+        console.log('📄 Target docs directory:', docsDir)
+
+        // Discover and analyze documents
+        console.log('\n🔍 Starting document discovery...')
+        const processedFiles = await this.discoverDocuments(docsDir)
+
+        if (processedFiles.length === 0) {
+          console.log('ℹ️ No documents found to process')
+          return null
+        }
+
+        // Run the multi-agent workflow
+        const documentTeam = new DocumentProcessingTeam()
+        const result = await documentTeam.processDocuments(processedFiles)
+
+        return result
+      } catch (error) {
+        console.error('❌ RAG Plugin Error:', error.message)
+        console.log('💡 Continuing with normal Docusaurus startup...')
+        return null
+      }
+    },
+
+    async discoverDocuments(docsDir) {
+      const fs = require('fs-extra')
+      const path = require('path')
+      const matter = require('gray-matter')
+
+      try {
+        // Find all markdown files
+        const files = await fs.readdir(docsDir)
+        const markdownFiles = files.filter(
+          file => file.endsWith('.md') && !file.includes('.backup'),
+        )
+
+        console.log('📚 Found', markdownFiles.length, 'markdown files:')
+        markdownFiles.forEach((file, index) => {
+          console.log(
+            `  ${index + 1}. ${docsDir.replace(process.cwd(), '')}/${file}`,
+          )
+        })
+
+        const processedFiles = []
+
+        console.log('\n📊 Analyzing documents...')
+        for (const file of markdownFiles) {
+          const filePath = path.join(docsDir, file)
+          const relativePath = path.relative(process.cwd(), filePath)
+
+          try {
+            const content = await fs.readFile(filePath, 'utf8')
+            const parsed = matter(content)
+            const wordCount = parsed.content.split(/\s+/).length
+            const headingCount = (parsed.content.match(/^#+\s+/gm) || []).length
+
+            // Check if recently enhanced (within 24 hours)
+            const lastEnhanced =
+              parsed.data.enhanced_at || parsed.data['ai-enhanced']
+            const isRecentlyEnhanced =
+              lastEnhanced &&
+              Date.now() - new Date(lastEnhanced).getTime() <
+                24 * 60 * 60 * 1000
+
+            const fileInfo = {
+              path: relativePath,
+              title: parsed.data.title || 'Untitled',
+              wordCount,
+              headingCount,
+              frontmatter: parsed.data,
+              needsEnhancement: !isRecentlyEnhanced,
+            }
+
+            console.log(`📄 ${fileInfo.title}`)
+            console.log(`   Path: ${relativePath}`)
+            console.log(`   Words: ${wordCount} | Headings: ${headingCount}`)
+            console.log(
+              `   Status: ${
+                isRecentlyEnhanced
+                  ? '✅ Recently enhanced'
+                  : '🔄 Needs enhancement'
+              }`,
+            )
+
+            processedFiles.push(fileInfo)
+          } catch (error) {
+            console.error(`❌ Error processing ${file}:`, error.message)
+          }
+        }
+
+        console.log(
+          '\n✅ Initial analysis complete! Processed',
+          processedFiles.length,
+          'files',
+        )
+
+        // Summary
+        const needEnhancement = processedFiles.filter(
+          f => f.needsEnhancement,
+        ).length
+        const recentlyEnhanced = processedFiles.length - needEnhancement
+
+        console.log('\n📊 ENHANCEMENT EFFICIENCY SUMMARY:')
+        console.log(`   📁 Total files: ${processedFiles.length}`)
+        console.log(`   🔄 Need enhancement: ${needEnhancement}`)
+        console.log(`   ✅ Recently enhanced (skip): ${recentlyEnhanced}`)
+
+        return processedFiles
+      } catch (error) {
+        console.error('❌ Error discovering documents:', error.message)
+        return []
+      }
+    },
+
+    // Docusaurus plugin methods
     async contentLoaded({ content, actions }) {
-      // This is where processed content gets integrated back into Docusaurus
-      console.log('📋 Content loaded into Docusaurus build process')
-
-      const { createData } = actions
-      await createData('rag-analysis.json', JSON.stringify(content, null, 2))
-    },
-
-    getPathsToWatch() {
-      // Watch for changes in docs-enhanced/sample-docs directory
-      return [
-        path.join(context.siteDir, 'docs-enhanced/sample-docs/**/*.{md,mdx}'),
-      ]
+      if (content) {
+        console.log('📋 Content loaded into Docusaurus build process')
+      }
     },
   }
 }

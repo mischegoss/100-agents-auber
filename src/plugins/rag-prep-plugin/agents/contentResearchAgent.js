@@ -1,120 +1,569 @@
 /**
- * Content Research & Validation Agent
- * Uses Tavily API to research current industry standards, best practices, and validate content accuracy
- * Makes the system truly autonomous by gathering real-time web intelligence
+ * Enhanced Content Research & Validation Agent
+ * Uses Tavily API for professional document validation with structured logging
+ * Generates validation reports saved to logs/ directory (not in PR)
  */
 class ContentResearchAgent {
   constructor() {
     this.name = 'content-research-agent'
-    this.role = 'Content Research & Validation Specialist'
+    this.role = 'Content Validation & Research Specialist'
     this.goal =
-      'Research current industry standards, validate content accuracy, and discover missing information using real-time web intelligence'
-    this.backstory = `You are an expert content researcher and validator specializing in technical documentation. 
-                        You excel at finding current industry best practices, validating technical accuracy, discovering 
-                        authoritative sources, and identifying content gaps. You use real-time web research to ensure 
-                        documentation stays current with rapidly evolving technical landscapes.`
+      'Validate content accuracy, identify outdated information, and generate professional validation reports'
+    this.backstory = `You are an expert technical documentation validator specializing in security and compliance analysis. 
+                          You excel at identifying outdated practices, missing security advisories, broken references, and 
+                          compliance gaps. You generate professional validation reports that enable quick decision-making.`
     this.verbose = true
     this.allowDelegation = false
     this.maxIter = 3
     this.memory = true
+    this.logDirectory = './logs/validation'
   }
 
   /**
-   * Analyze document content and research current industry standards
+   * Main analysis method - validates content and generates separate log
    */
   async analyzeContent(filePath, content, currentMetadata = {}) {
     console.log(`🔍 [Research Agent] Analyzing: ${filePath}`)
 
     try {
-      // Parse the document to separate content from frontmatter
+      // Parse the document
       const matter = require('gray-matter')
       const parsed = matter(content)
 
-      // Prepare analysis context
-      const analysisContext = {
+      // Prepare validation context
+      const validationContext = {
         title: parsed.data.title || 'Untitled',
         content: parsed.content,
+        filePath,
         currentMetadata: parsed.data,
         wordCount: parsed.content.split(/\s+/).length,
         technicalTopics: this.extractTechnicalTopics(parsed.content),
-        mainConcepts: this.extractMainConcepts(
+        securityConcepts: this.extractSecurityConcepts(parsed.content),
+        potentialIssues: this.identifyPotentialIssues(parsed.content),
+        documentType: this.classifyDocumentType(
           parsed.content,
           parsed.data.title,
         ),
       }
 
-      // Research current industry standards and best practices
-      const researchMetadata = await this.conductResearch(analysisContext)
+      // Conduct validation research
+      console.log(
+        `🔍 [Research Agent] Conducting validation research with Tavily...`,
+      )
+      const validationResults = await this.conductValidationResearch(
+        validationContext,
+      )
 
-      console.log(`✅ [Research Agent] Research complete for: ${filePath}`)
+      // Generate professional validation log
+      const validationLog = await this.generateValidationLog(
+        validationContext,
+        validationResults,
+      )
+
+      // Write validation log to separate file
+      await this.writeValidationLog(validationContext, validationLog)
+
+      // Return minimal metadata (no content changes for PR)
+      const enhancedMetadata = {
+        researchConducted: true,
+        researchDate: new Date().toISOString(),
+        validationScore: validationResults.overallScore || 75,
+        criticalIssues: validationResults.criticalIssues?.length || 0,
+        recommendationsCount: validationResults.recommendations?.length || 0,
+        researchSources: validationResults.sourcesCount || 0,
+        enhanced_by: 'rag-prep-plugin-research-validator',
+        enhanced_at: new Date().toISOString(),
+      }
+
+      console.log(
+        `✅ [Research Agent] Validation complete: ${
+          validationResults.status || 'REVIEWED'
+        }`,
+      )
+      console.log(
+        `📋 [Research Agent] Log saved: ${this.getLogPath(validationContext)}`,
+      )
 
       return {
         originalMetadata: parsed.data,
-        enhancedMetadata: researchMetadata,
-        content: parsed.content,
-        improvements: this.identifyImprovements(parsed.data, researchMetadata),
+        enhancedMetadata,
+        content: parsed.content, // No content changes
+        improvements: [
+          `Validation completed: ${validationResults.status}`,
+          `${
+            validationResults.criticalIssues?.length || 0
+          } critical issues found`,
+        ],
       }
     } catch (error) {
       console.error(
-        `❌ [Research Agent] Error analyzing ${filePath}:`,
+        `❌ [Research Agent] Error validating ${filePath}:`,
         error.message,
       )
-      throw error
+      return this.fallbackValidation(filePath, content)
     }
   }
 
   /**
-   * Extract technical topics from content for targeted research
+   * Conduct comprehensive validation research using Tavily
    */
-  extractTechnicalTopics(content) {
-    const topics = new Set()
+  async conductValidationResearch(context) {
+    // Load Tavily client
+    const tavilyClient = await this.initializeTavilyClient()
+    if (!tavilyClient) {
+      return this.fallbackResearch(context)
+    }
 
-    // Look for technical terms, APIs, frameworks
-    const patterns = [
-      /\b(API|SDK|framework|library|protocol)\b/gi,
-      /\b[A-Z]{2,}\b/g, // Acronyms
-      /\b\w+(?:\.js|\.py|\.go|\.rs)\b/gi, // File extensions
-      /\b(?:authentication|authorization|security|encryption|JWT|OAuth)\b/gi,
-      /\b(?:database|SQL|MongoDB|PostgreSQL|Redis)\b/gi,
-      /\b(?:React|Angular|Vue|Node|Express|FastAPI)\b/gi,
-    ]
+    try {
+      // Dynamic time filtering (within 1 year)
+      const searchOptions = {
+        search_depth: 'advanced',
+        max_results: 5,
+        time_range: 'year', // Past year only
+        include_answer: true,
+      }
 
-    patterns.forEach(pattern => {
-      const matches = content.match(pattern) || []
-      matches.forEach(match => {
-        if (match.length > 2) {
-          topics.add(match.toLowerCase())
+      // Generate targeted validation questions
+      const validationQuestions = this.generateValidationQuestions(context)
+
+      // Conduct validation research
+      const validationResults = []
+      const directAnswers = []
+
+      for (const question of validationQuestions) {
+        try {
+          console.log(`   🔎 Validating: "${question.query}"`)
+
+          // Use qna_search for direct answers
+          const answer = await tavilyClient.qna_search(
+            question.query,
+            searchOptions,
+          )
+          directAnswers.push({
+            question: question.query,
+            category: question.category,
+            answer: answer,
+            severity: question.severity,
+          })
+
+          // Also get detailed sources for critical questions
+          if (question.severity === 'critical') {
+            const detailed = await tavilyClient.search(
+              question.query,
+              searchOptions,
+            )
+            validationResults.push({
+              question: question.query,
+              category: question.category,
+              results: detailed.results || [],
+              answer: detailed.answer,
+            })
+          }
+        } catch (error) {
+          console.warn(`⚠️ [Research Agent] Question failed: ${question.query}`)
         }
+      }
+
+      // Analyze findings
+      const analysis = this.analyzeValidationFindings(
+        context,
+        directAnswers,
+        validationResults,
+      )
+
+      console.log(
+        `🎯 [Research Agent] Validation research complete - ${directAnswers.length} questions answered`,
+      )
+
+      return {
+        status: analysis.overallStatus,
+        overallScore: analysis.score,
+        criticalIssues: analysis.criticalIssues,
+        moderateIssues: analysis.moderateIssues,
+        validatedPractices: analysis.validatedPractices,
+        recommendations: analysis.recommendations,
+        sourcesCount: validationResults.reduce(
+          (sum, r) => sum + (r.results?.length || 0),
+          0,
+        ),
+        directAnswers,
+        detailedFindings: validationResults,
+        researchQueries: validationQuestions.map(q => q.query),
+      }
+    } catch (error) {
+      console.error(
+        `❌ [Research Agent] Validation research failed:`,
+        error.message,
+      )
+      return this.fallbackResearch(context)
+    }
+  }
+
+  /**
+   * Generate targeted validation questions based on content
+   */
+  generateValidationQuestions(context) {
+    const questions = []
+
+    // Security-focused validation for auth/security docs
+    if (context.securityConcepts.length > 0) {
+      context.securityConcepts.forEach(concept => {
+        questions.push({
+          query: `${concept} security best practices 2024 current standards`,
+          category: 'security_currency',
+          severity: 'critical',
+        })
+
+        questions.push({
+          query: `${concept} vulnerabilities CVE 2024 recent security advisories`,
+          category: 'security_vulnerabilities',
+          severity: 'critical',
+        })
+      })
+    }
+
+    // Technical currency validation
+    context.technicalTopics.forEach(topic => {
+      questions.push({
+        query: `${topic} current version 2024 deprecated practices`,
+        category: 'technical_currency',
+        severity: 'moderate',
       })
     })
 
-    return Array.from(topics).slice(0, 8) // Limit to top 8 topics
-  }
-
-  /**
-   * Extract main concepts from title and content
-   */
-  extractMainConcepts(content, title) {
-    const concepts = []
-
-    if (title) {
-      concepts.push(title.toLowerCase())
+    // Document-specific validation
+    if (context.documentType === 'authentication') {
+      questions.push(
+        {
+          query: 'OAuth 2.1 vs OAuth 2.0 current recommendations 2024',
+          category: 'standards_currency',
+          severity: 'moderate',
+        },
+        {
+          query: 'JWT security best practices 2024 current vulnerabilities',
+          category: 'security_best_practices',
+          severity: 'critical',
+        },
+        {
+          query: 'PKCE security requirements 2024 mandatory implementation',
+          category: 'security_requirements',
+          severity: 'critical',
+        },
+      )
     }
 
-    // Extract from headings
-    const headings = content.match(/^#+\s+(.+)$/gm) || []
-    headings.forEach(heading => {
-      const cleanHeading = heading.replace(/^#+\s+/, '').toLowerCase()
-      concepts.push(cleanHeading)
+    // Compliance validation
+    questions.push({
+      query: `${context.title} compliance requirements GDPR SOC2 2024`,
+      category: 'compliance',
+      severity: 'moderate',
     })
 
-    return concepts.slice(0, 5)
+    return questions.slice(0, 8) // Limit to prevent API overuse
   }
 
   /**
-   * Conduct comprehensive research using Tavily API
+   * Analyze validation findings and categorize issues
    */
-  async conductResearch(context) {
+  analyzeValidationFindings(context, directAnswers, detailedResults) {
+    const criticalIssues = []
+    const moderateIssues = []
+    const validatedPractices = []
+    const recommendations = []
+
+    // Analyze direct answers for issues
+    directAnswers.forEach(result => {
+      if (result.answer && result.answer.length > 10) {
+        // Check for outdated practices
+        if (
+          result.answer.toLowerCase().includes('deprecated') ||
+          result.answer.toLowerCase().includes('outdated') ||
+          result.answer.toLowerCase().includes('no longer recommended')
+        ) {
+          if (result.severity === 'critical') {
+            criticalIssues.push({
+              category: result.category,
+              issue: `Potentially outdated practice detected in ${result.question}`,
+              evidence: result.answer.substring(0, 200) + '...',
+              recommendation: `Review and update based on current ${result.category} standards`,
+            })
+          } else {
+            moderateIssues.push({
+              category: result.category,
+              issue: `Consider updating: ${result.question}`,
+              evidence: result.answer.substring(0, 150) + '...',
+            })
+          }
+        } else if (
+          result.answer.toLowerCase().includes('current') ||
+          result.answer.toLowerCase().includes('recommended') ||
+          result.answer.toLowerCase().includes('best practice')
+        ) {
+          validatedPractices.push({
+            category: result.category,
+            practice: result.question,
+            validation: result.answer.substring(0, 100) + '...',
+          })
+        }
+      }
+    })
+
+    // Check for specific security red flags in content
+    const securityRedFlags = this.checkSecurityRedFlags(context.content)
+    criticalIssues.push(...securityRedFlags)
+
+    // Generate specific recommendations
+    if (context.potentialIssues.missingReferences > 0) {
+      recommendations.push({
+        type: 'missing_references',
+        description: `${context.potentialIssues.missingReferences} broken or missing references found`,
+        priority: 'medium',
+        action: 'Add proper links to referenced documentation',
+      })
+    }
+
+    if (context.potentialIssues.vaguePhrases > 0) {
+      recommendations.push({
+        type: 'vague_instructions',
+        description:
+          'Document contains vague phrases like "as needed" or "appropriate values"',
+        priority: 'low',
+        action: 'Provide specific values and examples',
+      })
+    }
+
+    // Calculate overall score
+    let score = 85 // Base score
+    score -= criticalIssues.length * 15
+    score -= moderateIssues.length * 5
+    score += validatedPractices.length * 3
+    score = Math.max(score, 0)
+
+    // Determine overall status
+    let overallStatus = 'APPROVED'
+    if (criticalIssues.length > 0) {
+      overallStatus = 'CRITICAL_ISSUES_FOUND'
+    } else if (moderateIssues.length > 2) {
+      overallStatus = 'APPROVED_WITH_RECOMMENDATIONS'
+    }
+
+    return {
+      overallStatus,
+      score: Math.min(score, 100),
+      criticalIssues,
+      moderateIssues,
+      validatedPractices,
+      recommendations,
+    }
+  }
+
+  /**
+   * Check for specific security red flags in content
+   */
+  checkSecurityRedFlags(content) {
+    const redFlags = []
+
+    // Check for dangerous security advice
+    if (content.includes('disable server-side validation')) {
+      redFlags.push({
+        category: 'security_vulnerability',
+        issue: 'Document suggests disabling server-side validation',
+        evidence: 'Found text about disabling security validation',
+        recommendation:
+          'Remove dangerous security advice and emphasize validation importance',
+      })
+    }
+
+    // Check for outdated crypto parameters
+    if (content.includes('100,000') && content.includes('PBKDF2')) {
+      redFlags.push({
+        category: 'security_outdated',
+        issue:
+          'PBKDF2 iteration count appears outdated (100,000 vs current 600,000+ recommendation)',
+        evidence: 'Low PBKDF2 iteration count found',
+        recommendation:
+          'Update to current NIST recommended iteration counts (600,000+ for PBKDF2-SHA256)',
+      })
+    }
+
+    // Check for insecure storage mentions
+    if (
+      content.includes('plaintext') &&
+      (content.includes('cookie') || content.includes('storage'))
+    ) {
+      redFlags.push({
+        category: 'security_vulnerability',
+        issue: 'Document mentions plaintext storage of sensitive data',
+        evidence: 'References to plaintext storage found',
+        recommendation:
+          'Update to recommend encrypted storage for all sensitive data',
+      })
+    }
+
+    return redFlags
+  }
+
+  /**
+   * Generate professional validation log
+   */
+  async generateValidationLog(context, validationResults) {
+    const timestamp = new Date().toISOString().split('T')[0]
+    const status = validationResults.status
+    const score = validationResults.overallScore
+
+    let log = `# Document Validation Report\n\n`
+    log += `**Document:** ${context.title}\n`
+    log += `**File:** \`${context.filePath}\`\n`
+    log += `**Validated:** ${timestamp}\n`
+    log += `**Validation Score:** ${score}/100\n\n`
+
+    // Executive Summary
+    log += `## 📊 Executive Summary\n\n`
+
+    if (status === 'CRITICAL_ISSUES_FOUND') {
+      log += `🚨 **CRITICAL ISSUES FOUND** - Immediate action required\n\n`
+    } else if (status === 'APPROVED_WITH_RECOMMENDATIONS') {
+      log += `⚠️ **APPROVED WITH RECOMMENDATIONS** - Consider improvements\n\n`
+    } else {
+      log += `✅ **APPROVED** - Content meets current standards\n\n`
+    }
+
+    log += `- **Critical Issues:** ${
+      validationResults.criticalIssues?.length || 0
+    }\n`
+    log += `- **Recommendations:** ${
+      validationResults.recommendations?.length || 0
+    }\n`
+    log += `- **Sources Consulted:** ${validationResults.sourcesCount || 0}\n`
+    log += `- **Research Queries:** ${
+      validationResults.researchQueries?.length || 0
+    }\n\n`
+
+    // Critical Issues
+    if (validationResults.criticalIssues?.length > 0) {
+      log += `## 🚨 Critical Issues\n\n`
+      validationResults.criticalIssues.forEach((issue, index) => {
+        log += `### ${index + 1}. ${issue.issue}\n\n`
+        log += `**Category:** ${issue.category}\n\n`
+        log += `**Evidence:** ${issue.evidence}\n\n`
+        log += `**Recommendation:** ${issue.recommendation}\n\n`
+        log += `---\n\n`
+      })
+    }
+
+    // Moderate Issues
+    if (validationResults.moderateIssues?.length > 0) {
+      log += `## ⚠️ Moderate Concerns\n\n`
+      validationResults.moderateIssues.forEach((issue, index) => {
+        log += `**${index + 1}.** ${issue.issue}\n\n`
+        if (issue.evidence) {
+          log += `*Evidence:* ${issue.evidence}\n\n`
+        }
+      })
+    }
+
+    // Validated Practices
+    if (validationResults.validatedPractices?.length > 0) {
+      log += `## ✅ Validated Current Practices\n\n`
+      validationResults.validatedPractices.forEach((practice, index) => {
+        log += `**${index + 1}.** ${practice.practice} ✓\n\n`
+        log += `*Validation:* ${practice.validation}\n\n`
+      })
+    }
+
+    // Recommendations
+    if (validationResults.recommendations?.length > 0) {
+      log += `## 💡 Recommendations\n\n`
+      validationResults.recommendations.forEach((rec, index) => {
+        const priorityEmoji =
+          rec.priority === 'high'
+            ? '🔥'
+            : rec.priority === 'medium'
+            ? '📋'
+            : '💭'
+        log += `${priorityEmoji} **${index + 1}.** ${rec.description}\n\n`
+        log += `*Action:* ${rec.action}\n\n`
+      })
+    }
+
+    // Research Methodology
+    log += `## 🔍 Research Methodology\n\n`
+    log += `**Time Range:** Past 12 months (current practices)\n\n`
+    log += `**Search Depth:** Advanced\n\n`
+    log += `**Validation Queries:**\n`
+    validationResults.researchQueries?.forEach(query => {
+      log += `- ${query}\n`
+    })
+    log += `\n**Sources:** Industry standards (OWASP, NIST), official documentation, recent security advisories\n\n`
+
+    log += `---\n\n`
+    log += `*Generated by RAG Prep Plugin Research Agent*\n`
+    log += `*Report Date: ${new Date().toISOString()}*\n`
+
+    return log
+  }
+
+  /**
+   * Write validation log to separate log file
+   */
+  async writeValidationLog(context, logContent) {
+    const fs = require('fs').promises
+    const path = require('path') // Add missing import
+
+    try {
+      // Ensure log directory exists
+      await this.ensureLogDirectoryExists()
+
+      // Generate log file path
+      const logPath = this.getLogPath(context)
+
+      // Write validation log
+      await fs.writeFile(logPath, logContent, 'utf8')
+
+      console.log(`   📋 Validation log saved: ${logPath}`)
+    } catch (error) {
+      console.error(`   ❌ Failed to write validation log: ${error.message}`)
+    }
+  }
+
+  /**
+   * Get log file path for document
+   */
+  getLogPath(context) {
+    const path = require('path') // Add missing import
+    const filename = context.filePath
+      .split('/')
+      .pop()
+      .replace('.md', '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '-')
+
+    const timestamp = new Date().toISOString().split('T')[0]
+    return path.join(
+      this.logDirectory,
+      `${filename}-validation-${timestamp}.md`,
+    )
+  }
+
+  /**
+   * Ensure log directory exists
+   */
+  async ensureLogDirectoryExists() {
+    const fs = require('fs').promises
+    const path = require('path') // Add missing import
+
+    try {
+      await fs.mkdir(path.dirname(this.logDirectory), { recursive: true })
+      await fs.mkdir(this.logDirectory, { recursive: true })
+    } catch (error) {
+      // Directory probably exists, ignore
+    }
+  }
+
+  /**
+   * Initialize Tavily client with error handling
+   */
+  async initializeTavilyClient() {
     // Load environment variables
     if (!process.env.TAVILY_API_KEY) {
       try {
@@ -123,7 +572,7 @@ class ContentResearchAgent {
           path: path.join(process.cwd(), '.env.local'),
         })
       } catch (error) {
-        console.warn('⚠️  Could not load .env.local file')
+        console.warn('⚠️ Could not load .env.local file')
       }
     }
 
@@ -131,632 +580,174 @@ class ContentResearchAgent {
       console.error(
         '❌ [Research Agent] TAVILY_API_KEY not found in environment variables',
       )
-      return this.fallbackResearch(context)
+      return null
     }
 
     try {
       const { tavily } = require('@tavily/core')
-      const tavilyClient = tavily({ apiKey: process.env.TAVILY_API_KEY })
-
-      console.log(`🔍 [Research Agent] Conducting web research with Tavily...`)
-
-      // Research current best practices
-      const bestPracticesResults = await this.researchBestPractices(
-        tavilyClient,
-        context,
-      )
-
-      // Research industry standards
-      const industryStandardsResults = await this.researchIndustryStandards(
-        tavilyClient,
-        context,
-      )
-
-      // Research authoritative sources
-      const authoritativeSourcesResults =
-        await this.researchAuthoritativeSources(tavilyClient, context)
-
-      // Research related tools and technologies
-      const relatedToolsResults = await this.researchRelatedTools(
-        tavilyClient,
-        context,
-      )
-
-      // Compile comprehensive research metadata
-      const researchMetadata = this.compileResearchResults({
-        bestPractices: bestPracticesResults,
-        industryStandards: industryStandardsResults,
-        authoritativeSources: authoritativeSourcesResults,
-        relatedTools: relatedToolsResults,
-        context: context,
-      })
-
-      console.log(
-        `🎯 [Research Agent] Web research complete - found ${researchMetadata.researchSources.length} sources`,
-      )
-      return researchMetadata
+      return tavily({ apiKey: process.env.TAVILY_API_KEY })
     } catch (error) {
-      console.error('❌ [Research Agent] Tavily API error:', error.message)
-      return this.fallbackResearch(context)
+      console.error(
+        `❌ [Research Agent] Failed to initialize Tavily: ${error.message}`,
+      )
+      return null
     }
   }
 
   /**
-   * Research current best practices for the topic
+   * Extract technical topics for targeted research
    */
-  async researchBestPractices(tavilyClient, context) {
-    const query = `${context.title} best practices 2024 documentation guidelines`
+  extractTechnicalTopics(content) {
+    const topics = new Set()
+    const patterns = [
+      /\b(OAuth|JWT|PKCE|RSA|PBKDF2|SHA256|TLS|SSL)\b/gi,
+      /\b(API|REST|GraphQL|WebSocket)\b/gi,
+      /\b(authentication|authorization|encryption)\b/gi,
+      /\b(Node\.?js|Python|Java|React|Angular)\b/gi,
+    ]
 
-    try {
-      console.log(`   📚 Researching best practices: "${query}"`)
-      const response = await tavilyClient.search(query, {
-        search_depth: 'basic',
-        max_results: 3,
-        include_domains: [
-          'docs.microsoft.com',
-          'developers.google.com',
-          'github.com',
-          'stackoverflow.com',
-        ],
-      })
+    patterns.forEach(pattern => {
+      const matches = content.match(pattern) || []
+      matches.forEach(match => topics.add(match.toUpperCase()))
+    })
 
-      return {
-        query: query,
-        results: response.results || [],
-        insights: this.extractBestPracticesInsights(response.results || []),
-      }
-    } catch (error) {
-      console.warn(
-        `⚠️ [Research Agent] Best practices research failed: ${error.message}`,
-      )
-      return { query, results: [], insights: [] }
-    }
+    return Array.from(topics).slice(0, 5)
   }
 
   /**
-   * Research industry standards and compliance requirements
+   * Extract security concepts for focused validation
    */
-  async researchIndustryStandards(tavilyClient, context) {
-    const mainTopic = context.technicalTopics[0] || context.title
-    const query = `${mainTopic} industry standards compliance security 2024`
+  extractSecurityConcepts(content) {
+    const concepts = []
+    const securityTerms = [
+      'authentication',
+      'authorization',
+      'JWT',
+      'OAuth',
+      'PKCE',
+      'encryption',
+      'hashing',
+      'PBKDF2',
+      'token',
+      'session',
+      'credential',
+      'password',
+      'certificate',
+      'key rotation',
+    ]
 
-    try {
-      console.log(`   📋 Researching industry standards: "${query}"`)
-      const response = await tavilyClient.search(query, {
-        search_depth: 'basic',
-        max_results: 3,
-        include_domains: [
-          'nist.gov',
-          'iso.org',
-          'owasp.org',
-          'w3.org',
-          'ietf.org',
-        ],
-      })
-
-      return {
-        query: query,
-        results: response.results || [],
-        standards: this.extractStandardsInsights(response.results || []),
-      }
-    } catch (error) {
-      console.warn(
-        `⚠️ [Research Agent] Standards research failed: ${error.message}`,
-      )
-      return { query, results: [], standards: [] }
-    }
-  }
-
-  /**
-   * Research authoritative sources and official documentation
-   */
-  async researchAuthoritativeSources(tavilyClient, context) {
-    const mainTopic = context.technicalTopics[0] || context.title
-    const query = `${mainTopic} official documentation tutorial guide`
-
-    try {
-      console.log(`   🏛️ Researching authoritative sources: "${query}"`)
-      const response = await tavilyClient.search(query, {
-        search_depth: 'basic',
-        max_results: 4,
-        include_domains: [
-          'github.com',
-          'readthedocs.io',
-          'confluence.atlassian.com',
-        ],
-      })
-
-      return {
-        query: query,
-        results: response.results || [],
-        sources: this.extractAuthoritativeSourcesInsights(
-          response.results || [],
-        ),
-      }
-    } catch (error) {
-      console.warn(
-        `⚠️ [Research Agent] Authoritative sources research failed: ${error.message}`,
-      )
-      return { query, results: [], sources: [] }
-    }
-  }
-
-  /**
-   * Research related tools and technologies
-   */
-  async researchRelatedTools(tavilyClient, context) {
-    const technicalTopics = context.technicalTopics.slice(0, 3).join(' ')
-    const query = `${technicalTopics} tools libraries frameworks 2024`
-
-    try {
-      console.log(`   🔧 Researching related tools: "${query}"`)
-      const response = await tavilyClient.search(query, {
-        search_depth: 'basic',
-        max_results: 3,
-      })
-
-      return {
-        query: query,
-        results: response.results || [],
-        tools: this.extractToolsInsights(response.results || []),
-      }
-    } catch (error) {
-      console.warn(
-        `⚠️ [Research Agent] Tools research failed: ${error.message}`,
-      )
-      return { query, results: [], tools: [] }
-    }
-  }
-
-  /**
-   * Extract actionable insights from best practices research
-   */
-  extractBestPracticesInsights(results) {
-    const insights = []
-
-    results.forEach(result => {
-      if (result.content) {
-        // Look for actionable recommendations
-        const recommendations =
-          result.content.match(
-            /(?:should|must|recommend|best practice|tip).*?[.!]/gi,
-          ) || []
-        recommendations.slice(0, 2).forEach(rec => {
-          insights.push({
-            insight: rec.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-            source: result.url,
-            title: result.title,
-          })
-        })
+    securityTerms.forEach(term => {
+      if (content.toLowerCase().includes(term.toLowerCase())) {
+        concepts.push(term)
       }
     })
 
-    return insights.slice(0, 5)
+    return concepts.slice(0, 6)
   }
 
   /**
-   * Extract standards and compliance insights
+   * Identify potential issues for targeted validation
    */
-  extractStandardsInsights(results) {
-    const standards = []
-
-    results.forEach(result => {
-      if (result.content) {
-        // Look for standards references
-        const standardRefs =
-          result.content.match(/(?:ISO|NIST|RFC|OWASP|W3C)\s*\d+/gi) || []
-        standardRefs.forEach(ref => {
-          standards.push({
-            standard: ref,
-            source: result.url,
-            context: result.title,
-          })
-        })
-      }
-    })
-
-    return standards.slice(0, 3)
-  }
-
-  /**
-   * Extract authoritative sources
-   */
-  extractAuthoritativeSourcesInsights(results) {
-    return results
-      .map(result => ({
-        title: result.title,
-        url: result.url,
-        relevanceScore: this.calculateRelevanceScore(result),
-        summary: result.content ? result.content.substring(0, 150) + '...' : '',
-      }))
-      .slice(0, 4)
-  }
-
-  /**
-   * Extract tools and technologies insights
-   */
-  extractToolsInsights(results) {
-    const tools = []
-
-    results.forEach(result => {
-      if (result.content) {
-        // Look for tool mentions
-        const toolMentions =
-          result.content.match(
-            /\b\w+(?:\.js|\.py|\.go|\.rs|API|SDK|CLI)\b/gi,
-          ) || []
-        toolMentions.slice(0, 3).forEach(tool => {
-          tools.push({
-            tool: tool,
-            source: result.url,
-            context: result.title,
-          })
-        })
-      }
-    })
-
-    return tools.slice(0, 6)
-  }
-
-  /**
-   * Calculate relevance score for sources
-   */
-  calculateRelevanceScore(result) {
-    let score = 50 // Base score
-
-    // Higher score for official domains
-    if (result.url.includes('github.com') || result.url.includes('docs.'))
-      score += 20
-    if (result.url.includes('official') || result.url.includes('documentation'))
-      score += 15
-    if (result.title && result.title.toLowerCase().includes('guide'))
-      score += 10
-
-    return Math.min(score, 100)
-  }
-
-  /**
-   * Compile comprehensive research results into content suggestions
-   */
-  compileResearchResults({
-    bestPractices,
-    industryStandards,
-    authoritativeSources,
-    relatedTools,
-    context,
-  }) {
-    const currentDate = new Date().toISOString().split('T')[0]
-
-    // Generate actual content suggestions that will be added to the document
-    const contentSuggestions = this.generateContentSuggestions({
-      bestPractices,
-      industryStandards,
-      authoritativeSources,
-      relatedTools,
-      context,
-    })
-
+  identifyPotentialIssues(content) {
     return {
-      // Research metadata (for frontmatter)
-      researchConducted: true,
-      researchDate: currentDate,
-      researchSources: [
-        ...bestPractices.results,
-        ...industryStandards.results,
-        ...authoritativeSources.results,
-        ...relatedTools.results,
-      ].length,
-
-      // MAIN VALUE: Actual content to add to the document
-      suggestedContent: contentSuggestions,
-      contentEnhancements: this.generateContentEnhancements(
-        bestPractices,
-        industryStandards,
-        authoritativeSources,
-      ),
-
-      // Research insights for metadata
-      contentGaps: this.identifyContentGaps(
-        context,
-        bestPractices,
-        authoritativeSources,
-      ),
-      recommendedSections: this.generateRecommendedSections(
-        bestPractices,
-        industryStandards,
-        authoritativeSources,
-      ),
-
-      // Research quality metrics
-      researchScore: this.calculateResearchScore({
-        sourcesFound:
-          bestPractices.results.length +
-          industryStandards.results.length +
-          authoritativeSources.results.length,
-        insightsExtracted:
-          (bestPractices.insights?.length || 0) +
-          (industryStandards.standards?.length || 0),
-        authoritativeSourcesFound: authoritativeSources.sources?.length || 0,
-      }),
-
-      // Agent metadata
-      enhanced_by: 'rag-prep-plugin-research-agent',
-      enhanced_at: new Date().toISOString(),
-      tavilyIntegration: true,
+      missingReferences: (
+        content.match(/see\s+(our|the|company)\s+\w+/gi) || []
+      ).length,
+      vaguePhrases: (
+        content.match(/\b(as needed|appropriately|as required)\b/gi) || []
+      ).length,
+      securityConcerns: (
+        content.match(
+          /\b(disable|ignore|skip|bypass)\s+\w*(validation|security|check)/gi,
+        ) || []
+      ).length,
+      outdatedVersions: (
+        content.match(/\b(Node|React|Angular)\s+\d+\b/gi) || []
+      ).length,
     }
   }
 
   /**
-   * Generate actual content suggestions to add to the document
+   * Classify document type for targeted validation
    */
-  generateContentSuggestions({
-    bestPractices,
-    industryStandards,
-    authoritativeSources,
-    relatedTools,
-    context,
-  }) {
-    let suggestions = '\n\n'
+  classifyDocumentType(content, title) {
+    const titleLower = (title || '').toLowerCase()
+    const contentLower = content.toLowerCase()
 
-    // Add best practices section if insights found
-    if (bestPractices.insights?.length > 0) {
-      suggestions += `## 🏆 Current Best Practices (${new Date().getFullYear()})\n\n`
-      suggestions += 'Based on recent industry research:\n\n'
-
-      bestPractices.insights.slice(0, 3).forEach(insight => {
-        suggestions += `- **${insight.insight.split('.')[0]}**: ${
-          insight.insight
-        }\n`
-      })
-      suggestions += '\n'
-    }
-
-    // Add industry standards section if standards found
-    if (industryStandards.standards?.length > 0) {
-      suggestions += `## 📋 Industry Standards & Compliance\n\n`
-
-      industryStandards.standards.slice(0, 3).forEach(standard => {
-        suggestions += `- **${standard.standard}**: ${standard.context}\n`
-      })
-      suggestions += '\n'
-    }
-
-    // Add authoritative sources section
-    if (authoritativeSources.sources?.length > 0) {
-      suggestions += `## 📚 Additional Resources\n\n`
-
-      authoritativeSources.sources.slice(0, 3).forEach(source => {
-        suggestions += `- [${source.title}](${source.url})\n`
-      })
-      suggestions += '\n'
-    }
-
-    // Add related tools section
-    if (relatedTools.tools?.length > 0) {
-      suggestions += `## 🔧 Related Tools & Technologies\n\n`
-
-      const uniqueTools = [...new Set(relatedTools.tools.map(t => t.tool))]
-      uniqueTools.slice(0, 4).forEach(tool => {
-        suggestions += `- **${tool}**: Modern tool for ${context.title.toLowerCase()}\n`
-      })
-      suggestions += '\n'
-    }
-
-    return suggestions
-  }
-
-  /**
-   * Generate content enhancements for existing sections
-   */
-  generateContentEnhancements(
-    bestPractices,
-    industryStandards,
-    authoritativeSources,
-  ) {
-    const enhancements = []
-
-    // Security enhancements
     if (
-      bestPractices.insights?.some(i =>
-        i.insight.toLowerCase().includes('security'),
-      )
+      titleLower.includes('auth') ||
+      contentLower.includes('authentication')
     ) {
-      enhancements.push({
-        section: 'Security Considerations',
-        type: 'addition',
-        content:
-          'Consider implementing current security best practices based on 2024 industry standards.',
-        priority: 'high',
-      })
+      return 'authentication'
+    } else if (
+      titleLower.includes('credential') ||
+      contentLower.includes('password')
+    ) {
+      return 'credential_management'
+    } else if (
+      titleLower.includes('config') ||
+      contentLower.includes('configuration')
+    ) {
+      return 'configuration'
+    } else if (
+      titleLower.includes('api') ||
+      contentLower.includes('endpoint')
+    ) {
+      return 'api_documentation'
+    } else {
+      return 'general'
     }
-
-    // Standards compliance
-    if (industryStandards.standards?.length > 0) {
-      enhancements.push({
-        section: 'Compliance',
-        type: 'addition',
-        content: `Ensure compliance with current industry standards: ${industryStandards.standards
-          .map(s => s.standard)
-          .join(', ')}`,
-        priority: 'medium',
-      })
-    }
-
-    return enhancements
   }
 
   /**
-   * Generate recommended sections based on research
-   */
-  generateRecommendedSections(
-    bestPractices,
-    industryStandards,
-    authoritativeSources,
-  ) {
-    const sections = []
-
-    if (bestPractices.insights?.length > 0) {
-      sections.push({
-        title: 'Best Practices',
-        reason:
-          'Found current industry best practices that should be documented',
-        priority: 'high',
-      })
-    }
-
-    if (industryStandards.standards?.length > 0) {
-      sections.push({
-        title: 'Standards & Compliance',
-        reason: 'Identified relevant industry standards for compliance',
-        priority: 'medium',
-      })
-    }
-
-    if (authoritativeSources.sources?.length > 2) {
-      sections.push({
-        title: 'Additional Resources',
-        reason: 'Found authoritative sources that provide valuable context',
-        priority: 'low',
-      })
-    }
-
-    return sections
-  }
-  identifyContentGaps(context, bestPractices, authoritativeSources) {
-    const gaps = []
-
-    // Check if current content covers best practices found in research
-    bestPractices.insights?.forEach(insight => {
-      if (
-        !context.content
-          .toLowerCase()
-          .includes(insight.insight.toLowerCase().substring(0, 20))
-      ) {
-        gaps.push({
-          type: 'missing_best_practice',
-          recommendation: insight.insight,
-          source: insight.source,
-        })
-      }
-    })
-
-    return gaps.slice(0, 3)
-  }
-
-  /**
-   * Generate update recommendations based on research
-   */
-  generateUpdateRecommendations(bestPractices, industryStandards) {
-    const recommendations = []
-
-    if (bestPractices.insights?.length > 0) {
-      recommendations.push({
-        type: 'best_practices',
-        action: 'Consider incorporating current industry best practices',
-        priority: 'medium',
-        sources: bestPractices.insights.slice(0, 2).map(i => i.source),
-      })
-    }
-
-    if (industryStandards.standards?.length > 0) {
-      recommendations.push({
-        type: 'compliance',
-        action: 'Review compliance with current industry standards',
-        priority: 'high',
-        standards: industryStandards.standards.slice(0, 2).map(s => s.standard),
-      })
-    }
-
-    return recommendations
-  }
-
-  /**
-   * Calculate research quality score
-   */
-  calculateResearchScore({
-    sourcesFound,
-    insightsExtracted,
-    authoritativeSourcesFound,
-  }) {
-    let score = 50 // Base score
-
-    score += Math.min(sourcesFound * 5, 25) // Up to 25 points for sources
-    score += Math.min(insightsExtracted * 3, 15) // Up to 15 points for insights
-    score += Math.min(authoritativeSourcesFound * 2.5, 10) // Up to 10 points for authoritative sources
-
-    return Math.min(Math.round(score), 100)
-  }
-
-  /**
-   * Fallback research when Tavily is unavailable
+   * Fallback research when Tavily fails
    */
   fallbackResearch(context) {
-    console.log(
-      '📋 [Research Agent] Using fallback research (Tavily unavailable)',
+    console.warn(
+      `⚠️ [Research Agent] Using fallback validation for ${context.title}`,
     )
 
     return {
-      researchConducted: false,
-      researchDate: new Date().toISOString().split('T')[0],
-      researchSources: [],
-      bestPracticesFindings: [],
-      industryStandards: [],
-      authoritativeSources: [],
-      relatedTools: [],
-      contentGaps: [],
-      recommendedUpdates: [],
-      externalReferences: [],
-      researchScore: 30,
-      enhanced_by: 'rag-prep-plugin-research-agent-fallback',
-      enhanced_at: new Date().toISOString(),
-      tavilyIntegration: false,
-      fallbackReason: 'Tavily API unavailable',
+      status: 'VALIDATION_LIMITED',
+      overallScore: 70,
+      criticalIssues: [],
+      moderateIssues: [
+        {
+          category: 'validation_incomplete',
+          issue:
+            'Unable to perform full validation - limited to static analysis',
+        },
+      ],
+      validatedPractices: [],
+      recommendations: [
+        {
+          type: 'manual_review',
+          description:
+            'Manual review recommended due to validation service unavailability',
+          priority: 'medium',
+          action: 'Review document against current industry standards',
+        },
+      ],
+      sourcesCount: 0,
+      directAnswers: [],
+      researchQueries: [],
     }
   }
 
   /**
-   * Identify what research improvements were made
+   * Fallback when complete failure occurs
    */
-  identifyImprovements(original, enhanced) {
-    const improvements = []
-
-    if (!original.researchConducted && enhanced.researchConducted) {
-      improvements.push('Added real-time web research')
+  fallbackValidation(filePath, content) {
+    return {
+      originalMetadata: {},
+      enhancedMetadata: {
+        researchConducted: false,
+        validationScore: 50,
+        enhanced_by: 'rag-prep-plugin-research-fallback',
+      },
+      content,
+      improvements: ['Validation failed - manual review recommended'],
     }
-
-    if (enhanced.researchSources?.length > 0) {
-      improvements.push(
-        `Found ${enhanced.researchSources.length} research sources`,
-      )
-    }
-
-    if (enhanced.bestPracticesFindings?.length > 0) {
-      improvements.push(
-        `Identified ${enhanced.bestPracticesFindings.length} best practices`,
-      )
-    }
-
-    if (enhanced.industryStandards?.length > 0) {
-      improvements.push(
-        `Found ${enhanced.industryStandards.length} industry standards`,
-      )
-    }
-
-    if (enhanced.contentGaps?.length > 0) {
-      improvements.push(
-        `Identified ${enhanced.contentGaps.length} content gaps`,
-      )
-    }
-
-    if (enhanced.researchScore) {
-      improvements.push(`Research quality score: ${enhanced.researchScore}/100`)
-    }
-
-    if (enhanced.tavilyIntegration) {
-      improvements.push('Tavily web intelligence integration')
-    }
-
-    return improvements
   }
 }
 
