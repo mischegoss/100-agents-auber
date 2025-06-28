@@ -1,6 +1,53 @@
 ---
 sidebar_position: 5
 title: System Diagnostic Procedures
+description: >-
+  Diagnose system issues quickly! Learn effective troubleshooting procedures,
+  log analysis, and performance monitoring for optimal system health.
+tags:
+  - diagnostics
+  - troubleshooting
+  - logs
+  - performance
+  - database
+  - authentication
+keywords:
+  - system diagnostics
+  - troubleshooting
+  - log analysis
+  - performance monitoring
+  - error resolution
+  - system health
+topics:
+  - diagnostics
+  - system monitoring
+  - log analysis
+  - troubleshooting
+  - scenario-based diagnostics
+  - performance troubleshooting
+categories:
+  - troubleshooting
+  - infrastructure
+  - development
+  - operations
+audience:
+  - developers
+  - system-administrators
+  - beginners
+  - devops-engineers
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - authentication-concepts
+  - linux-fundamentals
+  - database-fundamentals
+category: System Administration
+difficulty: intermediate
+contentType: troubleshooting
+domainArea: infrastructure
+primaryTopic: system diagnostics
+ragScore: 87
+agentCount: 2
 ---
 
 # System Diagnostic Procedures
