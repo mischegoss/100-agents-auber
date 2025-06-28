@@ -1,6 +1,47 @@
 ---
 sidebar_position: 3
 title: Basic Tutorial
+description: >-
+  Learn how to create your first project using our API. This tutorial covers
+  project creation, data upload, status checks, and settings configuration. Get
+  star...
+tags:
+  - api
+  - tutorial
+  - project
+  - csv
+  - rest
+keywords:
+  - project creation
+  - api tutorial
+  - data upload
+  - project settings
+  - rest api
+  - csv data import
+topics:
+  - project management
+  - api interaction
+  - data upload
+  - configuration
+  - project initialization
+  - data import
+categories:
+  - tutorial
+  - development
+audience:
+  - developers
+  - beginners
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - rest-api-fundamentals
+category: API Documentation
+difficulty: beginner
+contentType: tutorial
+domainArea: development
+primaryTopic: project creation
+ragScore: 91
+agentCount: 2
 ---
 
 # Basic Tutorial
