@@ -1,6 +1,52 @@
 ---
 sidebar_position: 4
 title: Environmental Configuration Framework
+description: >-
+  Configure application environments with YAML files, environment variables, &
+  service dependencies. Learn database, cache, and runtime parameter setup.
+tags:
+  - configuration
+  - environment
+  - deployment
+  - yaml
+  - redis
+  - database
+  - postgres
+keywords:
+  - environment configuration
+  - yaml configuration
+  - environment variables
+  - database setup
+  - redis caching
+  - runtime parameters
+  - app configuration
+topics:
+  - environment configuration
+  - initial setup
+  - configuration files
+  - yaml configuration
+  - json configuration
+  - environment variables
+categories:
+  - guide
+  - configuration
+  - infrastructure
+audience:
+  - developers
+  - system-administrators
+  - beginners
+  - devops-engineers
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - linux-fundamentals
+category: Software Development
+difficulty: intermediate
+contentType: tutorial
+domainArea: infrastructure
+primaryTopic: configuration
+ragScore: 87
+agentCount: 2
 ---
 
 # Environment Configuration Framework
