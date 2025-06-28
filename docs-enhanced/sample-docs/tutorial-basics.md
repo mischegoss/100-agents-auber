@@ -1,6 +1,47 @@
 ---
 sidebar_position: 3
 title: Basic Tutorial
+description: >-
+  Learn to create projects via API, upload data, and configure settings. A
+  step-by-step tutorial for developers using POST requests and JSON objects.
+tags:
+  - api
+  - project
+  - tutorial
+  - rest
+  - json
+  - csv
+keywords:
+  - project creation
+  - api tutorial
+  - rest api
+  - data upload
+  - project settings
+  - json api
+topics:
+  - api
+  - project management
+  - project setup
+  - data upload
+  - project configuration
+  - api endpoints
+categories:
+  - tutorial
+  - development
+audience:
+  - developers
+  - beginners
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - json-understanding
+category: API Documentation
+difficulty: beginner
+contentType: tutorial
+domainArea: development
+primaryTopic: project creation
+ragScore: 90
+agentCount: 3
 ---
 
 # Basic Tutorial
