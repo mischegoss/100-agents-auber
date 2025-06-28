@@ -1,6 +1,52 @@
 ---
 sidebar_position: 5
 title: System Diagnostic Procedures
+description: >-
+  Diagnose and resolve system issues quickly with our step-by-step guide. Learn
+  monitoring, log analysis & specific troubleshooting scenarios.
+tags:
+  - diagnostics
+  - troubleshooting
+  - system-monitoring
+  - logs
+  - errors
+keywords:
+  - system diagnostics
+  - troubleshooting
+  - debugging
+  - log analysis
+  - performance monitoring
+  - error resolution
+  - database issues
+topics:
+  - diagnostics
+  - general information
+  - monitoring infrastructure
+  - log analysis
+  - specific scenarios
+  - performance
+categories:
+  - troubleshooting
+  - infrastructure
+  - development
+audience:
+  - developers
+  - system-administrators
+  - beginners
+  - devops-engineers
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - sql
+  - javascript
+  - log-analysis
+category: System Administration
+difficulty: intermediate
+contentType: troubleshooting
+domainArea: infrastructure
+primaryTopic: system diagnostics
+ragScore: 90
+agentCount: 3
 ---
 
 # System Diagnostic Procedures
