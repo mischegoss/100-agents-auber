@@ -1,11 +1,51 @@
 ---
 sidebar_position: 7
 title: Community Guidelines
+chunkingEnhanced: true
+chunkingDate: '2025-06-28T18:03:43.795Z'
+structureImprovements: 10
+optimalChunkSize: 350
+chunkingScore: 88
+headingsAdded: 10
+sectionsRestructured: 0
+semanticBridges: 0
+enhanced_by: rag-prep-plugin-chunking-restructurer
+enhanced_at: '2025-06-28T18:03:43.795Z'
 ---
 
 ## Community Guidelines
 
 ## Forum Rules
+
+## Acceptable Conduct and Communication
+
+### Professionalism and Respect
+
+### Prohibited Content and Behavior
+
+## Content Quality and Relevance
+
+### Asking Questions Effectively
+
+### Providing Meaningful Contributions
+
+### Reporting Bugs and Suggesting Features
+
+## Enforcement and Consequences
+
+### Moderation Policy
+
+### Accountability and Consequences
+
+
+
+
+
+
+
+
+
+
 
 This is our community, and we have high standards. All posts must be professional and directly related to our software. Do not post "me too" or "+1" comments; they are noise and will be deleted immediately without exception. Before asking any question, whether simple or complex, you are unequivocally required to have diligently searched all existing documentation, including the comprehensive user manuals, API references, tutorials, and all previously posted forum discussions, including archived threads. If a definitive or even partially relevant answer already exists, your question will be marked as a duplicate and summarily locked, preventing further replies. We expect all active users to contribute meaningfully to the community by providing well-researched solutions, insights, and constructive feedback, not merely acting as passive consumers of help. Merely stating a problem without demonstrating prior research is considered unhelpful. Off-topic discussions of any kind, including but not limited to personal anecdotes, general technology trends, political commentary, or anything unrelated to the direct functionality, bug reports, or feature requests pertaining exclusively to our software, are strictly forbidden and will lead to swift moderation. Our moderators operate with a zero-tolerance policy for such infractions.
 
