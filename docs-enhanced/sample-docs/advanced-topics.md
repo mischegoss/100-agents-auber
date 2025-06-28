@@ -1,6 +1,58 @@
 ---
 sidebar_position: 6
 title: Advanced Concepts
+description: >-
+  Deep dive into system internals, memory management (JVM G1GC tuning), and
+  network configuration. Optimize your deployments! Learn about queues and state
+  mach...
+tags:
+  - architecture
+  - internals
+  - memory
+  - jvm
+  - networking
+  - redis
+  - queue
+keywords:
+  - system-architecture
+  - system-internals
+  - memory-management
+  - jvm-g1gc
+  - message-queue
+  - state-machine
+  - redis-cache
+  - network-configuration
+topics:
+  - system architecture
+  - system internals
+  - message queueing
+  - rabbitmq
+  - api integration
+  - state management
+categories:
+  - guide
+  - infrastructure
+  - development
+  - configuration
+audience:
+  - developers
+  - system-administrators
+  - architects
+  - backend-developers
+  - devops-engineers
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - concurrency-concepts
+  - jvm-fundamentals
+  - linux-system-administration
+category: System Architecture
+difficulty: advanced
+contentType: reference
+domainArea: infrastructure
+primaryTopic: system architecture
+ragScore: 89
+agentCount: 2
 ---
 
 # Advanced Concepts
