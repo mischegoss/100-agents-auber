@@ -1,5 +1,52 @@
 ---
 sidebar_position: 6
+description: >-
+  Learn how to leverage Docusaurus Markdown features like front matter, links,
+  images, code blocks, admonitions, and MDX for interactive documentation.
+  Enhance...
+tags:
+  - docusaurus
+  - markdown
+  - mdx
+  - react
+  - documentation
+keywords:
+  - docusaurus
+  - markdown
+  - mdx
+  - documentation
+  - front matter
+  - code blocks
+  - admonitions
+  - react components
+topics:
+  - markdown
+  - markdown/syntax
+  - markdown/formatting
+  - markdown/links
+  - markdown/images
+  - markdown/code blocks
+categories:
+  - guide
+  - development
+  - reference
+  - documentation
+audience:
+  - developers
+  - content creators
+  - technical writers
+  - beginners
+  - content-creators
+prerequisites:
+  - basic-programming
+  - html-knowledge
+category: Documentation
+difficulty: beginner
+contentType: tutorial
+domainArea: development
+primaryTopic: markdown features
+ragScore: 91
+agentCount: 3
 ---
 
 # Markdown Features
