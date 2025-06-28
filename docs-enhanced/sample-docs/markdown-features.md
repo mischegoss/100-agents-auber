@@ -1,5 +1,50 @@
 ---
 sidebar_position: 6
+description: >-
+  Master Docusaurus Markdown! Learn about Front Matter, Links, Images, Code
+  Blocks, Admonitions, and MDX with React Components. Enhance your documentation
+  now!
+tags:
+  - docusaurus
+  - markdown
+  - documentation
+  - mdx
+  - react
+keywords:
+  - docusaurus markdown
+  - markdown features
+  - docusaurus documentation
+  - front matter
+  - mdx components
+  - react markdown
+  - code blocks
+  - admonitions
+topics:
+  - markdown
+  - markdown syntax
+  - docusaurus markdown
+  - docusaurus features
+  - front matter
+  - links
+categories:
+  - guide
+  - development
+audience:
+  - developers
+  - content-creators
+  - docusaurus-users
+  - beginners
+prerequisites:
+  - basic-programming
+  - markdown-basics
+  - html-basics
+category: Docusaurus Documentation
+difficulty: beginner
+contentType: guide
+domainArea: development
+primaryTopic: markdown features
+ragScore: 90
+agentCount: 2
 ---
 
 # Markdown Features
