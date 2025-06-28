@@ -1,6 +1,16 @@
 ---
 sidebar_position: 6
 title: Advanced Concepts
+chunkingEnhanced: true
+chunkingDate: '2025-06-28T16:29:41.581Z'
+structureImprovements: 0
+optimalChunkSize: 350
+chunkingScore: 70
+headingsAdded: 0
+sectionsRestructured: 0
+semanticBridges: 0
+enhanced_by: rag-prep-plugin-chunking-restructurer
+enhanced_at: '2025-06-28T16:29:41.581Z'
 ---
 
 # Advanced Concepts
