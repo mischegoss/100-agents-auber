@@ -1,6 +1,16 @@
 ---
 sidebar_position: 4
 title: Environmental Configuration Framework
+chunkingEnhanced: true
+chunkingDate: '2025-06-28T18:57:54.254Z'
+structureImprovements: 12
+optimalChunkSize: 350
+chunkingScore: 88
+headingsAdded: 12
+sectionsRestructured: 0
+semanticBridges: 0
+enhanced_by: rag-prep-plugin-chunking-restructurer
+enhanced_at: '2025-06-28T18:57:54.254Z'
 ---
 
 # Environment Configuration Framework
@@ -10,6 +20,12 @@ title: Environmental Configuration Framework
 The application runtime requires specific environmental parameters to be configured before deployment. These settings control various aspects of system behavior and integration points.
 
 ### Configuration File Structure
+
+### JSON Configuration (Legacy)
+
+
+### YAML Configuration
+
 
 The primary config file uses YAML format for better readability. However, certain legacy components still require JSON configuration files for backward compatibility.
 
@@ -32,6 +48,9 @@ api_settings:
 
 ### Environment Variables
 
+### Sensitive Environment Variables
+
+
 Some configuration values must be provided through shell environment variables for security reasons. These include sensitive credentials and deployment-specific overrides.
 
 ```bash
@@ -45,11 +64,17 @@ export LOG_LEVEL="info"
 
 ### Database Setup
 
+### Database Schema Management
+
+
 The application requires PostgreSQL version 12 or higher. Connection parameters are specified in the main configuration file or through environment variables.
 
 Initial database schema creation happens automatically during first startup. Migration scripts handle schema updates for existing installations.
 
 ### Caching Layer Configuration
+
+### Connection Pooling
+
 
 Redis serves as the distributed cache backend. Connection pooling is enabled by default with configurable pool sizes.
 
@@ -64,19 +89,34 @@ const cacheConfig = {
 
 ### External Service Integration
 
+### Email Service Integration
+
+
+### API Key Management
+
+
 Third-party service credentials must be configured for full functionality. API keys are loaded from environment variables during application initialization.
 
 Email service configuration requires SMTP settings or API credentials depending on the chosen provider. The system supports multiple email providers through a unified interface.
 
 ## Runtime Parameters
 
+## Deployment Considerations
+
+
 ### Memory Allocation
+
+### JVM Heap Sizing and Garbage Collection
+
 
 JVM heap settings should be adjusted based on expected load patterns. Garbage collection tuning may be necessary for high-throughput scenarios.
 
 Default memory limits are conservative and may need adjustment for production deployments. Monitor memory usage patterns during initial deployment phases.
 
 ### Logging Configuration
+
+### Logback Configuration Example
+
 
 Log levels can be adjusted per component through the logging configuration file. Structured logging is enabled by default with JSON output format.
 
@@ -100,6 +140,12 @@ Log levels can be adjusted per component through the logging configuration file.
 ```
 
 ### Network Configuration
+
+### Load Balancer Health Checks
+
+
+### Port and Network Interface Configuration
+
 
 Port assignments and network interface bindings are configured through startup parameters. Default ports may conflict with other services in containerized environments.
 
