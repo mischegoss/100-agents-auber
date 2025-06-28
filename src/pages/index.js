@@ -142,13 +142,7 @@ function SearchComparison() {
               </p>
             </div>
 
-            <SearchWidget
-              forceContext='docs-original'
-              placeholder='Search original docs...'
-              maxResults={3}
-              showKeywords={true}
-              compact={false}
-            />
+            <SearchWidget mode='original' title='Basic Search' compact={true} />
 
             <div
               style={{
@@ -237,11 +231,9 @@ function SearchComparison() {
             </div>
 
             <SearchWidget
-              forceContext='docs-enhanced'
-              placeholder='Search enhanced docs...'
-              maxResults={3}
-              showKeywords={true}
-              compact={false}
+              mode='enhanced'
+              title='RAG-AI Enhanced Search'
+              compact={true}
             />
 
             <div

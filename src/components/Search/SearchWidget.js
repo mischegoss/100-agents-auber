@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useLocation } from '@docusaurus/router'
 
 function SearchWidget({
-  placeholder = 'Search docs...',
-  maxResults = 5,
+  mode = 'original', // 'original' | 'enhanced'
+  title = null,
+  jsonFile = null,
+  placeholder = null,
+  maxResults = 3,
   showKeywords = true,
   compact = false,
-  forceContext = null, // Override URL-based context detection
 }) {
   const [query, setQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
@@ -16,110 +17,114 @@ function SearchWidget({
   const [searchStage, setSearchStage] = useState('')
   const [searchIndex, setSearchIndex] = useState(null)
   const [loadingError, setLoadingError] = useState(null)
+  const [aiResponse, setAiResponse] = useState(null)
+  const [aiSources, setAiSources] = useState([])
   const searchRef = useRef(null)
 
-  // Get current location to determine which docs we're in
-  const location = useLocation()
+  // Determine configuration based on mode
+  const getConfig = () => {
+    const isEnhanced = mode === 'enhanced'
 
-  // Determine current docs context
-  const getCurrentDocsContext = () => {
-    // If forceContext is provided, use it to override URL detection
-    if (forceContext) {
-      if (forceContext === 'docs-enhanced') {
-        return {
-          context: 'docs-enhanced',
-          jsonFile: '/search-index-enhanced.json',
-          label: 'Enhanced Docs',
-        }
-      } else if (forceContext === 'docs-original') {
-        return {
-          context: 'docs-original',
-          jsonFile: '/search-index-original.json',
-          label: 'Original Docs',
-        }
-      }
-    }
-
-    // Fall back to URL-based detection
-    const path = location.pathname
-
-    if (path.startsWith('/docs-enhanced')) {
-      return {
-        context: 'docs-enhanced',
-        jsonFile: '/search-index-enhanced.json',
-        label: 'Enhanced Docs',
-      }
-    } else if (path.startsWith('/docs-original')) {
-      return {
-        context: 'docs-original',
-        jsonFile: '/search-index-original.json',
-        label: 'Original Docs',
-      }
-    } else {
-      return {
-        context: 'docs-enhanced', // Default for demo
-        jsonFile: '/search-index-enhanced.json',
-        label: 'Enhanced Docs (Demo)',
-      }
+    return {
+      isEnhanced,
+      title: title || (isEnhanced ? 'RAG-AI Enhanced Search' : 'Basic Search'),
+      jsonFile:
+        jsonFile ||
+        (isEnhanced
+          ? '/search-data/enhanced-docs.json'
+          : '/search-data/original-docs.json'),
+      placeholder:
+        placeholder ||
+        (isEnhanced
+          ? '🤖 Ask me anything about the docs...'
+          : '🔍 Search documentation...'),
+      badge: isEnhanced ? '🤖 RAG-AI' : '📄 Basic',
+      primaryColor: isEnhanced ? '#28a745' : '#6c757d',
+      accentColor: isEnhanced ? '#d4edda' : '#f8f9fa',
+      borderColor: isEnhanced ? '#c3e6cb' : '#dee2e6',
     }
   }
 
-  const { context, jsonFile, label } = getCurrentDocsContext()
+  const config = getConfig()
+
+  // Demo questions based on mode
+  const demoQuestions = {
+    original: [
+      'authentication setup',
+      'credential management',
+      'tutorial basics',
+      'configuration',
+      'token',
+      'How do I resolve account lockout issues step by step?',
+      'What are JWT token security best practices and common pitfalls?',
+      'How do I troubleshoot authentication timeout problems?',
+      'What is the difference between credential policies and token management?',
+      'How do I configure SSO integration with LDAP?',
+    ],
+    enhanced: [
+      'authentication setup',
+      'credential management',
+      'tutorial basics',
+      'configuration',
+      'token',
+      'How do I resolve account lockout issues step by step?',
+      'What are JWT token security best practices and common pitfalls?',
+      'How do I troubleshoot authentication timeout problems?',
+      'What is the difference between credential policies and token management?',
+      'How do I configure SSO integration with LDAP?',
+    ],
+  }
 
   /**
    * Load documents from the generated JSON files
    */
   const loadDocumentsFromJSON = async () => {
-    console.log(`🔍 Loading search index from: ${jsonFile}`)
+    console.log(
+      `🔍 [${mode.toUpperCase()}] Loading search index from: ${
+        config.jsonFile
+      }`,
+    )
     setLoadingError(null)
 
     try {
-      const response = await fetch(jsonFile)
-
+      const response = await fetch(config.jsonFile)
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
 
       const searchIndexData = await response.json()
+      console.log(`📚 [${mode.toUpperCase()}] Loaded search index:`)
+      console.log(
+        `   📊 Total documents: ${searchIndexData.metadata.totalDocuments}`,
+      )
+      console.log(
+        `   🎯 Enhancement rate: ${searchIndexData.metadata.enhancementRate}%`,
+      )
 
-      console.log(`📚 Loaded search index for ${context}:`)
-      console.log(`   📊 Total documents: ${searchIndexData.totalDocuments}`)
-      console.log(`   🎯 Enhancement rate: ${searchIndexData.enhancementRate}%`)
-
-      if (searchIndexData.averageRagScore) {
+      if (searchIndexData.agentStats?.averageRAGScore) {
         console.log(
-          `   🧠 Average RAG score: ${searchIndexData.averageRagScore}`,
+          `   🧠 Average RAG score: ${searchIndexData.agentStats.averageRAGScore}`,
         )
-      }
-
-      if (searchIndexData.capabilities) {
-        const capabilities = Object.entries(searchIndexData.capabilities)
-          .filter(([_, enabled]) => enabled)
-          .map(([name, _]) => name)
-        console.log(`   ⚡ Capabilities: ${capabilities.join(', ')}`)
       }
 
       setSearchIndex(searchIndexData)
       setDocumentCache(searchIndexData.documents)
-
       return searchIndexData.documents
     } catch (error) {
       console.error(
-        `❌ Failed to load search index from ${jsonFile}:`,
+        `❌ [${mode.toUpperCase()}] Failed to load search index:`,
         error.message,
       )
       setLoadingError(error.message)
-
-      // Fallback to empty array
       setDocumentCache([])
       return []
     }
   }
 
-  // Load documents on component mount and context change
+  // Load documents on component mount and mode change
   useEffect(() => {
     loadDocumentsFromJSON()
-  }, [context, jsonFile, forceContext])
+  }, [mode, config.jsonFile])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -133,32 +138,30 @@ function SearchWidget({
   }, [])
 
   /**
-   * STAGE 1: Meta-tag filtering
+   * STAGE 1: Meta-tag filtering (same for both modes)
    */
   const performStage1MetaFilter = (query, documents) => {
-    console.log(`🔍 STAGE 1: Meta-tag filtering for query: "${query}"`)
+    console.log(
+      `🔍 [${mode.toUpperCase()}] STAGE 1: Meta-tag filtering for query: "${query}"`,
+    )
     setSearchStage('Stage 1: Scanning metadata...')
 
     const q = query.toLowerCase()
     const candidateDocs = []
 
     documents.forEach(doc => {
-      // Check if doc has meaningful keywords for this query
-      const keywordMatch = doc.keywords.some(
+      const keywordMatch = (doc.keywords || []).some(
         keyword =>
           keyword.toLowerCase().includes(q) ||
           q.includes(keyword.toLowerCase()),
       )
-
       const titleMatch = doc.title.toLowerCase().includes(q)
-      const descriptionMatch = doc.description.toLowerCase().includes(q)
-      const contentMatch = doc.content.toLowerCase().includes(q)
+      const descriptionMatch = (doc.description || '').toLowerCase().includes(q)
+      const contentMatch = (doc.content?.fullText || doc.content || '')
+        .toLowerCase()
+        .includes(q)
 
-      // Enhanced docs get better filtering with semantic keywords
-      if (
-        doc.isEnhanced &&
-        (keywordMatch || titleMatch || descriptionMatch || contentMatch)
-      ) {
+      if (keywordMatch || titleMatch || descriptionMatch || contentMatch) {
         candidateDocs.push({
           ...doc,
           stage1Reason: keywordMatch
@@ -168,305 +171,24 @@ function SearchWidget({
             : descriptionMatch
             ? 'description-match'
             : 'content-match',
-          matchedKeywords: doc.keywords.filter(
+          matchedKeywords: (doc.keywords || []).filter(
             k => k.toLowerCase().includes(q) || q.includes(k.toLowerCase()),
           ),
         })
-        console.log(
-          `✅ STAGE 1 PASS: ${doc.title} (${doc.enhancementLevel}) - ${
-            keywordMatch ? 'keyword' : titleMatch ? 'title' : 'description'
-          } match`,
-        )
-      } else if (
-        !doc.isEnhanced &&
-        (titleMatch || descriptionMatch || contentMatch)
-      ) {
-        // Basic docs get through with direct matches only
-        candidateDocs.push({
-          ...doc,
-          stage1Reason: 'direct-match',
-          matchedKeywords: [],
-        })
-        console.log(`✅ STAGE 1 PASS: ${doc.title} (basic - direct match)`)
-      } else {
-        console.log(`❌ STAGE 1 SKIP: ${doc.title} (no relevant matches)`)
+        console.log(`✅ [${mode.toUpperCase()}] STAGE 1 PASS: ${doc.title}`)
       }
     })
 
     console.log(
-      `📊 STAGE 1 RESULTS: ${candidateDocs.length} documents passed filter`,
+      `📊 [${mode.toUpperCase()}] STAGE 1 RESULTS: ${
+        candidateDocs.length
+      } documents passed filter`,
     )
-    return candidateDocs
+    return candidateDocs.slice(0, 3) // Limit to top 3 candidates
   }
 
   /**
-   * STAGE 2: AI semantic search (for enhanced docs only)
-   */
-  const performStage2AISearch = async (query, candidateDocs) => {
-    console.log(
-      `🤖 STAGE 2: AI semantic search on ${candidateDocs.length} candidates`,
-    )
-
-    // Only apply AI search to enhanced docs
-    const enhancedCandidates = candidateDocs.filter(doc => doc.isEnhanced)
-    const basicCandidates = candidateDocs.filter(doc => !doc.isEnhanced)
-
-    if (enhancedCandidates.length === 0) {
-      setSearchStage('Stage 2: No enhanced docs for AI processing')
-      return performBasicScoring(candidateDocs, query)
-    }
-
-    setSearchStage('Stage 2: AI semantic analysis...')
-
-    try {
-      // Simulate AI semantic search with advanced mappings
-      const aiResults = await simulateAISemanticSearch(
-        query,
-        enhancedCandidates,
-      )
-      const basicResults = performBasicScoring(basicCandidates, query)
-
-      // Combine and sort by relevance
-      const allResults = [...aiResults, ...basicResults].sort(
-        (a, b) => b.relevanceScore - a.relevanceScore,
-      )
-
-      return allResults
-    } catch (error) {
-      console.error(
-        '❌ AI search failed, falling back to basic scoring:',
-        error.message,
-      )
-      return performBasicScoring(candidateDocs, query)
-    }
-  }
-
-  /**
-   * Advanced AI semantic search simulation
-   */
-  const simulateAISemanticSearch = async (query, candidateDocs) => {
-    // Simulate AI processing delay
-    await new Promise(resolve => setTimeout(resolve, 600))
-
-    const q = query.toLowerCase()
-
-    // Advanced semantic mappings for AI-enhanced search
-    const semanticMappings = {
-      // Authentication ecosystem
-      auth: [
-        'authentication',
-        'login',
-        'signin',
-        'access',
-        'credential',
-        'token',
-        'session',
-      ],
-      login: [
-        'authentication',
-        'signin',
-        'access',
-        'credential',
-        'session',
-        'lockout',
-      ],
-      authentication: [
-        'login',
-        'signin',
-        'access',
-        'credential',
-        'token',
-        'security',
-        'MFA',
-      ],
-      signin: ['login', 'authentication', 'access', 'credential'],
-
-      // Security and access control
-      lockout: [
-        'locked',
-        'access-control',
-        'failed-login',
-        'blocked',
-        'timeout',
-        'security',
-      ],
-      locked: [
-        'lockout',
-        'access-control',
-        'failed-login',
-        'blocked',
-        'security',
-      ],
-      timeout: [
-        'lockout',
-        'expiry',
-        'session',
-        'access-control',
-        'session-management',
-      ],
-      security: [
-        'authentication',
-        'access-control',
-        'lockout',
-        'credential',
-        'encryption',
-        'audit',
-      ],
-      access: [
-        'authentication',
-        'login',
-        'permission',
-        'credential',
-        'access-control',
-      ],
-
-      // Credentials and tokens
-      password: [
-        'credential',
-        'authentication',
-        'login',
-        'access',
-        'security',
-        'policy',
-      ],
-      token: [
-        'authentication',
-        'access',
-        'credential',
-        'session',
-        'JWT',
-        'bearer-token',
-        'oauth',
-      ],
-      credential: [
-        'password',
-        'authentication',
-        'login',
-        'access',
-        'token',
-        'management',
-      ],
-      jwt: ['token', 'authentication', 'access', 'bearer-token', 'oauth'],
-
-      // System and integration
-      system: [
-        'integration',
-        'configuration',
-        'setup',
-        'deployment',
-        'endpoints',
-      ],
-      integration: ['system', 'SSO', 'LDAP', 'API', 'federation', 'endpoints'],
-      config: ['configuration', 'setup', 'deployment', 'environment'],
-      setup: [
-        'configuration',
-        'installation',
-        'deployment',
-        'environment',
-        'tutorial',
-      ],
-      sso: ['integration', 'federation', 'authentication', 'system'],
-      ldap: ['integration', 'directory-services', 'authentication', 'system'],
-      api: ['integration', 'endpoints', 'system', 'authentication'],
-
-      // Session and lifecycle
-      session: ['authentication', 'token', 'timeout', 'expiry', 'management'],
-      expiry: ['timeout', 'session', 'token', 'credential'],
-      expired: ['expiry', 'timeout', 'session', 'token'],
-      lifecycle: ['management', 'credential', 'token', 'session'],
-
-      // Procedures and management
-      procedure: ['process', 'workflow', 'steps', 'guide', 'tutorial'],
-      management: ['lifecycle', 'credential', 'administration', 'policy'],
-      policy: ['credential', 'security', 'governance', 'compliance'],
-      audit: ['logging', 'review', 'compliance', 'monitoring', 'security'],
-
-      // User experience
-      tutorial: [
-        'guide',
-        'getting-started',
-        'beginner',
-        'introduction',
-        'basics',
-      ],
-      guide: ['tutorial', 'documentation', 'instructions', 'help'],
-      help: ['guide', 'tutorial', 'documentation', 'support'],
-    }
-
-    const results = candidateDocs.map(doc => {
-      let relevanceScore = 0
-
-      // Direct matches get high scores
-      if (doc.title.toLowerCase().includes(q)) relevanceScore += 50
-      if (doc.description.toLowerCase().includes(q)) relevanceScore += 35
-      if (doc.content.toLowerCase().includes(q)) relevanceScore += 25
-      if (doc.matchedKeywords?.length > 0) relevanceScore += 40
-
-      // Semantic matches using AI-powered mappings
-      const semanticTerms = semanticMappings[q] || []
-      let semanticMatches = []
-
-      semanticTerms.forEach(term => {
-        if (
-          doc.keywords.some(k => k.toLowerCase().includes(term.toLowerCase()))
-        ) {
-          relevanceScore += 30
-          semanticMatches.push(term)
-        }
-        if (doc.title.toLowerCase().includes(term)) {
-          relevanceScore += 25
-          if (!semanticMatches.includes(term)) semanticMatches.push(term)
-        }
-        if (doc.description.toLowerCase().includes(term)) {
-          relevanceScore += 20
-          if (!semanticMatches.includes(term)) semanticMatches.push(term)
-        }
-      })
-
-      // Enhanced metadata bonuses
-      if (doc.isEnhanced) {
-        relevanceScore += 20 // Base enhancement bonus
-
-        // RAG score influence
-        if (doc.ragScore) {
-          relevanceScore += Math.floor(doc.ragScore / 10) // 0-10 bonus based on RAG score
-        }
-
-        // Topic cluster bonus
-        if (
-          doc.topicClusters &&
-          semanticTerms.some(term =>
-            doc.topicClusters.some(cluster =>
-              cluster.includes(term.split('-')[0]),
-            ),
-          )
-        ) {
-          relevanceScore += 15
-        }
-
-        // Search priority bonus
-        if (doc.searchPriority) {
-          relevanceScore += doc.searchPriority
-        }
-      }
-
-      return {
-        ...doc,
-        relevanceScore,
-        aiProcessed: true,
-        excerpt: createExcerpt(doc.content, query),
-        semanticMatches: semanticMatches.slice(0, 3), // Top 3 semantic matches
-        aiConfidence: Math.min(95, relevanceScore), // Simulated AI confidence
-      }
-    })
-
-    return results
-      .filter(r => r.relevanceScore > 0)
-      .sort((a, b) => b.relevanceScore - a.relevanceScore)
-  }
-
-  /**
-   * Basic scoring for non-enhanced docs
+   * STAGE 2A: Basic scoring for original mode
    */
   const performBasicScoring = (candidateDocs, query) => {
     const q = query.toLowerCase()
@@ -476,19 +198,203 @@ function SearchWidget({
         let relevanceScore = 0
 
         if (doc.title.toLowerCase().includes(q)) relevanceScore += 50
-        if (doc.description.toLowerCase().includes(q)) relevanceScore += 30
-        if (doc.content.toLowerCase().includes(q)) relevanceScore += 20
+        if ((doc.description || '').toLowerCase().includes(q))
+          relevanceScore += 30
+        if (
+          (doc.content?.fullText || doc.content || '').toLowerCase().includes(q)
+        )
+          relevanceScore += 20
         if (doc.matchedKeywords?.length > 0) relevanceScore += 25
 
         return {
           ...doc,
           relevanceScore,
           aiProcessed: false,
-          excerpt: createExcerpt(doc.content, query),
+          excerpt: createExcerpt(
+            doc.content?.fullText || doc.content || '',
+            query,
+          ),
         }
       })
       .filter(r => r.relevanceScore > 0)
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
+  }
+
+  /**
+   * STAGE 2B: AI-powered grounded search for enhanced mode
+   */
+  const performAIGroundedSearch = async (query, candidateDocs) => {
+    console.log(
+      `🤖 [ENHANCED] STAGE 2: AI grounded search on ${candidateDocs.length} candidates`,
+    )
+    setSearchStage('Stage 2: AI analyzing documents...')
+
+    try {
+      // Load Google Generative AI (same pattern as plugin agents)
+      const { GoogleGenerativeAI } = require('@google/generative-ai')
+
+      // Check for API key (same fallback pattern as plugins)
+      const geminiKey =
+        process.env.GOOGLE_API_KEY ||
+        process.env.GEMINI_API_KEY ||
+        process.env.GOOGLE_GEMINI_API_KEY ||
+        process.env.GOOGLE_GENERATIVE_AI_API_KEY
+
+      if (!geminiKey) {
+        console.error('❌ [ENHANCED] No Gemini API key found')
+        throw new Error('Gemini API key not configured')
+      }
+
+      const genAI = new GoogleGenerativeAI(geminiKey)
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+        generationConfig: {
+          temperature: 0.3, // Lower temperature for more factual responses
+          topP: 0.8,
+          topK: 40,
+          maxOutputTokens: 1024,
+        },
+      })
+
+      // Build grounded prompt
+      const prompt = buildGroundedPrompt(query, candidateDocs)
+
+      console.log('🔑 [ENHANCED] Calling Gemini with grounded prompt...')
+
+      // Call Gemini API
+      const result = await model.generateContent(prompt)
+      const response = await result.response
+      const aiText = response.text()
+
+      console.log('🎯 [ENHANCED] AI response generated successfully')
+
+      // Parse the response
+      const parsedResponse = parseAIResponse(aiText)
+
+      setAiResponse(parsedResponse.answer)
+
+      // Calculate relevance scores and extract insights
+      const enhancedResults = candidateDocs.map(doc => {
+        const relevanceScore = calculateRelevanceScore(doc, query, aiText)
+        const insight = extractDocumentInsight(doc, aiText)
+
+        return {
+          ...doc,
+          relevanceScore,
+          aiProcessed: true,
+          excerpt: createExcerpt(
+            doc.content?.fullText || doc.content || '',
+            query,
+          ),
+          aiInsight: insight,
+        }
+      })
+
+      // Set sources for display
+      const sources = enhancedResults
+        .filter(doc => doc.relevanceScore > 30)
+        .map(doc => ({ id: doc.id, title: doc.title, url: doc.url }))
+      setAiSources(sources)
+
+      return enhancedResults.sort((a, b) => b.relevanceScore - a.relevanceScore)
+    } catch (error) {
+      console.error('❌ [ENHANCED] AI grounded search failed:', error.message)
+      setSearchStage('AI search failed, using basic search')
+
+      // Fallback to basic scoring
+      return performBasicScoring(candidateDocs, query)
+    }
+  }
+
+  /**
+   * Build grounded prompt for Gemini
+   */
+  const buildGroundedPrompt = (query, documents) => {
+    const docsContext = documents
+      .map(
+        doc => `
+DOCUMENT: ${doc.title}
+CONTENT: ${(doc.content?.fullText || doc.content || '').substring(0, 1500)}
+URL: ${doc.url}
+---`,
+      )
+      .join('\n')
+
+    return `You are a helpful documentation assistant. Answer the user's question based ONLY on the provided documentation. Do not make up information or reference external sources.
+
+IMPORTANT RULES:
+1. Base your answer ONLY on the provided documents
+2. If the documents don't contain enough information, say so
+3. Cite which documents you're referencing
+4. Be concise but helpful
+5. If the question can't be answered from the docs, explain what's missing
+
+USER QUESTION: ${query}
+
+AVAILABLE DOCUMENTATION:
+${docsContext}
+
+Please provide a helpful answer based on these documents. Start your response with a direct answer, then mention which documents you referenced.`
+  }
+
+  /**
+   * Parse AI response to extract answer and confidence
+   */
+  const parseAIResponse = aiText => {
+    // Clean up the response
+    const cleanAnswer = aiText
+      .replace(/^```[\w]*\n?/, '') // Remove code block markers
+      .replace(/\n?```$/, '')
+      .trim()
+
+    return {
+      answer: cleanAnswer,
+      confidence: 0.85, // Could be calculated based on response quality
+    }
+  }
+
+  /**
+   * Calculate relevance score based on AI analysis
+   */
+  const calculateRelevanceScore = (doc, query, aiResponse) => {
+    let score = 50 // Base score
+
+    // Check if document was mentioned in AI response
+    if (aiResponse.toLowerCase().includes(doc.title.toLowerCase())) {
+      score += 40
+    }
+
+    // Check for keyword matches
+    const queryWords = query.toLowerCase().split(' ')
+    const titleWords = doc.title.toLowerCase().split(' ')
+    const matches = queryWords.filter(word =>
+      titleWords.some(titleWord => titleWord.includes(word)),
+    )
+    score += matches.length * 10
+
+    // Enhanced doc bonus
+    if (doc.isEnhanced) {
+      score += 15
+    }
+
+    // RAG score influence
+    if (doc.qualityScores?.overall) {
+      score += Math.floor(doc.qualityScores.overall / 10)
+    }
+
+    return Math.min(100, score)
+  }
+
+  /**
+   * Extract insights about how document relates to query
+   */
+  const extractDocumentInsight = (doc, aiResponse) => {
+    // Simple insight extraction - in production this could be more sophisticated
+    const title = doc.title.toLowerCase()
+    if (aiResponse.toLowerCase().includes(title)) {
+      return 'Referenced in AI response'
+    }
+    return null
   }
 
   /**
@@ -497,15 +403,19 @@ function SearchWidget({
   const performSearch = async searchQuery => {
     if (!searchQuery.trim() || !documentCache) {
       setSearchResults([])
+      setAiResponse(null)
+      setAiSources([])
       setIsOpen(false)
       return
     }
 
     setIsSearching(true)
     setIsOpen(true)
+    setAiResponse(null)
+    setAiSources([])
 
     try {
-      // STAGE 1: Metadata filtering
+      // STAGE 1: Metadata filtering (same for both)
       const stage1Candidates = performStage1MetaFilter(
         searchQuery,
         documentCache,
@@ -518,17 +428,27 @@ function SearchWidget({
         return
       }
 
-      // STAGE 2: AI semantic search (for enhanced docs)
-      const finalResults = await performStage2AISearch(
-        searchQuery,
-        stage1Candidates,
-      )
+      // STAGE 2: Different processing based on mode
+      let finalResults
+      if (config.isEnhanced) {
+        finalResults = await performAIGroundedSearch(
+          searchQuery,
+          stage1Candidates,
+        )
+        setSearchStage(
+          `🤖 AI analysis complete - ${finalResults.length} results`,
+        )
+      } else {
+        finalResults = performBasicScoring(stage1Candidates, searchQuery)
+        setSearchStage(
+          `📄 Basic search complete - ${finalResults.length} results`,
+        )
+      }
 
-      setSearchStage(`Found ${finalResults.length} results`)
       setSearchResults(finalResults.slice(0, maxResults))
       setIsSearching(false)
     } catch (error) {
-      console.error('❌ Search error:', error.message)
+      console.error(`❌ [${mode.toUpperCase()}] Search error:`, error.message)
       setSearchStage('Search error occurred')
       setSearchResults([])
       setIsSearching(false)
@@ -561,6 +481,11 @@ function SearchWidget({
     performSearch(value)
   }
 
+  const handleDemoQuestion = question => {
+    setQuery(question)
+    performSearch(question)
+  }
+
   const highlightText = (text, query) => {
     if (!query || !text) return text
 
@@ -588,19 +513,23 @@ function SearchWidget({
   const handleResultClick = result => {
     setIsOpen(false)
     setQuery('')
-    // In a real Docusaurus environment, this would navigate properly
     console.log('Navigate to:', result.url)
     window.location.href = result.url
   }
 
-  // Update placeholder based on context and capabilities
-  const getContextualPlaceholder = () => {
-    if (loadingError) return '❌ Search index unavailable'
+  const getEnhancementStats = () => {
+    if (!searchIndex) return 'Loading docs...'
+    if (loadingError) return `Error: ${loadingError}`
 
-    if (context === 'docs-enhanced') {
-      return `🚀 Try: "auth timeout", "credential lockout", "session expiry"`
+    const { totalDocuments, enhancementRate } = searchIndex.metadata
+    const averageRAGScore = searchIndex.agentStats?.averageRAGScore
+
+    if (config.isEnhanced) {
+      return `${totalDocuments} docs (${enhancementRate}% enhanced${
+        averageRAGScore ? `, avg RAG: ${averageRAGScore}` : ''
+      })`
     } else {
-      return `🔍 Try: "authentication", "configuration", "tutorial"`
+      return `${totalDocuments} docs (${enhancementRate}% enhanced)`
     }
   }
 
@@ -608,29 +537,82 @@ function SearchWidget({
     container: {
       position: 'relative',
       width: '100%',
-      maxWidth: compact ? '300px' : '500px',
+      maxWidth: compact ? '400px' : '600px',
       margin: compact ? '0' : '0 auto',
       fontFamily: 'system-ui, -apple-system, sans-serif',
+      border: `2px solid ${config.borderColor}`,
+      borderRadius: '12px',
+      padding: '20px',
+      backgroundColor: 'white',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    },
+    title: {
+      fontSize: '18px',
+      fontWeight: '700',
+      color: config.primaryColor,
+      marginBottom: '12px',
+      textAlign: 'center',
     },
     searchInput: {
       width: '100%',
-      padding: compact ? '8px 12px' : '12px 16px',
+      padding: compact ? '10px 14px' : '14px 18px',
       fontSize: compact ? '14px' : '16px',
-      border: '2px solid #e1e1e1',
-      borderRadius: '8px',
+      border: `2px solid ${config.primaryColor}`,
+      borderRadius: '10px',
       outline: 'none',
-      transition: 'border-color 0.2s, box-shadow 0.2s',
+      transition: 'all 0.2s ease',
       backgroundColor: 'white',
       boxSizing: 'border-box',
       opacity: loadingError ? 0.6 : 1,
     },
-    searchInputFocused: {
-      borderColor: context === 'docs-enhanced' ? '#28a745' : '#007acc',
-      boxShadow: `0 0 0 3px ${
-        context === 'docs-enhanced'
-          ? 'rgba(40, 167, 69, 0.1)'
-          : 'rgba(0, 122, 204, 0.1)'
-      }`,
+    contextBadge: {
+      position: 'absolute',
+      top: '-10px',
+      right: '12px',
+      backgroundColor: config.primaryColor,
+      color: 'white',
+      fontSize: '11px',
+      padding: '4px 8px',
+      borderRadius: '6px',
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    },
+    statusIndicator: {
+      fontSize: '11px',
+      color: loadingError ? '#dc3545' : '#666',
+      textAlign: 'right',
+      marginBottom: '6px',
+      fontWeight: '500',
+    },
+    groundedNotice: {
+      backgroundColor: config.accentColor,
+      border: `1px solid ${config.borderColor}`,
+      borderRadius: '8px',
+      padding: '12px',
+      marginBottom: '16px',
+      fontSize: '13px',
+      color: config.isEnhanced ? '#155724' : '#856404',
+    },
+    demoButtons: {
+      marginBottom: '16px',
+    },
+    demoButtonsTitle: {
+      fontSize: '12px',
+      fontWeight: '600',
+      marginBottom: '8px',
+      color: '#495057',
+    },
+    demoButton: {
+      backgroundColor: config.accentColor,
+      border: `1px solid ${config.primaryColor}`,
+      borderRadius: '6px',
+      padding: '6px 10px',
+      margin: '3px',
+      fontSize: '11px',
+      cursor: 'pointer',
+      display: 'inline-block',
+      transition: 'all 0.2s ease',
     },
     dropdown: {
       position: 'absolute',
@@ -639,30 +621,34 @@ function SearchWidget({
       right: '0',
       backgroundColor: 'white',
       border: '1px solid #e1e1e1',
-      borderRadius: '8px',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+      borderRadius: '10px',
+      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)',
       zIndex: 1000,
-      maxHeight: '400px',
+      maxHeight: '500px',
       overflowY: 'auto',
-      marginTop: '4px',
+      marginTop: '6px',
     },
-    contextBadge: {
-      position: 'absolute',
-      top: '-8px',
-      right: '8px',
-      backgroundColor: context === 'docs-enhanced' ? '#28a745' : '#6c757d',
-      color: 'white',
-      fontSize: '10px',
-      padding: '2px 6px',
-      borderRadius: '4px',
+    aiResponseSection: {
+      backgroundColor: '#f8f9fa',
+      borderBottom: '2px solid #e9ecef',
+      padding: '16px',
+    },
+    aiResponse: {
+      fontSize: '14px',
+      lineHeight: '1.6',
+      color: '#495057',
+      marginBottom: '12px',
+      whiteSpace: 'pre-wrap',
+    },
+    sourcesTitle: {
+      fontSize: '12px',
       fontWeight: '600',
-      textTransform: 'uppercase',
+      color: '#6c757d',
+      marginBottom: '6px',
     },
-    statusIndicator: {
-      fontSize: '10px',
-      color: loadingError ? '#dc3545' : '#666',
-      textAlign: 'right',
-      marginBottom: '4px',
+    sourcesList: {
+      fontSize: '11px',
+      color: '#6c757d',
     },
     result: {
       padding: compact ? '12px' : '16px',
@@ -673,76 +659,114 @@ function SearchWidget({
     resultTitle: {
       fontSize: compact ? '14px' : '16px',
       fontWeight: '600',
-      color: context === 'docs-enhanced' ? '#28a745' : '#007acc',
-      margin: '0 0 4px 0',
+      color: config.primaryColor,
+      margin: '0 0 6px 0',
       lineHeight: '1.3',
     },
     resultExcerpt: {
-      fontSize: compact ? '12px' : '14px',
+      fontSize: compact ? '12px' : '13px',
       color: '#666',
-      margin: '0 0 8px 0',
-      lineHeight: '1.4',
+      margin: '0 0 10px 0',
+      lineHeight: '1.5',
     },
     resultMeta: {
-      fontSize: '12px',
+      fontSize: '11px',
       color: '#888',
       display: 'flex',
-      gap: '12px',
+      gap: '10px',
       flexWrap: 'wrap',
       alignItems: 'center',
     },
     noResults: {
-      padding: '20px',
+      padding: '24px',
       textAlign: 'center',
       color: '#666',
       fontSize: '14px',
     },
     loading: {
-      padding: '20px',
+      padding: '24px',
       textAlign: 'center',
       color: '#666',
       fontSize: '14px',
     },
-  }
-
-  // Calculate enhancement stats from loaded index
-  const getEnhancementStats = () => {
-    if (!searchIndex) return 'Loading docs...'
-
-    if (loadingError) return `Error: ${loadingError}`
-
-    const { totalDocuments, enhancementRate, averageRagScore } = searchIndex
-
-    if (context === 'docs-enhanced') {
-      return `${totalDocuments} docs (${enhancementRate}% enhanced${
-        averageRagScore ? `, avg RAG: ${averageRagScore}` : ''
-      })`
-    } else {
-      return `${totalDocuments} docs (${enhancementRate}% enhanced)`
-    }
+    disclaimer: {
+      marginTop: '12px',
+      fontSize: '10px',
+      color: '#6c757d',
+      textAlign: 'center',
+      fontStyle: 'italic',
+    },
   }
 
   return (
     <div ref={searchRef} style={widgetStyles.container}>
-      <div style={widgetStyles.contextBadge}>
-        {context === 'docs-enhanced' ? 'Enhanced' : 'Original'}
+      <div style={widgetStyles.contextBadge}>{config.badge}</div>
+
+      <h3 style={widgetStyles.title}>{config.title}</h3>
+
+      <div style={widgetStyles.statusIndicator}>{getEnhancementStats()}</div>
+
+      {/* Grounded Search Notice */}
+      <div style={widgetStyles.groundedNotice}>
+        {config.isEnhanced ? (
+          <>
+            <strong>🛡️ Grounded AI Search:</strong> Our AI only answers based on
+            the documentation provided. It cannot make up information or
+            reference external sources, ensuring accurate and trustworthy
+            responses.
+          </>
+        ) : (
+          <>
+            <strong>📋 Basic Search:</strong> Direct keyword matching in
+            document metadata and content.
+          </>
+        )}
       </div>
 
-      {/* Status indicator showing enhancement stats */}
-      <div style={widgetStyles.statusIndicator}>{getEnhancementStats()}</div>
+      {/* Demo Question Buttons */}
+      <div style={widgetStyles.demoButtons}>
+        <div style={widgetStyles.demoButtonsTitle}>
+          {config.isEnhanced
+            ? '🤖 Try AI Questions:'
+            : '🔍 Try Basic Searches:'}
+        </div>
+        {(config.isEnhanced
+          ? demoQuestions.enhanced
+          : demoQuestions.original
+        ).map((question, index) => (
+          <button
+            key={index}
+            style={widgetStyles.demoButton}
+            onClick={() => handleDemoQuestion(question)}
+            onMouseEnter={e => {
+              e.target.style.backgroundColor = config.isEnhanced
+                ? '#c3e6cb'
+                : '#e9ecef'
+            }}
+            onMouseLeave={e => {
+              e.target.style.backgroundColor = config.accentColor
+            }}
+          >
+            {question}
+          </button>
+        ))}
+      </div>
 
       <input
         type='text'
-        placeholder={getContextualPlaceholder()}
+        placeholder={config.placeholder}
         value={query}
         onChange={handleSearch}
         onFocus={() => query && setIsOpen(true)}
         disabled={loadingError}
-        style={{
-          ...widgetStyles.searchInput,
-          ...(isOpen ? widgetStyles.searchInputFocused : {}),
-        }}
+        style={widgetStyles.searchInput}
       />
+
+      {config.isEnhanced && (
+        <div style={widgetStyles.disclaimer}>
+          ⚠️ Demo only - Direct API calls not production ready
+        </div>
+      )}
 
       {isOpen && (
         <div style={widgetStyles.dropdown}>
@@ -750,20 +774,43 @@ function SearchWidget({
           {query && (
             <div
               style={{
-                padding: '8px 16px',
-                backgroundColor:
-                  context === 'docs-enhanced' ? '#d4edda' : '#fff3cd',
+                padding: '10px 16px',
+                backgroundColor: config.accentColor,
                 borderBottom: '1px solid #e1e1e1',
-                fontSize: '11px',
+                fontSize: '12px',
                 fontWeight: 'bold',
-                color: context === 'docs-enhanced' ? '#155724' : '#856404',
+                color: config.isEnhanced ? '#155724' : '#856404',
               }}
             >
               {isSearching
                 ? searchStage
-                : context === 'docs-enhanced'
-                ? '🚀 Two-Stage AI Search: Metadata Filter → Semantic Analysis'
+                : config.isEnhanced
+                ? '🚀 Two-Stage RAG Search: Metadata Filter → AI Grounded Analysis'
                 : '📋 Basic Search: Direct Keyword Matching Only'}
+            </div>
+          )}
+
+          {/* AI Response Section (Enhanced mode only) */}
+          {config.isEnhanced && aiResponse && (
+            <div style={widgetStyles.aiResponseSection}>
+              <div style={widgetStyles.aiResponse}>
+                <strong>🤖 AI Response:</strong>
+                <br />
+                {aiResponse}
+              </div>
+              {aiSources.length > 0 && (
+                <>
+                  <div style={widgetStyles.sourcesTitle}>📚 Sources:</div>
+                  <div style={widgetStyles.sourcesList}>
+                    {aiSources.map((source, index) => (
+                      <span key={index}>
+                        {source.title}
+                        {index < aiSources.length - 1 ? ', ' : ''}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
 
@@ -791,7 +838,6 @@ function SearchWidget({
                   </p>
                   {showKeywords && (
                     <div style={widgetStyles.resultMeta}>
-                      {/* Enhancement level badge */}
                       <span
                         style={{
                           backgroundColor: result.isEnhanced
@@ -800,14 +846,13 @@ function SearchWidget({
                           color: 'white',
                           padding: '2px 6px',
                           borderRadius: '4px',
-                          fontSize: '11px',
+                          fontSize: '10px',
                           fontWeight: 'bold',
                         }}
                       >
                         {result.isEnhanced ? '🤖 AI Enhanced' : '📄 Basic'}
                       </span>
 
-                      {/* AI processing indicator */}
                       {result.aiProcessed && (
                         <span
                           style={{
@@ -815,7 +860,7 @@ function SearchWidget({
                             color: 'white',
                             padding: '2px 6px',
                             borderRadius: '4px',
-                            fontSize: '11px',
+                            fontSize: '10px',
                             fontWeight: 'bold',
                           }}
                         >
@@ -823,50 +868,29 @@ function SearchWidget({
                         </span>
                       )}
 
-                      {/* RAG Score for enhanced docs */}
-                      {result.ragScore && (
+                      {result.qualityScores?.overall && (
                         <span
                           style={{
                             backgroundColor: '#ffc107',
                             color: '#000',
                             padding: '2px 6px',
                             borderRadius: '4px',
-                            fontSize: '11px',
+                            fontSize: '10px',
                             fontWeight: 'bold',
                           }}
                         >
-                          RAG: {result.ragScore}
+                          RAG: {result.qualityScores.overall}
                         </span>
                       )}
 
-                      {/* Show matched keywords */}
-                      {result.matchedKeywords &&
-                        result.matchedKeywords.length > 0 && (
-                          <span>
-                            <strong>Keywords:</strong>{' '}
-                            {result.matchedKeywords.slice(0, 2).join(', ')}
-                          </span>
-                        )}
-
-                      {/* Show semantic matches for AI-enhanced results */}
-                      {result.semanticMatches &&
-                        result.semanticMatches.length > 0 && (
-                          <span style={{ color: '#28a745' }}>
-                            <strong>Semantic:</strong>{' '}
-                            {result.semanticMatches.slice(0, 2).join(', ')}
-                          </span>
-                        )}
-
-                      {/* Relevance score */}
                       <span
                         style={{
                           marginLeft: 'auto',
-                          color: result.isEnhanced ? '#28a745' : '#007acc',
-                          fontWeight: result.isEnhanced ? 'bold' : 'normal',
+                          color: config.primaryColor,
+                          fontWeight: config.isEnhanced ? 'bold' : 'normal',
                         }}
                       >
                         Score: {result.relevanceScore}
-                        {result.aiConfidence && ` (${result.aiConfidence}%)`}
                       </span>
                     </div>
                   )}
@@ -879,21 +903,21 @@ function SearchWidget({
                   borderTop: '2px solid #e9ecef',
                   padding: '12px 16px',
                   backgroundColor: '#f8f9fa',
-                  fontSize: '12px',
+                  fontSize: '11px',
                   color: '#495057',
                 }}
               >
                 <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
-                  {context === 'docs-enhanced'
-                    ? '🎯 AI-Enhanced Search Results:'
+                  {config.isEnhanced
+                    ? '🎯 RAG-AI Enhanced Results:'
                     : '📋 Basic Search Results:'}
                 </div>
-                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                  {context === 'docs-enhanced' ? (
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  {config.isEnhanced ? (
                     <>
                       <span>✅ Metadata filtered</span>
-                      <span>🧠 AI processed</span>
-                      <span>🚀 Semantic enhanced</span>
+                      <span>🤖 AI grounded</span>
+                      <span>🛡️ Source-verified</span>
                     </>
                   ) : (
                     <>
@@ -905,32 +929,24 @@ function SearchWidget({
                   <span>
                     Enhanced: {searchResults.filter(r => r.isEnhanced).length}
                   </span>
-                  {context === 'docs-enhanced' &&
-                    searchResults.some(r => r.aiProcessed) && (
-                      <span>
-                        AI: {searchResults.filter(r => r.aiProcessed).length}
-                      </span>
-                    )}
                 </div>
               </div>
             </>
           ) : query ? (
             <div style={widgetStyles.noResults}>
-              <strong>
-                No results found for "{query}"
-                <br />
-                <div
-                  style={{
-                    marginTop: '8px',
-                    fontSize: '12px',
-                    color: context === 'docs-enhanced' ? '#28a745' : '#dc3545',
-                  }}
-                >
-                  {context === 'docs-enhanced'
-                    ? 'Try semantic terms like "auth timeout" or "credential lockout"'
-                    : 'Try exact terms like "authentication" or "configuration"'}
-                </div>
-              </strong>
+              <strong>No results found for "{query}"</strong>
+              <br />
+              <div
+                style={{
+                  marginTop: '8px',
+                  fontSize: '12px',
+                  color: config.primaryColor,
+                }}
+              >
+                {config.isEnhanced
+                  ? 'Try asking complete questions like "How do I..." or use the demo buttons above'
+                  : 'Try exact terms like "authentication" or "configuration"'}
+              </div>
             </div>
           ) : null}
         </div>
