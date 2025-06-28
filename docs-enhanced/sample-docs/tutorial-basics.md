@@ -1,6 +1,16 @@
 ---
 sidebar_position: 3
 title: Basic Tutorial
+chunkingEnhanced: true
+chunkingDate: '2025-06-28T18:06:45.213Z'
+structureImprovements: 0
+optimalChunkSize: 350
+chunkingScore: 85
+headingsAdded: 0
+sectionsRestructured: 0
+semanticBridges: 0
+enhanced_by: rag-prep-plugin-chunking-restructurer
+enhanced_at: '2025-06-28T18:06:45.213Z'
 ---
 
 # Basic Tutorial
