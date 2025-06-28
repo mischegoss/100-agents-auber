@@ -1,7 +1,7 @@
 /**
  * Enhanced Metadata Task (Sequential Agent Processing)
  * Runs agents one by one in logical order for true collaboration
- * Much simpler and more reliable than parallel processing
+ * FIXED: Prevents agents from modifying original files - only changes go to PR
  */
 class EnhanceMetadataTask {
   constructor() {
@@ -133,13 +133,14 @@ class EnhanceMetadataTask {
 
   /**
    * Process single file through all agents sequentially
+   * FIXED: Works with in-memory content only, doesn't modify original files
    */
   async processFileSequentially(fileInfo, agentStats) {
     const fs = require('fs-extra')
     const path = require('path')
     const fullPath = path.join(process.cwd(), fileInfo.path)
 
-    // Read original content
+    // Read original content ONCE at the beginning
     const originalContent = await fs.readFile(fullPath, 'utf8')
     const originalWordCount = originalContent.split(/\s+/).length
 
@@ -149,7 +150,10 @@ class EnhanceMetadataTask {
     const allImprovements = []
     let contentEvolution = [{ stage: 'original', content: originalContent }]
 
-    // Run each agent in sequence
+    // CRITICAL: Work with in-memory content, not files on disk
+    let currentContent = originalContent
+
+    // Run each agent in sequence with in-memory content
     for (let i = 0; i < this.agents.length; i++) {
       const agent = this.agents[i]
 
@@ -159,9 +163,12 @@ class EnhanceMetadataTask {
         )
         const startTime = Date.now()
 
-        // Each agent reads the current file state (potentially modified by previous agents)
-        const currentContent = await fs.readFile(fullPath, 'utf8')
-        const result = await agent.analyzeContent(fullPath, currentContent, {})
+        // FIXED: Use our memory-safe wrapper instead of calling agent directly
+        const result = await this.runAgentSafely(
+          agent,
+          fullPath,
+          currentContent,
+        )
 
         const processingTime = Date.now() - startTime
         console.log(`      ✅ ${agent.name} completed (${processingTime}ms)`)
@@ -177,15 +184,27 @@ class EnhanceMetadataTask {
           )
         }
 
-        // Track content evolution
-        const postProcessContent = await fs.readFile(fullPath, 'utf8')
-        if (postProcessContent !== currentContent) {
+        // Update current content for next agent (if content was modified)
+        let newContent = currentContent
+        if (result.content && result.content !== currentContent) {
+          newContent = result.content
           console.log(`      ✂️ Content modified by ${agent.name}`)
+        } else if (
+          result.restructuredContent &&
+          result.restructuredContent !== currentContent
+        ) {
+          newContent = result.restructuredContent
+          console.log(`      ✂️ Content restructured by ${agent.name}`)
+        }
+
+        // Track content evolution
+        if (newContent !== currentContent) {
           contentEvolution.push({
             stage: agent.name,
-            content: postProcessContent,
-            wordCount: postProcessContent.split(/\s+/).length,
+            content: newContent,
+            wordCount: newContent.split(/\s+/).length,
           })
+          currentContent = newContent // Update for next agent
         }
 
         agentResults.push({
@@ -193,7 +212,7 @@ class EnhanceMetadataTask {
           agentRole: agent.role,
           result,
           processingTime,
-          contentModified: postProcessContent !== currentContent,
+          contentModified: newContent !== currentContent,
           sequencePosition: i + 1,
         })
       } catch (error) {
@@ -214,8 +233,8 @@ class EnhanceMetadataTask {
       }
     }
 
-    // Read final content after all agents
-    const finalContent = await fs.readFile(fullPath, 'utf8')
+    // Final content is whatever we have in memory (original file is unchanged)
+    const finalContent = currentContent
     const finalWordCount = finalContent.split(/\s+/).length
 
     // Calculate overall metrics
@@ -230,12 +249,13 @@ class EnhanceMetadataTask {
       `   📊 Content evolution: ${originalWordCount} → ${finalWordCount} words`,
     )
     console.log(`   🎯 Consolidated RAG score: ${ragScore}/100`)
+    console.log(`   💾 Original file unchanged (changes only in PR)`)
 
     return {
       filePath: fullPath,
       relativePath: fileInfo.path,
       originalContent,
-      finalContent,
+      finalContent, // This is the enhanced content for the PR
       contentEvolution,
       agentResults,
       improvements: allImprovements,
@@ -243,6 +263,76 @@ class EnhanceMetadataTask {
       addedFields,
       totalProcessingTime,
       sequentialProcessing: true,
+    }
+  }
+
+  /**
+   * CRITICAL: Memory-safe agent wrapper that prevents file modifications
+   */
+  async runAgentSafely(agent, filePath, content) {
+    // Create a temporary file or use in-memory processing
+    const path = require('path')
+    const fs = require('fs-extra')
+    const tempDir = path.join(process.cwd(), '.temp-agent-processing')
+
+    try {
+      // Ensure temp directory exists
+      await fs.ensureDir(tempDir)
+
+      // Create temporary file with unique name
+      const tempFileName = `temp-${agent.name.replace(
+        /[^a-z0-9]/gi,
+        '-',
+      )}-${Date.now()}.md`
+      const tempFilePath = path.join(tempDir, tempFileName)
+
+      // Write current content to temp file
+      await fs.writeFile(tempFilePath, content, 'utf8')
+
+      // Call agent with temp file
+      const result = await agent.analyzeContent(tempFilePath, content, {})
+
+      // Read the result from temp file (in case agent modified it)
+      let resultContent = content // Default to original
+      try {
+        const tempContent = await fs.readFile(tempFilePath, 'utf8')
+        resultContent = tempContent
+      } catch (e) {
+        // If temp file doesn't exist or can't be read, use original content
+      }
+
+      // Clean up temp file
+      try {
+        await fs.remove(tempFilePath)
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+
+      // Return result with the processed content
+      return {
+        ...result,
+        content: resultContent,
+      }
+    } catch (error) {
+      console.error(`   ❌ Error in safe agent processing: ${error.message}`)
+
+      // Clean up temp directory on error
+      try {
+        await fs.remove(tempDir)
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+
+      // Fallback: call agent with original parameters but ignore file changes
+      try {
+        const result = await agent.analyzeContent(filePath, content, {})
+        return {
+          ...result,
+          content: content, // Use original content since we can't trust file changes
+        }
+      } catch (fallbackError) {
+        throw new Error(`Agent ${agent.name} failed: ${fallbackError.message}`)
+      }
     }
   }
 

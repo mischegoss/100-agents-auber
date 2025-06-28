@@ -10,8 +10,8 @@ class DocumentChunkingOptimizerAgent {
     this.goal =
       'Actively restructure documents for optimal chunking and RAG retrieval effectiveness'
     this.backstory = `You are an expert document restructuring specialist who doesn't just analyze - you actually improve content organization. 
-                          You excel at breaking up wall-of-text sections, adding missing headings, creating semantic bridges between concepts,
-                          and rewriting content for both human readability and AI comprehension. You work like a professional editor.`
+                              You excel at breaking up wall-of-text sections, adding missing headings, creating semantic bridges between concepts,
+                              and rewriting content for both human readability and AI comprehension. You work like a professional editor.`
     this.verbose = true
     this.allowDelegation = false
     this.maxIter = 3
@@ -169,15 +169,17 @@ class DocumentChunkingOptimizerAgent {
   buildRestructuringPrompt(context) {
     return `You are a professional technical documentation editor. Restructure this document for optimal readability and AI retrieval.
   
+  IMPORTANT: Respond with ONLY valid JSON, no markdown formatting, no backticks, no explanations.
+      
   DOCUMENT ANALYSIS:
   Title: "${context.title}"
   Word Count: ${context.wordCount}
   Current Headings: ${context.headings.length}
   Structural Issues: ${context.structuralIssues.length}
-  
+      
   CONTENT:
   ${context.content}
-  
+      
   RESTRUCTURING TASKS:
   1. Add missing H2/H3 headings to break up sections >400 words
   2. Split oversized sections into logical subsections
@@ -185,7 +187,7 @@ class DocumentChunkingOptimizerAgent {
   4. Improve heading hierarchy and consistency
   5. Add contextual anchors around code blocks
   6. Ensure each section has a clear, focused purpose
-  
+      
   REQUIREMENTS:
   - Preserve all original information and technical accuracy
   - Maintain the author's voice and style
@@ -193,7 +195,7 @@ class DocumentChunkingOptimizerAgent {
   - Focus on organization improvements, not content rewrites
   - Ensure each section is 200-400 words for optimal chunking
   
-  OUTPUT FORMAT:
+  Respond with valid JSON only:
   {
     "actions": [
       {
@@ -202,17 +204,6 @@ class DocumentChunkingOptimizerAgent {
         "text": "New Heading Text",
         "insertAfter": "existing content to find",
         "reason": "explanation"
-      },
-      {
-        "type": "split_section", 
-        "originalHeading": "Current Section",
-        "newSubsections": ["Subsection 1", "Subsection 2"],
-        "splitPoints": ["content marker 1", "content marker 2"]
-      },
-      {
-        "type": "add_bridge",
-        "insertAfter": "section ending content",
-        "bridgeText": "transition sentence connecting concepts"
       }
     ],
     "scoreImprovement": 15,
@@ -326,23 +317,16 @@ class DocumentChunkingOptimizerAgent {
   }
 
   /**
-   * Write improved content back to file
+   * Write improved content back to file (NO BACKUP CREATION)
    */
   async writeImprovedContent(filePath, content) {
     const fs = require('fs').promises
-    const path = require('path')
 
     try {
-      // Create backup of original
-      const backupPath = filePath.replace('.md', '.backup.md')
-      const originalContent = await fs.readFile(filePath, 'utf8')
-      await fs.writeFile(backupPath, originalContent)
-
-      // Write improved content
+      // Write improved content directly (no backup)
       await fs.writeFile(filePath, content, 'utf8')
 
       console.log(`   💾 Content restructured and saved to ${filePath}`)
-      console.log(`   📄 Original backed up to ${backupPath}`)
     } catch (error) {
       console.error(`   ❌ Failed to write improved content: ${error.message}`)
       throw error
@@ -492,15 +476,49 @@ class DocumentChunkingOptimizerAgent {
     return !!hasExplanation
   }
 
+  /**
+   * Fixed JSON parsing with better error handling
+   */
   parseRestructuringResponse(response) {
     try {
-      return JSON.parse(response)
+      // Clean the response - remove markdown code blocks and extra whitespace
+      let cleanedResponse = response.trim()
+
+      // Remove markdown code blocks if present
+      if (cleanedResponse.startsWith('```json')) {
+        cleanedResponse = cleanedResponse
+          .replace(/^```json\s*/, '')
+          .replace(/\s*```$/, '')
+      } else if (cleanedResponse.startsWith('```')) {
+        cleanedResponse = cleanedResponse
+          .replace(/^```\s*/, '')
+          .replace(/\s*```$/, '')
+      }
+
+      // Remove any leading/trailing text that isn't JSON
+      const jsonStart = cleanedResponse.indexOf('{')
+      const jsonEnd = cleanedResponse.lastIndexOf('}')
+
+      if (jsonStart !== -1 && jsonEnd !== -1) {
+        cleanedResponse = cleanedResponse.substring(jsonStart, jsonEnd + 1)
+      }
+
+      const parsed = JSON.parse(cleanedResponse)
+
+      // Validate the response structure
+      if (!parsed.actions || !Array.isArray(parsed.actions)) {
+        console.warn('⚠️ Invalid response structure, using fallback')
+        throw new Error('Invalid response structure')
+      }
+
+      return parsed
     } catch (error) {
-      console.warn('⚠️ Failed to parse Gemini response, using fallback plan')
+      console.warn(`⚠️ Failed to parse Gemini response: ${error.message}`)
+      console.warn(`Response preview: ${response.substring(0, 200)}...`)
       return {
         actions: [],
         scoreImprovement: 0,
-        summary: 'Fallback restructuring',
+        summary: 'Fallback restructuring - JSON parsing failed',
       }
     }
   }
