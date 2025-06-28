@@ -2,20 +2,52 @@
 sidebar_position: 1
 title: Authentication Token Management
 keywords:
-  - JWT
-  - JSON Web Token
-  - OAuth 2.0
-  - PKCE
-  - Token Refresh
-  - RSA-256
-  - Access Token
-  - Authorization Code Flow
+  - jwt authentication
+  - token management
+  - refresh token rotation
+  - oauth 2.0 security
+  - access token
 tags:
   - authentication
   - security
+  - jwt
+  - oauth2
+  - microservices
 ai-enhanced: '2025-06-24T01:35:11.645Z'
 ai-keywords-added: 8
 ai-tags-added: 2
+description: >-
+  Learn comprehensive JWT authentication token management, refresh token
+  rotation, and security best practices using OAuth 2.0. Secure your
+  microservices now!
+topics:
+  - authentication
+  - token-based authentication
+  - jwt (json web token)
+  - token acquisition
+  - oauth 2.0
+  - authorization code flow
+categories:
+  - guide
+  - security
+audience:
+  - developers
+  - system-administrators
+  - architects
+  - security-specialists
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - authentication-concepts
+  - oauth-basics
+  - jwt-understanding
+category: Security
+difficulty: intermediate
+contentType: guide
+domainArea: security
+primaryTopic: token management
+ragScore: 91
+agentCount: 2
 ---
 
 # Authentication Token Management
