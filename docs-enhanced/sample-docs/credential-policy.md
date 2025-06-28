@@ -1,6 +1,51 @@
 ---
 sidebar_position: 3
 title: Credential Policy
+description: >-
+  Learn about our credential policy. Ensure secure user access with robust
+  password management, governance, and user responsibilities. Stay compliant &
+  protect...
+tags:
+  - security
+  - credentials
+  - passwords
+  - authentication
+  - policy
+  - access control
+keywords:
+  - credential policy
+  - password management
+  - user authentication
+  - access control
+  - security policy
+  - data security
+topics:
+  - security
+  - credential management
+  - policy
+  - governance
+  - user responsibilities
+  - credential lifecycle
+categories:
+  - policy
+  - security
+audience:
+  - developers
+  - system-administrators
+  - security-professionals
+  - it-staff
+  - security-specialists
+  - end-users
+prerequisites:
+  - basic-security-concepts
+  - access-control-principles
+category: Security
+difficulty: intermediate
+contentType: reference
+domainArea: security
+primaryTopic: credential management
+ragScore: 87
+agentCount: 2
 ---
 
 # Credential Policy
