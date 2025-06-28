@@ -1,6 +1,54 @@
 ---
 sidebar_position: 3
 title: System Integration Endpoints
+description: >-
+  Integrate systems effectively with our API endpoints. Comprehensive
+  documentation for data retrieval, updates, error handling, and advanced usage.
+  Learn to c...
+tags:
+  - api
+  - integration
+  - endpoints
+  - rest
+  - json
+  - http
+keywords:
+  - system integration
+  - api endpoints
+  - rest api
+  - data retrieval
+  - error handling
+  - json api
+topics:
+  - system integration
+  - api
+  - rest api
+  - endpoint management
+  - data retrieval
+  - data modification
+categories:
+  - reference
+  - api documentation
+  - integration
+audience:
+  - developers
+  - system administrators
+  - integration specialists
+  - system-administrators
+  - backend-developers
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - rest-concepts
+  - json-knowledge
+  - http-basics
+category: API Documentation
+difficulty: intermediate
+contentType: reference
+domainArea: integration
+primaryTopic: api endpoints
+ragScore: 90
+agentCount: 3
 ---
 
 # System Integration Endpoints
