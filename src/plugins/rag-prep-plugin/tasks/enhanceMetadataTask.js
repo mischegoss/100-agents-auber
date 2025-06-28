@@ -1,24 +1,29 @@
 /**
- * Enhance Metadata Task (Multi-Agent Version)
+ * Enhance Metadata Task (Multi-Agent Version with Research Integration)
  * Coordinates multiple AI agents for comprehensive document enhancement
- * Supports up to 6 agents working collaboratively
+ * Supports up to 6 agents working collaboratively, including Tavily web research
  */
 class EnhanceMetadataTask {
   constructor() {
     this.description = `Analyze document content using multiple AI agents to extract keywords, generate descriptions, 
-                      create topic taxonomies, and enhance frontmatter metadata for improved RAG effectiveness.
+                      create topic taxonomies, conduct web research, and enhance both frontmatter metadata and content 
+                      for improved RAG effectiveness.
                       
                       This task will:
-                      1. Coordinate multiple specialized agents (SEO, Taxonomy, etc.)
+                      1. Coordinate multiple specialized agents (SEO, Taxonomy, Chunking, Research, etc.)
                       2. Analyze each document through all available agents
-                      3. Merge and consolidate agent recommendations
-                      4. Create GitHub PR with proposed enhancements (NO immediate file writing)
-                      5. Wait for human approval before applying changes
-                      6. Provide comprehensive summary of all improvements`
+                      3. Conduct real-time web research using Tavily API
+                      4. Merge and consolidate agent recommendations
+                      5. Generate enhanced content with research-based additions
+                      6. Create GitHub PR with proposed enhancements (NO immediate file writing)
+                      7. Wait for human approval before applying changes
+                      8. Provide comprehensive summary of all improvements`
 
     this.expectedOutput = `A comprehensive report containing:
                          - List of all processed files with consolidated enhancements
+                         - Enhanced content with research-based additions
                          - Summary of metadata improvements from all agents
+                         - Web research findings and content suggestions
                          - RAG effectiveness scores for each document
                          - GitHub PR URL for human review and approval
                          - Agent collaboration statistics and contribution analysis
@@ -98,10 +103,11 @@ class EnhanceMetadataTask {
             fileInfo,
           )
 
-          // Generate enhanced content
-          const enhancedContent = this.generateEnhancedContent(
+          // Generate enhanced content with research additions
+          const enhancedContent = this.generateEnhancedContentWithResearch(
             originalContent,
             mergedEnhancement.enhancedMetadata,
+            agentResults,
           )
 
           enhancements.push({
@@ -113,6 +119,7 @@ class EnhanceMetadataTask {
             improvements: mergedEnhancement.improvements,
             ragScore: mergedEnhancement.ragScore,
             addedFields: mergedEnhancement.addedFields,
+            researchFindings: this.extractResearchFindings(agentResults),
             agentContributions: mergedEnhancement.agentContributions,
           })
 
@@ -128,6 +135,14 @@ class EnhanceMetadataTask {
               mergedEnhancement.addedFields.join(', ') || 'none'
             }`,
           )
+
+          // Log research findings if available
+          const researchFindings = this.extractResearchFindings(agentResults)
+          if (researchFindings.sourcesFound > 0) {
+            console.log(
+              `   🔍 Research: ${researchFindings.sourcesFound} sources, ${researchFindings.sectionsAdded} new sections`,
+            )
+          }
         } catch (error) {
           console.error(`❌ Error processing ${fileInfo.title}:`, error.message)
           errors.push({
@@ -236,35 +251,35 @@ class EnhanceMetadataTask {
           frontmatter,
         )
 
-        const endTime = Date.now()
-        const processingTime = endTime - startTime
-
-        agentResults.push({
-          agentName: agent.name,
-          agentRole: agent.role,
-          success: true,
-          result: result,
-          processingTime: processingTime,
-        })
+        const processingTime = Date.now() - startTime
+        console.log(`      ✅ ${agent.name} completed (${processingTime}ms)`)
 
         // Update agent statistics
         agentStats[agent.name].successful++
         agentStats[agent.name].totalProcessingTime += processingTime
-
-        console.log(`      ✅ ${agent.name} completed (${processingTime}ms)`)
-      } catch (error) {
-        console.error(`      ❌ ${agent.name} failed: ${error.message}`)
+        agentStats[agent.name].averageProcessingTime = Math.round(
+          agentStats[agent.name].totalProcessingTime /
+            agentStats[agent.name].successful,
+        )
 
         agentResults.push({
           agentName: agent.name,
           agentRole: agent.role,
-          success: false,
+          result: result,
+          processingTime: processingTime,
+        })
+      } catch (error) {
+        console.error(`      ❌ ${agent.name} failed: ${error.message}`)
+        agentStats[agent.name].failed++
+
+        // Continue with other agents even if one fails
+        agentResults.push({
+          agentName: agent.name,
+          agentRole: agent.role,
+          result: null,
           error: error.message,
           processingTime: 0,
         })
-
-        // Update agent statistics
-        agentStats[agent.name].failed++
       }
     }
 
@@ -272,101 +287,225 @@ class EnhanceMetadataTask {
   }
 
   /**
-   * Merge results from all agents into unified enhancement
+   * Extract research findings from agent results
+   */
+  extractResearchFindings(agentResults) {
+    const researchAgent = agentResults.find(
+      ar => ar.agentName === 'content-research-agent',
+    )
+
+    if (!researchAgent || !researchAgent.result) {
+      return {
+        conducted: false,
+        sourcesFound: 0,
+        sectionsAdded: 0,
+        contentAdded: false,
+      }
+    }
+
+    const research = researchAgent.result.enhancedMetadata
+
+    return {
+      conducted: research.researchConducted || false,
+      sourcesFound: research.researchSources || 0,
+      sectionsAdded: research.suggestedContent
+        ? research.suggestedContent.split('##').length - 1
+        : 0,
+      contentAdded: Boolean(
+        research.suggestedContent &&
+          research.suggestedContent.trim().length > 0,
+      ),
+      bestPracticesFound: research.bestPracticesFindings?.length || 0,
+      standardsFound: research.industryStandards?.length || 0,
+      authoritativeSourcesFound: research.authoritativeSources?.length || 0,
+      researchScore: research.researchScore || 0,
+    }
+  }
+
+  /**
+   * Generate enhanced content with research additions
+   */
+  generateEnhancedContentWithResearch(
+    originalContent,
+    enhancedMetadata,
+    agentResults,
+  ) {
+    const matter = require('gray-matter')
+    const parsed = matter(originalContent)
+
+    // Clean metadata for YAML compatibility
+    const cleanedMetadata = this.cleanMetadataForSimpleYaml(enhancedMetadata)
+
+    // Merge with original frontmatter
+    const mergedMetadata = {
+      ...parsed.data,
+      ...cleanedMetadata,
+    }
+
+    // Extract research content from research agent
+    let contentWithResearch = parsed.content
+    const researchAgent = agentResults.find(
+      ar => ar.agentName === 'content-research-agent',
+    )
+
+    if (
+      researchAgent &&
+      researchAgent.result &&
+      researchAgent.result.enhancedMetadata.suggestedContent
+    ) {
+      const researchContent =
+        researchAgent.result.enhancedMetadata.suggestedContent
+
+      // Add research content to the end of the document
+      if (researchContent.trim().length > 0) {
+        console.log(`   📚 Adding research-based content sections`)
+        contentWithResearch = parsed.content + researchContent
+      }
+    }
+
+    return matter.stringify(contentWithResearch, mergedMetadata, {
+      noRefs: true,
+      flowLevel: -1,
+    })
+  }
+
+  /**
+   * Merge results from all agents into consolidated enhancement
    */
   mergeAgentResults(agentResults, fileInfo) {
     console.log(`   🔄 Merging results from ${agentResults.length} agents...`)
 
-    const successfulResults = agentResults.filter(r => r.success)
     const mergedMetadata = {}
     const allImprovements = []
     const agentContributions = {}
     const ragScores = []
 
     // Initialize agent contributions tracking
-    successfulResults.forEach(result => {
-      agentContributions[result.agentName] = {
-        role: result.agentRole,
-        improvements: result.result.improvements || [],
+    agentResults.forEach(({ agentName, agentRole }) => {
+      agentContributions[agentName] = {
+        role: agentRole,
         keyContributions: [],
+        improvementCount: 0,
       }
     })
 
-    // Merge metadata from all successful agents
-    successfulResults.forEach(result => {
-      const agentMetadata = result.result.enhancedMetadata || {}
-      const agentName = result.agentName
-
-      // Merge arrays (keywords, tags, topics, etc.)
-      this.mergeArrayFields(
-        mergedMetadata,
-        agentMetadata,
-        agentName,
-        agentContributions,
-      )
-
-      // Merge scalar fields (difficulty, category, etc.)
-      this.mergeScalarFields(
-        mergedMetadata,
-        agentMetadata,
-        agentName,
-        agentContributions,
-      )
-
-      // Collect improvements
-      if (result.result.improvements) {
-        allImprovements.push(...result.result.improvements)
+    // Process results from each agent
+    agentResults.forEach(({ agentName, result, error }) => {
+      if (error || !result) {
+        console.log(`      ⚠️ Skipping ${agentName} due to error`)
+        return
       }
 
-      // Collect RAG scores for averaging
-      if (
-        agentMetadata.ragScore ||
-        agentMetadata.rag_score ||
-        agentMetadata.seoScore ||
-        agentMetadata.taxonomyScore
-      ) {
-        ragScores.push(
-          agentMetadata.ragScore ||
-            agentMetadata.rag_score ||
-            agentMetadata.seoScore ||
-            agentMetadata.taxonomyScore,
+      const { enhancedMetadata, improvements } = result
+
+      // Merge metadata from this agent
+      if (enhancedMetadata) {
+        this.mergeAgentMetadata(
+          mergedMetadata,
+          enhancedMetadata,
+          agentName,
+          agentContributions,
         )
+
+        // Collect RAG scores
+        if (
+          enhancedMetadata.ragScore ||
+          enhancedMetadata.seoScore ||
+          enhancedMetadata.taxonomyScore ||
+          enhancedMetadata.chunkingScore ||
+          enhancedMetadata.researchScore
+        ) {
+          const scores = [
+            enhancedMetadata.ragScore,
+            enhancedMetadata.seoScore,
+            enhancedMetadata.taxonomyScore,
+            enhancedMetadata.chunkingScore,
+            enhancedMetadata.researchScore,
+          ].filter(score => score && score > 0)
+
+          if (scores.length > 0) {
+            ragScores.push(...scores)
+          }
+        }
+      }
+
+      // Collect improvements
+      if (improvements && Array.isArray(improvements)) {
+        allImprovements.push(...improvements)
+        agentContributions[agentName].improvementCount = improvements.length
       }
     })
 
     // Calculate consolidated RAG score
     const consolidatedRagScore =
       ragScores.length > 0
-        ? Math.round(ragScores.reduce((a, b) => a + b, 0) / ragScores.length)
-        : 75
+        ? Math.round(
+            ragScores.reduce((acc, score) => acc + score, 0) / ragScores.length,
+          )
+        : 70
 
-    // Add processing metadata
-    mergedMetadata.enhanced_by = 'rag-prep-plugin-multi-agent'
-    mergedMetadata.enhanced_at = new Date().toISOString()
-    mergedMetadata.agent_count = successfulResults.length
-    mergedMetadata.consolidatedRagScore = consolidatedRagScore
-
-    // Remove duplicates from improvements
-    const uniqueImprovements = [...new Set(allImprovements)]
-
-    // Determine added fields
-    const addedFields = this.getAddedFields(
-      fileInfo.frontmatter,
-      mergedMetadata,
+    // Identify added fields
+    const originalFields = new Set(Object.keys(fileInfo.frontmatter || {}))
+    const addedFields = Object.keys(mergedMetadata).filter(
+      field => !originalFields.has(field),
     )
 
-    console.log(`      ✅ Merged data from ${successfulResults.length} agents`)
+    console.log(
+      `      ✅ Merged data from ${
+        agentResults.filter(ar => !ar.error && ar.result).length
+      } agents`,
+    )
     console.log(
       `      📊 Consolidated RAG score: ${consolidatedRagScore} (avg of ${ragScores.length} scores)`,
     )
 
     return {
-      enhancedMetadata: mergedMetadata,
-      improvements: uniqueImprovements,
+      enhancedMetadata: {
+        ...mergedMetadata,
+        ragScore: consolidatedRagScore,
+        agentCount: this.agents.length,
+        enhanced_by: 'rag-prep-plugin-multi-agent',
+        enhanced_at: new Date().toISOString(),
+      },
+      improvements: allImprovements,
       ragScore: consolidatedRagScore,
       addedFields: addedFields,
       agentContributions: agentContributions,
     }
+  }
+
+  /**
+   * Merge metadata from a specific agent
+   */
+  mergeAgentMetadata(
+    mergedMetadata,
+    agentMetadata,
+    agentName,
+    agentContributions,
+  ) {
+    // Merge array fields
+    this.mergeArrayFields(
+      mergedMetadata,
+      agentMetadata,
+      agentName,
+      agentContributions,
+    )
+
+    // Merge scalar fields
+    this.mergeScalarFields(
+      mergedMetadata,
+      agentMetadata,
+      agentName,
+      agentContributions,
+    )
+
+    // Merge research-specific fields
+    this.mergeResearchFields(
+      mergedMetadata,
+      agentMetadata,
+      agentName,
+      agentContributions,
+    )
   }
 
   /**
@@ -379,18 +518,12 @@ class EnhanceMetadataTask {
     agentContributions,
   ) {
     const arrayFields = [
-      'keywords',
       'tags',
+      'keywords',
       'topics',
       'categories',
-      'subCategories',
       'audience',
-      'targetRoles',
       'prerequisites',
-      'learningPath',
-      'relatedConcepts',
-      'useCases',
-      'industryTags',
     ]
 
     arrayFields.forEach(field => {
@@ -399,8 +532,9 @@ class EnhanceMetadataTask {
           mergedMetadata[field] = []
         }
 
+        const existingItems = new Set(mergedMetadata[field])
         const newItems = agentMetadata[field].filter(
-          item => !mergedMetadata[field].includes(item),
+          item => !existingItems.has(item),
         )
 
         if (newItems.length > 0) {
@@ -463,6 +597,38 @@ class EnhanceMetadataTask {
   }
 
   /**
+   * Merge research-specific fields from research agent
+   */
+  mergeResearchFields(
+    mergedMetadata,
+    agentMetadata,
+    agentName,
+    agentContributions,
+  ) {
+    if (agentName !== 'content-research-agent') return
+
+    const researchFields = [
+      'researchConducted',
+      'researchDate',
+      'researchSources',
+      'contentGaps',
+      'recommendedSections',
+      'bestPracticesFindings',
+      'industryStandards',
+      'authoritativeSources',
+      'researchScore',
+      'tavilyIntegration',
+    ]
+
+    researchFields.forEach(field => {
+      if (agentMetadata[field] !== undefined) {
+        mergedMetadata[field] = agentMetadata[field]
+        agentContributions[agentName].keyContributions.push(`${field}: added`)
+      }
+    })
+  }
+
+  /**
    * Initialize agent statistics tracking
    */
   initializeAgentStats() {
@@ -477,28 +643,6 @@ class EnhanceMetadataTask {
       }
     })
     return stats
-  }
-
-  /**
-   * Generate enhanced content with merged metadata
-   */
-  generateEnhancedContent(originalContent, enhancedMetadata) {
-    const matter = require('gray-matter')
-    const parsed = matter(originalContent)
-
-    // Clean metadata for YAML compatibility
-    const cleanedMetadata = this.cleanMetadataForSimpleYaml(enhancedMetadata)
-
-    // Merge with original frontmatter
-    const mergedMetadata = {
-      ...parsed.data,
-      ...cleanedMetadata,
-    }
-
-    return matter.stringify(parsed.content, mergedMetadata, {
-      noRefs: true,
-      flowLevel: -1,
-    })
   }
 
   /**
@@ -543,111 +687,126 @@ class EnhanceMetadataTask {
 
     // Clean scalar fields
     const scalarFields = [
-      'category',
       'difficulty',
+      'complexity',
       'contentType',
       'domainArea',
       'primaryTopic',
+      'category',
+      'ragScore',
+      'agentCount',
     ]
     scalarFields.forEach(field => {
-      if (metadata[field] && typeof metadata[field] === 'string') {
-        cleaned[field] = metadata[field].trim()
+      if (metadata[field] !== undefined) {
+        if (typeof metadata[field] === 'string') {
+          cleaned[field] = metadata[field].replace(/"/g, "'")
+        } else {
+          cleaned[field] = metadata[field]
+        }
       }
     })
 
-    // Add scores
-    if (typeof metadata.consolidatedRagScore === 'number') {
-      cleaned.ragScore = metadata.consolidatedRagScore
-    }
-
-    // Add multi-agent metadata
-    if (metadata.agent_count) {
-      cleaned.agentCount = metadata.agent_count
+    // Add research metadata if available
+    if (metadata.researchConducted) {
+      cleaned.researchConducted = metadata.researchConducted
+      cleaned.researchDate = metadata.researchDate
+      cleaned.researchSources = metadata.researchSources
+      cleaned.researchScore = metadata.researchScore
+      cleaned.tavilyIntegration = metadata.tavilyIntegration
     }
 
     return cleaned
   }
 
   /**
-   * Get fields that would be added
-   */
-  getAddedFields(originalFrontmatter, enhancedMetadata) {
-    const original = originalFrontmatter || {}
-    const enhanced = this.cleanMetadataForSimpleYaml(enhancedMetadata)
-    return Object.keys(enhanced).filter(key => !original[key])
-  }
-
-  /**
    * Generate comprehensive multi-agent summary
    */
   generateMultiAgentSummary(enhancements, errors, agentStats) {
-    const successful = enhancements.filter(e => e.enhancedMetadata)
-    const ragScores = enhancements.filter(e => e.ragScore).map(e => e.ragScore)
+    const totalFiles = enhancements.length + errors.length
+    const successfulEnhancements = enhancements.length
+    const totalAgentOperations = successfulEnhancements * this.agents.length
 
-    // Calculate agent statistics
-    Object.keys(agentStats).forEach(agentName => {
-      const stats = agentStats[agentName]
-      if (stats.successful > 0) {
-        stats.averageProcessingTime = Math.round(
-          stats.totalProcessingTime / stats.successful,
-        )
-      }
-    })
+    // Calculate research statistics
+    const researchStats = enhancements.reduce(
+      (acc, enh) => {
+        if (enh.researchFindings?.conducted) {
+          acc.filesWithResearch++
+          acc.totalSources += enh.researchFindings.sourcesFound
+          acc.totalSectionsAdded += enh.researchFindings.sectionsAdded
+        }
+        return acc
+      },
+      { filesWithResearch: 0, totalSources: 0, totalSectionsAdded: 0 },
+    )
+
+    // Calculate average RAG score
+    const ragScores = enhancements
+      .map(e => e.ragScore)
+      .filter(score => score > 0)
+    const averageRagScore =
+      ragScores.length > 0
+        ? Math.round(
+            ragScores.reduce((acc, score) => acc + score, 0) / ragScores.length,
+          )
+        : 0
+
+    // Calculate collaboration effectiveness
+    const collaborationEffectiveness =
+      totalFiles > 0
+        ? Math.round(
+            (totalAgentOperations / (totalFiles * this.agents.length)) * 100,
+          )
+        : 0
 
     return {
-      totalFiles: enhancements.length,
-      successful: successful.length,
+      totalFiles,
+      successful: successfulEnhancements,
       errors: errors.length,
-      averageRagScore:
-        ragScores.length > 0
-          ? Math.round(ragScores.reduce((a, b) => a + b, 0) / ragScores.length)
-          : 0,
-      agentCollaborations: successful.length * this.agents.length,
-      agentPerformance: agentStats,
-      topPerformingAgent: this.getTopPerformingAgent(agentStats),
-      collaborationEffectiveness:
-        this.calculateCollaborationEffectiveness(enhancements),
+      averageRagScore,
+      agentCollaborations: totalAgentOperations,
+      collaborationEffectiveness,
+      agentCount: this.agents.length,
+      researchStats,
+      topImprovements: this.calculateTopImprovements(enhancements),
+      topAddedFields: this.calculateTopAddedFields(enhancements),
     }
   }
 
   /**
-   * Get top performing agent
+   * Calculate top improvements across all files
    */
-  getTopPerformingAgent(agentStats) {
-    let topAgent = null
-    let highestSuccessRate = 0
+  calculateTopImprovements(enhancements) {
+    const improvementCounts = {}
 
-    Object.entries(agentStats).forEach(([agentName, stats]) => {
-      const total = stats.successful + stats.failed
-      const successRate = total > 0 ? stats.successful / total : 0
-
-      if (successRate > highestSuccessRate) {
-        highestSuccessRate = successRate
-        topAgent = {
-          name: agentName,
-          role: stats.role,
-          successRate: Math.round(successRate * 100),
-          avgProcessingTime: stats.averageProcessingTime,
-        }
-      }
+    enhancements.forEach(enhancement => {
+      enhancement.improvements.forEach(improvement => {
+        const type = improvement.split(':')[0] || improvement.substring(0, 30)
+        improvementCounts[type] = (improvementCounts[type] || 0) + 1
+      })
     })
 
-    return topAgent
+    return Object.entries(improvementCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 5)
+      .map(([type, count]) => ({ type, count }))
   }
 
   /**
-   * Calculate collaboration effectiveness
+   * Calculate top added fields across all files
    */
-  calculateCollaborationEffectiveness(enhancements) {
-    if (enhancements.length === 0) return 0
+  calculateTopAddedFields(enhancements) {
+    const fieldCounts = {}
 
-    const totalContributions = enhancements.reduce((sum, enhancement) => {
-      return sum + Object.keys(enhancement.agentContributions || {}).length
-    }, 0)
+    enhancements.forEach(enhancement => {
+      enhancement.addedFields.forEach(field => {
+        fieldCounts[field] = (fieldCounts[field] || 0) + 1
+      })
+    })
 
-    return Math.round(
-      (totalContributions / (enhancements.length * this.agents.length)) * 100,
-    )
+    return Object.entries(fieldCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 8)
+      .map(([field, count]) => ({ field, count }))
   }
 }
 

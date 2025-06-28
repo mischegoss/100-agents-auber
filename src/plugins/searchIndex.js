@@ -1,21 +1,12 @@
-/**
- * Search Index Generator Plugin for Docusaurus
- *
- * Generates search-index-enhanced.json and search-index-original.json
- * during the build process.
- *
- * Usage in docusaurus.config.js:
- * plugins: [
- *   './src/plugins/search-index-generator.js'
- * ]
- */
-
-const fs = require('fs')
 const path = require('path')
+const fs = require('fs-extra')
 
-// Enhanced metadata for AI-powered search
+// Enhanced metadata constants with all three agents
 const ENHANCED_METADATA = {
   'account-lockout': {
+    // SEO Agent metadata
+    description:
+      'Comprehensive guide to preventing and resolving account lockouts, including timeout policies and recovery procedures',
     keywords: [
       'authentication',
       'lockout',
@@ -26,300 +17,345 @@ const ENHANCED_METADATA = {
       'account-recovery',
       'session-management',
     ],
-    description:
-      'Comprehensive guide to preventing and resolving account lockouts, including timeout policies and recovery procedures.',
+    focusKeyword: 'authentication',
+    searchKeywords: ['authentication', 'lockout', 'security'],
+    contentType: 'troubleshooting',
+    seoScore: 92,
+
+    // Taxonomy Agent metadata
+    topics: ['authentication', 'security-procedures', 'access-control'],
+    difficulty: 'intermediate',
+    audience: ['developers', 'system-administrators'],
+    targetRoles: ['devops-engineer', 'security-specialist'],
+    prerequisites: ['basic-authentication', 'system-administration'],
+    domainArea: 'security',
+    taxonomyScore: 88,
+
+    // Chunking Agent metadata
+    chunkingStrategy: 'semantic',
+    optimalChunkSize: 450,
+    chunkOverlap: 75,
+    totalChunks: 6,
+    chunkBoundaries: ['heading-based', 'semantic-breaks'],
+    semanticBridges: [
+      'intro-to-prevention',
+      'prevention-to-resolution',
+      'resolution-to-monitoring',
+    ],
+    contextualAnchors: [
+      'lockout-triggers',
+      'recovery-process',
+      'prevention-strategies',
+    ],
+    ragOptimizations: {
+      vectorSearchKeywords: [
+        'lockout',
+        'timeout',
+        'authentication',
+        'security',
+      ],
+      semanticClusters: ['auth-security', 'troubleshooting', 'system-admin'],
+      retrievalHints: 'Focus on error scenarios and step-by-step procedures',
+    },
+    chunkingScore: 90,
+    structureScore: 85,
+
+    // Combined RAG Score
     ragScore: 92,
-    relatedDocs: ['auth-tokens', 'credential-management', 'system-integration'],
-    semanticCategories: ['authentication'],
-    topicClusters: ['security'],
+    enhancementLevel: 'comprehensive',
   },
+
   'auth-tokens': {
+    // SEO Agent metadata
+    description:
+      'Complete guide to authentication token management, including JWT implementation, security best practices, and lifecycle management',
     keywords: [
       'authentication',
       'tokens',
       'JWT',
-      'session',
       'security',
-      'expiry',
-      'validation',
-      'bearer-token',
       'oauth',
+      'bearer-token',
+      'session-management',
     ],
-    description:
-      'Complete reference for managing authentication tokens, including generation, validation, expiry, and security best practices.',
-    ragScore: 95,
-    relatedDocs: [
-      'account-lockout',
-      'credential-management',
-      'system-integration',
+    focusKeyword: 'authentication-tokens',
+    searchKeywords: ['tokens', 'JWT', 'authentication'],
+    contentType: 'reference',
+    seoScore: 89,
+
+    // Taxonomy Agent metadata
+    topics: ['authentication', 'token-management', 'security'],
+    difficulty: 'advanced',
+    audience: ['developers', 'security-engineers'],
+    targetRoles: ['backend-developer', 'security-specialist'],
+    prerequisites: ['authentication-concepts', 'oauth-basics'],
+    domainArea: 'security',
+    taxonomyScore: 91,
+
+    // Chunking Agent metadata
+    chunkingStrategy: 'hybrid',
+    optimalChunkSize: 500,
+    chunkOverlap: 80,
+    totalChunks: 8,
+    chunkBoundaries: ['heading-based', 'code-blocks', 'semantic-breaks'],
+    semanticBridges: [
+      'concepts-to-implementation',
+      'implementation-to-security',
+      'security-to-lifecycle',
     ],
-    semanticCategories: ['authentication'],
-    topicClusters: ['security'],
+    contextualAnchors: [
+      'jwt-structure',
+      'token-validation',
+      'refresh-patterns',
+    ],
+    ragOptimizations: {
+      vectorSearchKeywords: [
+        'JWT',
+        'token',
+        'bearer',
+        'oauth',
+        'authentication',
+      ],
+      semanticClusters: [
+        'token-auth',
+        'security-implementation',
+        'api-security',
+      ],
+      retrievalHints:
+        'Focus on implementation patterns and security considerations',
+    },
+    chunkingScore: 93,
+    structureScore: 88,
+
+    // Combined RAG Score
+    ragScore: 91,
+    enhancementLevel: 'comprehensive',
   },
-  'credential-management': {
-    keywords: [
-      'credentials',
-      'password',
-      'MFA',
-      'security',
-      'storage',
-      'encryption',
-      'authentication',
-      'access-control',
-    ],
-    description:
-      'Advanced credential management including password policies, multi-factor authentication, and secure storage mechanisms.',
-    ragScore: 88,
-    relatedDocs: ['account-lockout', 'auth-tokens', 'credential-policy'],
-    semanticCategories: ['authentication'],
-    topicClusters: ['security'],
-  },
-  'credential-policy': {
-    keywords: [
-      'policy',
-      'credentials',
-      'security',
-      'compliance',
-      'governance',
-      'authentication',
-      'password-policy',
-      'access-rules',
-    ],
-    description:
-      'Enterprise credential policies covering password requirements, security standards, and compliance guidelines.',
-    ragScore: 85,
-    relatedDocs: ['credential-management', 'system-integration'],
-    semanticCategories: ['authentication'],
-    topicClusters: ['security'],
-  },
-  'system-integration': {
-    keywords: [
-      'integration',
-      'SSO',
-      'LDAP',
-      'API',
-      'enterprise',
-      'authentication',
-      'federation',
-      'directory-services',
-      'endpoints',
-    ],
-    description:
-      'Enterprise system integration patterns including SSO, LDAP, and API authentication strategies.',
-    ragScore: 90,
-    relatedDocs: ['auth-tokens', 'credential-management', 'env-setup'],
-    semanticCategories: ['system'],
-    topicClusters: ['setup', 'advanced'],
-  },
+
   'tutorial-basics': {
+    // SEO Agent metadata
+    description:
+      'Essential tutorial covering fundamental concepts and getting started with the system',
     keywords: [
       'tutorial',
-      'getting-started',
-      'beginner',
-      'introduction',
       'basics',
-      'first-steps',
-      'onboarding',
+      'getting-started',
+      'fundamentals',
+      'introduction',
     ],
-    description:
-      'Step-by-step getting started tutorial for new users with comprehensive onboarding procedures.',
-    ragScore: 78,
-    relatedDocs: ['configuration-basics', 'env-setup'],
-    semanticCategories: ['user-guide'],
-    topicClusters: ['setup'],
-  },
-  'configuration-basics': {
-    keywords: [
-      'configuration',
-      'setup',
-      'deployment',
-      'environment',
-      'installation',
-      'initialization',
-      'system-config',
+    focusKeyword: 'tutorial',
+    searchKeywords: ['tutorial', 'basics', 'getting-started'],
+    contentType: 'tutorial',
+    seoScore: 85,
+
+    // Taxonomy Agent metadata
+    topics: ['fundamentals', 'getting-started', 'tutorial'],
+    difficulty: 'beginner',
+    audience: ['beginners', 'developers'],
+    targetRoles: ['new-developer', 'student'],
+    prerequisites: [],
+    domainArea: 'education',
+    taxonomyScore: 82,
+
+    // Chunking Agent metadata
+    chunkingStrategy: 'structural',
+    optimalChunkSize: 350,
+    chunkOverlap: 60,
+    totalChunks: 5,
+    chunkBoundaries: ['heading-based', 'step-boundaries'],
+    semanticBridges: [
+      'intro-to-setup',
+      'setup-to-usage',
+      'usage-to-next-steps',
     ],
-    description:
-      'Essential system configuration guide covering initial setup, deployment, and environment preparation.',
-    ragScore: 80,
-    relatedDocs: ['tutorial-basics', 'env-setup', 'system-integration'],
-    semanticCategories: ['system'],
-    topicClusters: ['setup'],
-  },
-  'env-setup': {
-    keywords: [
-      'environment',
-      'setup',
-      'configuration',
-      'deployment',
-      'infrastructure',
-      'system-configuration',
-      'installation',
-    ],
-    description:
-      'Advanced environment configuration framework for production and development deployments.',
-    ragScore: 87,
-    relatedDocs: ['configuration-basics', 'system-integration'],
-    semanticCategories: ['system'],
-    topicClusters: ['setup', 'advanced'],
-  },
-  'create-a-page': {
-    keywords: [
-      'documentation',
-      'page-creation',
-      'content-management',
-      'publishing',
-      'authoring',
-      'system-procedures',
-    ],
-    description:
-      'System diagnostic procedures and page creation workflows for content management.',
-    ragScore: 75,
-    relatedDocs: ['markdown-features', 'tutorial-basics'],
-    semanticCategories: ['user-guide'],
-    topicClusters: ['content'],
-  },
-  'advanced-topics': {
-    keywords: [
-      'advanced',
-      'concepts',
-      'expert',
-      'complex',
-      'technical',
-      'in-depth',
-      'professional',
-    ],
-    description:
-      'Advanced technical concepts and expert-level configuration options for experienced users.',
-    ragScore: 93,
-    relatedDocs: ['system-integration', 'credential-management'],
-    semanticCategories: ['administration'],
-    topicClusters: ['advanced', 'maintenance'],
-  },
-  'markdown-features': {
-    keywords: [
-      'markdown',
-      'formatting',
-      'documentation',
-      'content',
-      'authoring',
-      'syntax',
-      'writing',
-    ],
-    description:
-      'Comprehensive markdown syntax guide and formatting options for documentation authoring.',
-    ragScore: 82,
-    relatedDocs: ['create-a-page', 'community-guidelines'],
-    semanticCategories: ['user-guide'],
-    topicClusters: ['content'],
-  },
-  'community-guidelines': {
-    keywords: [
-      'community',
-      'guidelines',
-      'standards',
-      'best-practices',
-      'collaboration',
-      'social',
-      'conduct',
-    ],
-    description:
-      'Community standards, best practices, and collaboration guidelines for effective teamwork.',
-    ragScore: 79,
-    relatedDocs: ['markdown-features'],
-    semanticCategories: ['community'],
-    topicClusters: ['content'],
-  },
-  'release-notes': {
-    keywords: [
-      'release',
-      'updates',
-      'changelog',
-      'version',
-      'features',
-      'improvements',
-      'announcements',
-    ],
-    description:
-      'Latest product updates, new features, and version history with detailed change documentation.',
-    ragScore: 84,
-    relatedDocs: ['advanced-topics'],
-    semanticCategories: ['administration'],
-    topicClusters: ['maintenance'],
-  },
-  'audit-log-review': {
-    keywords: [
-      'audit',
-      'logging',
-      'review',
-      'compliance',
-      'monitoring',
-      'security',
-      'tracking',
-      'accountability',
-    ],
-    description:
-      'Security audit procedures, log analysis, and compliance monitoring for system accountability.',
-    ragScore: 86,
-    relatedDocs: ['account-lockout', 'credential-policy'],
-    semanticCategories: ['administration'],
-    topicClusters: ['security', 'maintenance'],
+    contextualAnchors: ['first-steps', 'basic-concepts', 'next-actions'],
+    ragOptimizations: {
+      vectorSearchKeywords: [
+        'tutorial',
+        'basics',
+        'getting started',
+        'introduction',
+      ],
+      semanticClusters: ['learning', 'fundamentals', 'beginner-guide'],
+      retrievalHints:
+        'Focus on step-by-step instructions and foundational concepts',
+    },
+    chunkingScore: 87,
+    structureScore: 83,
+
+    // Combined RAG Score
+    ragScore: 85,
+    enhancementLevel: 'comprehensive',
   },
 }
 
-function searchIndexGeneratorPlugin(context, options) {
+function createMockDoc(id, type) {
+  const isEnhanced = type === 'enhanced'
+  const baseUrl = isEnhanced
+    ? '/docs-enhanced/sample-docs'
+    : '/docs-original/sample-docs'
+
+  const title = id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  const metadata = isEnhanced ? ENHANCED_METADATA[id] : null
+
   return {
-    name: 'search-index-generator',
+    id,
+    title,
+    content: `This is the content for ${title}. It contains information about ${id.replace(
+      /-/g,
+      ' ',
+    )}.`,
+    frontMatter: {
+      title,
+      description: metadata?.description || 'Basic documentation page.',
+      keywords: metadata?.keywords || ['documentation'],
 
-    async postBuild({ siteDir, routesPaths, outDir }) {
-      console.log('🔍 Generating search indexes...')
+      // Include all agent enhancements if available
+      ...(metadata && {
+        // SEO enhancements
+        focusKeyword: metadata.focusKeyword,
+        searchKeywords: metadata.searchKeywords,
+        contentType: metadata.contentType,
+        seoScore: metadata.seoScore,
 
-      try {
-        // Get all docs content from the build context
-        const docsData = await extractDocsContent(context)
+        // Taxonomy enhancements
+        topics: metadata.topics,
+        difficulty: metadata.difficulty,
+        audience: metadata.audience,
+        targetRoles: metadata.targetRoles,
+        prerequisites: metadata.prerequisites,
+        domainArea: metadata.domainArea,
+        taxonomyScore: metadata.taxonomyScore,
 
-        // Generate both indexes
-        const enhancedIndex = generateEnhancedIndex(docsData.enhanced)
-        const originalIndex = generateOriginalIndex(docsData.original)
+        // Chunking enhancements
+        chunkingStrategy: metadata.chunkingStrategy,
+        optimalChunkSize: metadata.optimalChunkSize,
+        chunkOverlap: metadata.chunkOverlap,
+        totalChunks: metadata.totalChunks,
+        chunkBoundaries: metadata.chunkBoundaries,
+        semanticBridges: metadata.semanticBridges,
+        contextualAnchors: metadata.contextualAnchors,
+        ragOptimizations: metadata.ragOptimizations,
+        chunkingScore: metadata.chunkingScore,
+        structureScore: metadata.structureScore,
 
-        // Write JSON files to both static (for dev) and build output (for production)
-        const staticDir = path.join(siteDir, 'static')
-        const buildDir = outDir
-
-        // Write to static directory (for development)
-        await writeIndexFile(
-          staticDir,
-          'search-index-enhanced.json',
-          enhancedIndex,
-        )
-        await writeIndexFile(
-          staticDir,
-          'search-index-original.json',
-          originalIndex,
-        )
-
-        // Write to build output (for production)
-        await writeIndexFile(
-          buildDir,
-          'search-index-enhanced.json',
-          enhancedIndex,
-        )
-        await writeIndexFile(
-          buildDir,
-          'search-index-original.json',
-          originalIndex,
-        )
-
-        console.log('✅ Search indexes generated successfully!')
-        console.log(
-          `   📊 Enhanced: ${enhancedIndex.totalDocuments} docs (${enhancedIndex.enhancementRate}% enhanced)`,
-        )
-        console.log(
-          `   📄 Original: ${originalIndex.totalDocuments} docs (${originalIndex.enhancementRate}% enhanced)`,
-        )
-      } catch (error) {
-        console.error('❌ Error generating search indexes:', error)
-      }
+        // Overall enhancement metrics
+        ragScore: metadata.ragScore,
+        enhancementLevel: metadata.enhancementLevel,
+      }),
     },
+    url: `${baseUrl}/${id}`,
+    isEnhanced,
+    enhancementLevel: metadata?.enhancementLevel || 'basic',
+    ragScore: metadata?.ragScore || null,
+
+    // Agent-specific scores for debugging
+    seoScore: metadata?.seoScore || null,
+    taxonomyScore: metadata?.taxonomyScore || null,
+    chunkingScore: metadata?.chunkingScore || null,
+    structureScore: metadata?.structureScore || null,
+
+    // Enhanced search capabilities
+    semanticKeywords: metadata?.ragOptimizations?.vectorSearchKeywords || [],
+    semanticClusters: metadata?.ragOptimizations?.semanticClusters || [],
+    retrievalHints: metadata?.ragOptimizations?.retrievalHints || null,
+
+    // Chunking information for RAG
+    chunkingInfo: metadata
+      ? {
+          strategy: metadata.chunkingStrategy,
+          size: metadata.optimalChunkSize,
+          overlap: metadata.chunkOverlap,
+          count: metadata.totalChunks,
+          anchors: metadata.contextualAnchors,
+        }
+      : null,
+  }
+}
+
+function createSearchIndex(docs, type) {
+  const enhancedDocs = docs.filter(doc => doc.isEnhanced)
+  const basicDocs = docs.filter(doc => !doc.isEnhanced)
+
+  return {
+    version: '2.1.0',
+    type: type,
+    generatedAt: new Date().toISOString(),
+    totalDocuments: docs.length,
+    enhancedDocuments: enhancedDocs.length,
+    enhancementRate: Math.round((enhancedDocs.length / docs.length) * 100),
+
+    // Agent statistics
+    agentStats: {
+      seoEnhanced: enhancedDocs.filter(d => d.seoScore).length,
+      taxonomyEnhanced: enhancedDocs.filter(d => d.taxonomyScore).length,
+      chunkingEnhanced: enhancedDocs.filter(d => d.chunkingScore).length,
+      averageRAGScore:
+        enhancedDocs.length > 0
+          ? Math.round(
+              enhancedDocs.reduce((acc, doc) => acc + (doc.ragScore || 0), 0) /
+                enhancedDocs.length,
+            )
+          : 0,
+    },
+
+    // Chunking statistics
+    chunkingStats: {
+      averageChunkSize:
+        enhancedDocs.length > 0
+          ? Math.round(
+              enhancedDocs.reduce(
+                (acc, doc) => acc + (doc.chunkingInfo?.size || 0),
+                0,
+              ) / enhancedDocs.length,
+            )
+          : 0,
+      totalChunks: enhancedDocs.reduce(
+        (acc, doc) => acc + (doc.chunkingInfo?.count || 0),
+        0,
+      ),
+      strategiesUsed: [
+        ...new Set(
+          enhancedDocs.map(d => d.chunkingInfo?.strategy).filter(Boolean),
+        ),
+      ],
+    },
+
+    documents: docs.map(doc => ({
+      id: doc.id,
+      title: doc.title,
+      description: doc.frontMatter.description,
+      url: doc.url,
+      content: doc.content,
+      keywords: doc.frontMatter.keywords || [],
+
+      // Enhanced metadata
+      isEnhanced: doc.isEnhanced,
+      enhancementLevel: doc.enhancementLevel,
+      ragScore: doc.ragScore,
+
+      // Agent scores
+      seoScore: doc.seoScore,
+      taxonomyScore: doc.taxonomyScore,
+      chunkingScore: doc.chunkingScore,
+      structureScore: doc.structureScore,
+
+      // Semantic search enhancements
+      semanticKeywords: doc.semanticKeywords,
+      semanticClusters: doc.semanticClusters,
+      retrievalHints: doc.retrievalHints,
+
+      // Document structure
+      topics: doc.frontMatter.topics || [],
+      difficulty: doc.frontMatter.difficulty,
+      audience: doc.frontMatter.audience || [],
+      contentType: doc.frontMatter.contentType,
+
+      // Chunking metadata
+      chunkingInfo: doc.chunkingInfo,
+      contextualAnchors: doc.frontMatter.contextualAnchors || [],
+      semanticBridges: doc.frontMatter.semanticBridges || [],
+    })),
   }
 }
 
@@ -350,153 +386,53 @@ async function extractDocsContent(context) {
   return { enhanced, original }
 }
 
-function createMockDoc(id, type) {
-  const isEnhanced = type === 'enhanced'
-  const baseUrl = isEnhanced
-    ? '/docs-enhanced/sample-docs'
-    : '/docs-original/sample-docs'
-
-  const title = id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-  const metadata = isEnhanced ? ENHANCED_METADATA[id] : null
-
+/**
+ * Search Index Generator Plugin
+ * Generates JSON files for both enhanced and original documentation
+ */
+function searchIndexPlugin(context, options = {}) {
   return {
-    id,
-    title,
-    content: `This is the content for ${title}. It contains information about ${id.replace(
-      /-/g,
-      ' ',
-    )}.`,
-    frontMatter: {
-      title,
-      description: metadata?.description || 'Basic documentation page.',
-      tags: metadata?.semanticCategories || [],
+    name: 'search-index-generator',
+
+    async postBuild({ outDir }) {
+      console.log('🔍 Generating search indexes...')
+
+      try {
+        // Extract docs content (in real implementation, use actual docs)
+        const { enhanced, original } = await extractDocsContent(context)
+
+        // Create search indexes
+        const enhancedIndex = createSearchIndex(enhanced, 'enhanced')
+        const originalIndex = createSearchIndex(original, 'original')
+
+        // Write JSON files to build output
+        const staticDir = path.join(outDir, 'search-data')
+        await fs.ensureDir(staticDir)
+
+        await fs.writeJSON(
+          path.join(staticDir, 'enhanced-docs.json'),
+          enhancedIndex,
+          { spaces: 2 },
+        )
+
+        await fs.writeJSON(
+          path.join(staticDir, 'original-docs.json'),
+          originalIndex,
+          { spaces: 2 },
+        )
+
+        console.log('✅ Search indexes generated successfully!')
+        console.log(
+          `   📊 Enhanced: ${enhancedIndex.totalDocuments} docs (${enhancedIndex.enhancementRate}% enhanced)`,
+        )
+        console.log(
+          `   📄 Original: ${originalIndex.totalDocuments} docs (${originalIndex.enhancementRate}% enhanced)`,
+        )
+      } catch (error) {
+        console.error('❌ Error generating search indexes:', error)
+      }
     },
-    url: `${baseUrl}/${id}`,
-    metadata,
   }
 }
 
-function generateEnhancedIndex(docs) {
-  const enhancedDocs = docs.map(doc => {
-    const metadata = doc.metadata || {}
-
-    return {
-      id: doc.id,
-      title: doc.title,
-      description: metadata.description || doc.frontMatter.description,
-      keywords: metadata.keywords || ['documentation', 'guide'],
-      content: extractContentPreview(doc.content, 500),
-      url: doc.url,
-      isEnhanced: true,
-      enhancementLevel: 'ai-enhanced',
-      ragScore: metadata.ragScore || 75,
-      relatedDocs: metadata.relatedDocs || [],
-      semanticCategories: metadata.semanticCategories || ['general'],
-      topicClusters: metadata.topicClusters || ['general'],
-      searchPriority: getSearchPriority(doc.id),
-      lastModified: new Date().toISOString(),
-      contentLength: doc.content.length,
-      readingTime: Math.ceil(doc.content.split(' ').length / 200),
-      tags: doc.frontMatter.tags || [],
-    }
-  })
-
-  const avgRagScore = Math.round(
-    enhancedDocs.reduce((sum, doc) => sum + doc.ragScore, 0) /
-      enhancedDocs.length,
-  )
-
-  return {
-    generated: new Date().toISOString(),
-    version: '1.0.0',
-    totalDocuments: enhancedDocs.length,
-    enhancementRate: 100,
-    averageRagScore: avgRagScore,
-    capabilities: {
-      semanticSearch: true,
-      aiProcessing: true,
-      relatedDocs: true,
-      ragScoring: true,
-      topicClustering: true,
-    },
-    documents: enhancedDocs,
-  }
-}
-
-function generateOriginalIndex(docs) {
-  const originalDocs = docs.map(doc => ({
-    id: doc.id,
-    title: doc.title,
-    description: 'Basic documentation page.',
-    keywords: ['documentation', 'basic', 'guide'],
-    content: extractContentPreview(doc.content, 200),
-    url: doc.url,
-    isEnhanced: false,
-    enhancementLevel: 'basic',
-    lastModified: new Date().toISOString(),
-  }))
-
-  return {
-    generated: new Date().toISOString(),
-    version: '1.0.0',
-    totalDocuments: originalDocs.length,
-    enhancementRate: 0,
-    capabilities: {
-      semanticSearch: false,
-      aiProcessing: false,
-      relatedDocs: false,
-      ragScoring: false,
-      topicClustering: false,
-    },
-    documents: originalDocs,
-  }
-}
-
-function extractContentPreview(content, maxLength = 300) {
-  const cleanContent = content
-    .replace(/#{1,6}\s+/g, '')
-    .replace(/\*\*(.+?)\*\*/g, '$1')
-    .replace(/\*(.+?)\*/g, '$1')
-    .replace(/\[(.+?)\]\(.+?\)/g, '$1')
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`(.+?)`/g, '$1')
-    .replace(/\n+/g, ' ')
-    .trim()
-
-  return cleanContent.length > maxLength
-    ? cleanContent.substring(0, maxLength) + '...'
-    : cleanContent
-}
-
-function getSearchPriority(id) {
-  const priorities = {
-    'tutorial-basics': 10,
-    'account-lockout': 9,
-    'auth-tokens': 9,
-    'credential-management': 8,
-    'configuration-basics': 7,
-    'system-integration': 6,
-    'env-setup': 5,
-    'advanced-topics': 4,
-    'markdown-features': 3,
-    'community-guidelines': 2,
-    'release-notes': 1,
-    'audit-log-review': 1,
-  }
-  return priorities[id] || 5
-}
-
-async function writeIndexFile(outputDir, filename, indexData) {
-  // Ensure output directory exists
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true })
-  }
-
-  const filePath = path.join(outputDir, filename)
-  fs.writeFileSync(filePath, JSON.stringify(indexData, null, 2))
-  console.log(
-    `   📝 Written: ${filename} (${indexData.totalDocuments} documents)`,
-  )
-}
-
-module.exports = searchIndexGeneratorPlugin
+module.exports = searchIndexPlugin
