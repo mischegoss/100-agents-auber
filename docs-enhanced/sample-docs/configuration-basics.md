@@ -1,6 +1,49 @@
 ---
 sidebar_position: 4
 title: Configuration
+description: >-
+  Configure your application with YAML files! Learn best practices, settings for
+  database, Redis cache, API rate limits, and timeout configurations. Optimize
+  y...
+tags:
+  - configuration
+  - yaml
+  - database
+  - redis
+  - api
+  - settings
+keywords:
+  - application configuration
+  - yaml configuration
+  - app.yml
+  - database settings
+  - redis cache
+  - api settings
+  - rate limits
+topics:
+  - application configuration
+  - main configuration
+  - yaml configuration
+  - database configuration
+  - redis cache configuration
+  - api settings
+categories:
+  - reference
+  - configuration
+audience:
+  - developers
+  - system-administrators
+  - beginners
+prerequisites:
+  - basic-programming
+  - yaml-knowledge
+category: Application Development
+difficulty: beginner
+contentType: reference
+domainArea: configuration
+primaryTopic: configuration
+ragScore: 84
+agentCount: 3
 ---
 
 # Configuration

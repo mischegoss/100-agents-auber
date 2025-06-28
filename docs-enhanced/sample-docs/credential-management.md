@@ -1,7 +1,50 @@
 ---
 sidebar_position: 2
 title: Credential Lifecycle Operations
-
+description: >-
+  Learn credential lifecycle operations, including reset procedures, security
+  implications, & timeout considerations. Secure your system with our guide.
+tags:
+  - credentials
+  - security
+  - authentication
+  - authorization
+  - iam
+  - password reset
+keywords:
+  - credential-management
+  - access-control
+  - identity-verification
+  - credential-reset
+  - security-protocols
+  - cryptographic-protocols
+  - user-authentication
+topics:
+  - identity and access management
+  - credential lifecycle
+  - credential reset
+  - user authentication
+  - access control
+  - security audit
+categories:
+  - guide
+  - security
+audience:
+  - developers
+  - system-administrators
+  - security-engineers
+  - security-specialist
+prerequisites:
+  - basic-programming
+  - authentication-concepts
+  - linux-command-line
+category: Security
+difficulty: intermediate
+contentType: reference
+domainArea: security
+primaryTopic: credential management
+ragScore: 89
+agentCount: 3
 ---
 
 # Credential Lifecycle Operations
