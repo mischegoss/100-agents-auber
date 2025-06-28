@@ -1,6 +1,56 @@
 ---
 sidebar_position: 6
 title: Advanced Concepts
+description: >-
+  Dive into advanced system architecture, message queues (RabbitMQ), state
+  machines, memory management (JVM G1GC, Redis), and container networking.
+  Optimize sy...
+tags:
+  - architecture
+  - internals
+  - rabbitmq
+  - jvm
+  - redis
+  - networking
+  - containers
+keywords:
+  - system architecture
+  - message queue
+  - rabbitmq
+  - state machine
+  - jvm g1gc
+  - redis cache
+  - container networking
+  - memory management
+topics:
+  - architecture
+  - system design
+  - microservices
+  - message queues
+  - rabbitmq
+  - data persistence
+categories:
+  - guide
+  - infrastructure
+audience:
+  - developers
+  - system-administrators
+  - architects
+  - devops-engineers
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - system-administration
+  - networking-fundamentals
+  - jvm-fundamentals
+  - message-queueing-concepts
+category: System Administration
+difficulty: advanced
+contentType: reference
+domainArea: infrastructure
+primaryTopic: system architecture
+ragScore: 89
+agentCount: 3
 ---
 
 # Advanced Concepts
