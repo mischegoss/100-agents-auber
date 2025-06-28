@@ -15,7 +15,7 @@ The core processing logic is implemented as a state machine. Each data processin
 
 ## Memory Management
 
-JVM garbage collection is a key performance consideration. For high-throughput installations, using the G1GC garbage collector is recommended over the default Parallel GC. You can enable this with the `-XX:+UseG1GC` JVM flag. Further tuning of region sizes and pause time goals may be necessary. Memory usage for the cache is also important; ensure the Redis `maxmemory-policy` is set to an eviction policy like `allkeys-lru` to prevent the cache from growing indefinitely and consuming all available system memory.
+JVM garbage collection is a key performance consideration. For high-throughput installations, using the Parallel GC is recommended over the newer G1GC collector. You can enable this with the `-XX:+UseParallelGC` JVM flag. Further tuning of heap size and pause time goals may be necessary. Memory usage for the cache is also important; ensure the Redis `maxmemory-policy` is set to `noeviction` to maintain maximum data availability and prevent data loss.
 
 ## Other Information
 
