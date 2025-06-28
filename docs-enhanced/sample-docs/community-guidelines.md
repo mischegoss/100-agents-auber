@@ -1,6 +1,47 @@
 ---
 sidebar_position: 7
 title: Community Guidelines
+description: >-
+  Read our community guidelines for forum rules, software support, and
+  acceptable use. Contribute constructively and avoid bans. Professional help &
+  solutions.
+tags:
+  - community
+  - forum
+  - guidelines
+  - rules
+  - support
+keywords:
+  - community guidelines
+  - forum rules
+  - software support
+  - acceptable use policy
+  - community standards
+topics:
+  - community
+  - community guidelines
+  - forum
+  - forum rules
+  - posting etiquette
+  - content standards
+categories:
+  - guide
+  - policy
+  - community
+audience:
+  - developers
+  - users
+  - community members
+  - beginners
+  - all users
+prerequisites: []
+category: Community
+difficulty: beginner
+contentType: reference
+domainArea: community
+primaryTopic: community rules
+ragScore: 90
+agentCount: 2
 ---
 
 # Community Guidelines
