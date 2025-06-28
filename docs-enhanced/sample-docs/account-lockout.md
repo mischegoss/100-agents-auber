@@ -1,6 +1,46 @@
 ---
 sidebar_position: 4
 title: Account Lockout Procedures
+description: >-
+  Learn how to handle account lockouts. Understand the process, end-user steps,
+  and administrator resolution for swift access restoration. Security best
+  practi...
+tags:
+  - account security
+  - user management
+  - security protocols
+  - access control
+  - authentication
+keywords:
+  - account lockout
+  - user lockout
+  - security lockout
+  - administrator unlock
+  - failed login attempts
+topics:
+  - account management
+  - security
+  - account lockout procedures
+  - lockout overview
+  - user account security
+  - unauthorized access prevention
+categories:
+  - reference
+  - security
+audience:
+  - system-administrators
+  - end-users
+  - beginners
+prerequisites:
+  - basic-computer-literacy
+  - understanding-of-user-accounts
+category: Security
+difficulty: beginner
+contentType: reference
+domainArea: security
+primaryTopic: account lockout
+ragScore: 90
+agentCount: 2
 ---
 
 # Account Lockout Procedures
