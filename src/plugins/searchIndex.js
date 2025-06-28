@@ -59,14 +59,11 @@ const ENHANCED_METADATA = {
     },
     chunkingScore: 90,
     structureScore: 85,
-
-    // Combined RAG Score
     ragScore: 92,
     enhancementLevel: 'comprehensive',
   },
 
   'auth-tokens': {
-    // SEO Agent metadata
     description:
       'Complete guide to authentication token management, including JWT implementation, security best practices, and lifecycle management',
     keywords: [
@@ -82,8 +79,6 @@ const ENHANCED_METADATA = {
     searchKeywords: ['tokens', 'JWT', 'authentication'],
     contentType: 'reference',
     seoScore: 89,
-
-    // Taxonomy Agent metadata
     topics: ['authentication', 'token-management', 'security'],
     difficulty: 'advanced',
     audience: ['developers', 'security-engineers'],
@@ -91,8 +86,6 @@ const ENHANCED_METADATA = {
     prerequisites: ['authentication-concepts', 'oauth-basics'],
     domainArea: 'security',
     taxonomyScore: 91,
-
-    // Chunking Agent metadata
     chunkingStrategy: 'hybrid',
     optimalChunkSize: 500,
     chunkOverlap: 80,
@@ -126,14 +119,11 @@ const ENHANCED_METADATA = {
     },
     chunkingScore: 93,
     structureScore: 88,
-
-    // Combined RAG Score
     ragScore: 91,
     enhancementLevel: 'comprehensive',
   },
 
   'tutorial-basics': {
-    // SEO Agent metadata
     description:
       'Essential tutorial covering fundamental concepts and getting started with the system',
     keywords: [
@@ -147,8 +137,6 @@ const ENHANCED_METADATA = {
     searchKeywords: ['tutorial', 'basics', 'getting-started'],
     contentType: 'tutorial',
     seoScore: 85,
-
-    // Taxonomy Agent metadata
     topics: ['fundamentals', 'getting-started', 'tutorial'],
     difficulty: 'beginner',
     audience: ['beginners', 'developers'],
@@ -156,8 +144,6 @@ const ENHANCED_METADATA = {
     prerequisites: [],
     domainArea: 'education',
     taxonomyScore: 82,
-
-    // Chunking Agent metadata
     chunkingStrategy: 'structural',
     optimalChunkSize: 350,
     chunkOverlap: 60,
@@ -182,8 +168,6 @@ const ENHANCED_METADATA = {
     },
     chunkingScore: 87,
     structureScore: 83,
-
-    // Combined RAG Score
     ragScore: 85,
     enhancementLevel: 'comprehensive',
   },
@@ -198,27 +182,24 @@ function createMockDoc(id, type) {
   const title = id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
   const metadata = isEnhanced ? ENHANCED_METADATA[id] : null
 
+  // Generate mock content based on document type
+  const content = generateMockContent(id, metadata)
+  const headings = extractHeadings(content)
+
   return {
     id,
     title,
-    content: `This is the content for ${title}. It contains information about ${id.replace(
-      /-/g,
-      ' ',
-    )}.`,
+    content,
+    headings,
     frontMatter: {
       title,
       description: metadata?.description || 'Basic documentation page.',
       keywords: metadata?.keywords || ['documentation'],
-
-      // Include all agent enhancements if available
       ...(metadata && {
-        // SEO enhancements
         focusKeyword: metadata.focusKeyword,
         searchKeywords: metadata.searchKeywords,
         contentType: metadata.contentType,
         seoScore: metadata.seoScore,
-
-        // Taxonomy enhancements
         topics: metadata.topics,
         difficulty: metadata.difficulty,
         audience: metadata.audience,
@@ -226,8 +207,6 @@ function createMockDoc(id, type) {
         prerequisites: metadata.prerequisites,
         domainArea: metadata.domainArea,
         taxonomyScore: metadata.taxonomyScore,
-
-        // Chunking enhancements
         chunkingStrategy: metadata.chunkingStrategy,
         optimalChunkSize: metadata.optimalChunkSize,
         chunkOverlap: metadata.chunkOverlap,
@@ -238,8 +217,6 @@ function createMockDoc(id, type) {
         ragOptimizations: metadata.ragOptimizations,
         chunkingScore: metadata.chunkingScore,
         structureScore: metadata.structureScore,
-
-        // Overall enhancement metrics
         ragScore: metadata.ragScore,
         enhancementLevel: metadata.enhancementLevel,
       }),
@@ -248,19 +225,13 @@ function createMockDoc(id, type) {
     isEnhanced,
     enhancementLevel: metadata?.enhancementLevel || 'basic',
     ragScore: metadata?.ragScore || null,
-
-    // Agent-specific scores for debugging
     seoScore: metadata?.seoScore || null,
     taxonomyScore: metadata?.taxonomyScore || null,
     chunkingScore: metadata?.chunkingScore || null,
     structureScore: metadata?.structureScore || null,
-
-    // Enhanced search capabilities
     semanticKeywords: metadata?.ragOptimizations?.vectorSearchKeywords || [],
     semanticClusters: metadata?.ragOptimizations?.semanticClusters || [],
     retrievalHints: metadata?.ragOptimizations?.retrievalHints || null,
-
-    // Chunking information for RAG
     chunkingInfo: metadata
       ? {
           strategy: metadata.chunkingStrategy,
@@ -273,19 +244,226 @@ function createMockDoc(id, type) {
   }
 }
 
+function generateMockContent(id, metadata) {
+  const baseContent = `This is the content for ${id.replace(
+    /-/g,
+    ' ',
+  )}. It contains information about ${id.replace(/-/g, ' ')}.`
+
+  // Add more realistic content for enhanced docs
+  if (metadata) {
+    return `${baseContent}
+
+## Overview
+${metadata.description}
+
+## Key Topics
+${metadata.topics?.join(', ') || 'Various topics'}
+
+## Prerequisites
+${
+  metadata.prerequisites?.length
+    ? metadata.prerequisites.join(', ')
+    : 'No prerequisites required'
+}
+
+## Difficulty Level
+This content is designed for ${metadata.difficulty} users.
+
+## Target Audience
+${metadata.audience?.join(', ') || 'General users'}
+
+${
+  metadata.retrievalHints ||
+  'Additional implementation details and examples would go here.'
+}
+`
+  }
+
+  return baseContent
+}
+
+function extractHeadings(content) {
+  const headingRegex = /^(#{1,6})\s+(.+)$/gm
+  const headings = []
+  let match
+
+  while ((match = headingRegex.exec(content)) !== null) {
+    headings.push({
+      level: match[1].length,
+      text: match[2].trim(),
+      id: match[2]
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, ''),
+    })
+  }
+
+  return headings
+}
+
+function createChunks(doc) {
+  if (!doc.chunkingInfo) {
+    return [
+      {
+        id: `${doc.id}-chunk-1`,
+        content: doc.content,
+        startOffset: 0,
+        endOffset: doc.content.length,
+        semanticAnchor: doc.id,
+        contextBridge: null,
+        vectorKeywords: doc.semanticKeywords.slice(0, 3),
+      },
+    ]
+  }
+
+  const { size, overlap, count, anchors } = doc.chunkingInfo
+  const chunks = []
+  const contentLength = doc.content.length
+
+  for (let i = 0; i < count; i++) {
+    const start = i * (size - overlap)
+    const end = Math.min(start + size, contentLength)
+
+    chunks.push({
+      id: `${doc.id}-chunk-${i + 1}`,
+      content: doc.content.slice(start, end),
+      startOffset: start,
+      endOffset: end,
+      semanticAnchor: anchors?.[i] || `${doc.id}-section-${i + 1}`,
+      contextBridge: doc.frontMatter.semanticBridges?.[i] || null,
+      vectorKeywords: doc.semanticKeywords.slice(0, 3),
+    })
+  }
+
+  return chunks
+}
+
+function buildSearchIndices(docs) {
+  const keywordIndex = {}
+  const semanticClusters = {}
+  const facetedIndex = {
+    byDifficulty: {},
+    byContentType: {},
+    byTopic: {},
+    byAudience: {},
+  }
+
+  docs.forEach(doc => {
+    // Build keyword index
+    const allKeywords = [
+      ...doc.frontMatter.keywords,
+      ...doc.semanticKeywords,
+      doc.title.toLowerCase().split(' '),
+    ].flat()
+
+    allKeywords.forEach(keyword => {
+      if (!keywordIndex[keyword]) {
+        keywordIndex[keyword] = []
+      }
+      keywordIndex[keyword].push({
+        docId: doc.id,
+        frequency: (
+          doc.content.toLowerCase().match(new RegExp(keyword, 'g')) || []
+        ).length,
+        title: doc.title,
+      })
+    })
+
+    // Build semantic clusters
+    doc.semanticClusters.forEach(cluster => {
+      if (!semanticClusters[cluster]) {
+        semanticClusters[cluster] = {
+          documents: [],
+          keywords: new Set(),
+        }
+      }
+      semanticClusters[cluster].documents.push(doc.id)
+      doc.semanticKeywords.forEach(kw =>
+        semanticClusters[cluster].keywords.add(kw),
+      )
+    })
+
+    // Build faceted indices
+    const difficulty = doc.frontMatter.difficulty
+    if (difficulty) {
+      if (!facetedIndex.byDifficulty[difficulty])
+        facetedIndex.byDifficulty[difficulty] = []
+      facetedIndex.byDifficulty[difficulty].push(doc.id)
+    }
+
+    const contentType = doc.frontMatter.contentType
+    if (contentType) {
+      if (!facetedIndex.byContentType[contentType])
+        facetedIndex.byContentType[contentType] = []
+      facetedIndex.byContentType[contentType].push(doc.id)
+    }
+
+    const topics = doc.frontMatter.topics || []
+    topics.forEach(topic => {
+      if (!facetedIndex.byTopic[topic]) facetedIndex.byTopic[topic] = []
+      facetedIndex.byTopic[topic].push(doc.id)
+    })
+
+    const audience = doc.frontMatter.audience || []
+    audience.forEach(aud => {
+      if (!facetedIndex.byAudience[aud]) facetedIndex.byAudience[aud] = []
+      facetedIndex.byAudience[aud].push(doc.id)
+    })
+  })
+
+  // Convert semantic clusters keywords Set to Array
+  Object.keys(semanticClusters).forEach(cluster => {
+    semanticClusters[cluster].keywords = Array.from(
+      semanticClusters[cluster].keywords,
+    )
+  })
+
+  return {
+    keyword: keywordIndex,
+    semantic: { clusters: semanticClusters },
+    faceted: facetedIndex,
+  }
+}
+
 function createSearchIndex(docs, type) {
   const enhancedDocs = docs.filter(doc => doc.isEnhanced)
   const basicDocs = docs.filter(doc => !doc.isEnhanced)
+  const searchIndices = buildSearchIndices(docs)
 
   return {
-    version: '2.1.0',
-    type: type,
-    generatedAt: new Date().toISOString(),
-    totalDocuments: docs.length,
-    enhancedDocuments: enhancedDocs.length,
-    enhancementRate: Math.round((enhancedDocs.length / docs.length) * 100),
+    metadata: {
+      version: '2.1.0',
+      type: type,
+      generatedAt: new Date().toISOString(),
+      totalDocuments: docs.length,
+      enhancedDocuments: enhancedDocs.length,
+      enhancementRate: Math.round((enhancedDocs.length / docs.length) * 100),
+    },
 
-    // Agent statistics
+    searchConfig: {
+      vectorDimensions: 1536,
+      chunkingEnabled: true,
+      hybridSearchEnabled: true,
+      semanticThreshold: 0.75,
+      keywordBoost: 1.2,
+      contextWindowSize: 512,
+    },
+
+    taxonomies: {
+      topics: [...new Set(docs.flatMap(d => d.frontMatter.topics || []))],
+      difficulties: [
+        ...new Set(docs.map(d => d.frontMatter.difficulty).filter(Boolean)),
+      ],
+      audiences: [...new Set(docs.flatMap(d => d.frontMatter.audience || []))],
+      contentTypes: [
+        ...new Set(docs.map(d => d.frontMatter.contentType).filter(Boolean)),
+      ],
+      domainAreas: [
+        ...new Set(docs.map(d => d.frontMatter.domainArea).filter(Boolean)),
+      ],
+    },
+
     agentStats: {
       seoEnhanced: enhancedDocs.filter(d => d.seoScore).length,
       taxonomyEnhanced: enhancedDocs.filter(d => d.taxonomyScore).length,
@@ -299,7 +477,6 @@ function createSearchIndex(docs, type) {
           : 0,
     },
 
-    // Chunking statistics
     chunkingStats: {
       averageChunkSize:
         enhancedDocs.length > 0
@@ -321,41 +498,248 @@ function createSearchIndex(docs, type) {
       ],
     },
 
-    documents: docs.map(doc => ({
-      id: doc.id,
-      title: doc.title,
-      description: doc.frontMatter.description,
-      url: doc.url,
-      content: doc.content,
-      keywords: doc.frontMatter.keywords || [],
+    documents: docs.map(doc => {
+      const chunks = createChunks(doc)
 
-      // Enhanced metadata
-      isEnhanced: doc.isEnhanced,
-      enhancementLevel: doc.enhancementLevel,
-      ragScore: doc.ragScore,
+      return {
+        id: doc.id,
+        title: doc.title,
+        url: doc.url,
 
-      // Agent scores
-      seoScore: doc.seoScore,
-      taxonomyScore: doc.taxonomyScore,
-      chunkingScore: doc.chunkingScore,
-      structureScore: doc.structureScore,
+        searchMetadata: {
+          primaryKeywords:
+            doc.frontMatter.searchKeywords ||
+            doc.frontMatter.keywords?.slice(0, 3) ||
+            [],
+          secondaryKeywords: doc.frontMatter.keywords || [],
+          semanticKeywords: doc.semanticKeywords,
+          focusKeyword: doc.frontMatter.focusKeyword,
+          contentType: doc.frontMatter.contentType,
+          searchBoost: doc.ragScore ? 1 + doc.ragScore / 100 : 1.0,
+        },
 
-      // Semantic search enhancements
-      semanticKeywords: doc.semanticKeywords,
-      semanticClusters: doc.semanticClusters,
-      retrievalHints: doc.retrievalHints,
+        content: {
+          fullText: doc.content,
+          summary: doc.frontMatter.description,
+          headings: doc.headings.map(h => h.text),
+        },
 
-      // Document structure
-      topics: doc.frontMatter.topics || [],
-      difficulty: doc.frontMatter.difficulty,
-      audience: doc.frontMatter.audience || [],
-      contentType: doc.frontMatter.contentType,
+        chunking: {
+          strategy: doc.chunkingInfo?.strategy || 'basic',
+          optimalSize: doc.chunkingInfo?.size || 300,
+          overlap: doc.chunkingInfo?.overlap || 50,
+          totalChunks: chunks.length,
+          boundaries: doc.frontMatter.chunkBoundaries || ['paragraph'],
+          chunks: chunks,
+        },
 
-      // Chunking metadata
-      chunkingInfo: doc.chunkingInfo,
-      contextualAnchors: doc.frontMatter.contextualAnchors || [],
-      semanticBridges: doc.frontMatter.semanticBridges || [],
-    })),
+        classification: {
+          topics: doc.frontMatter.topics || [],
+          difficulty: doc.frontMatter.difficulty,
+          audience: doc.frontMatter.audience || [],
+          targetRoles: doc.frontMatter.targetRoles || [],
+          prerequisites: doc.frontMatter.prerequisites || [],
+          domainArea: doc.frontMatter.domainArea,
+          estimatedReadTime: Math.ceil(doc.content.split(' ').length / 200),
+        },
+
+        ragOptimizations: {
+          retrievalHints: doc.retrievalHints,
+          semanticClusters: doc.semanticClusters,
+          contextualAnchors: doc.frontMatter.contextualAnchors || [],
+          semanticBridges: doc.frontMatter.semanticBridges || [],
+        },
+
+        qualityScores: {
+          overall: doc.ragScore || 50,
+          seo: doc.seoScore || 50,
+          taxonomy: doc.taxonomyScore || 50,
+          chunking: doc.chunkingScore || 50,
+          structure: doc.structureScore || 50,
+          searchability: doc.ragScore ? Math.min(100, doc.ragScore + 10) : 60,
+        },
+
+        relationships: {
+          relatedDocs: getRelatedDocs(doc, docs),
+          prerequisites: doc.frontMatter.prerequisites || [],
+          nextSteps: getNextSteps(doc, docs),
+          semanticSimilarity: calculateSemanticSimilarity(doc, docs),
+        },
+
+        searchHints: {
+          commonQueries: generateCommonQueries(doc),
+          intentMapping: calculateIntentMapping(doc),
+          queryExpansions: generateQueryExpansions(doc),
+        },
+
+        // Legacy fields for backwards compatibility
+        isEnhanced: doc.isEnhanced,
+        enhancementLevel: doc.enhancementLevel,
+        ragScore: doc.ragScore,
+        keywords: doc.frontMatter.keywords || [],
+        description: doc.frontMatter.description,
+      }
+    }),
+
+    searchIndices: searchIndices,
+
+    searchFeatures: {
+      autoComplete: {
+        suggestions: generateAutocompleteSuggestions(docs),
+      },
+
+      spellCorrection: {
+        corrections: generateSpellCorrections(docs),
+      },
+
+      queryExpansion: {
+        synonyms: generateSynonyms(docs),
+        related: generateRelatedTerms(docs),
+      },
+    },
+
+    analytics: {
+      topQueries: [], // Would be populated by usage analytics
+      clickthrough: {},
+      searchPatterns: {
+        commonPaths: [],
+        exitPoints: [],
+      },
+    },
+  }
+}
+
+function getRelatedDocs(doc, docs) {
+  return docs
+    .filter(d => d.id !== doc.id)
+    .filter(d => {
+      const commonTopics = (doc.frontMatter.topics || []).filter(topic =>
+        (d.frontMatter.topics || []).includes(topic),
+      )
+      return commonTopics.length > 0
+    })
+    .slice(0, 3)
+    .map(d => d.id)
+}
+
+function getNextSteps(doc, docs) {
+  const difficulty = doc.frontMatter.difficulty
+  const nextLevel =
+    difficulty === 'beginner'
+      ? 'intermediate'
+      : difficulty === 'intermediate'
+      ? 'advanced'
+      : null
+
+  if (!nextLevel) return []
+
+  return docs
+    .filter(d => d.frontMatter.difficulty === nextLevel)
+    .slice(0, 2)
+    .map(d => d.id)
+}
+
+function calculateSemanticSimilarity(doc, docs) {
+  return docs
+    .filter(d => d.id !== doc.id)
+    .map(d => {
+      const commonKeywords = doc.semanticKeywords.filter(kw =>
+        d.semanticKeywords.includes(kw),
+      ).length
+      const totalKeywords = new Set([
+        ...doc.semanticKeywords,
+        ...d.semanticKeywords,
+      ]).size
+      const score = totalKeywords > 0 ? commonKeywords / totalKeywords : 0
+
+      return { docId: d.id, score: Math.round(score * 100) / 100 }
+    })
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+}
+
+function generateCommonQueries(doc) {
+  const keywords = doc.frontMatter.keywords || []
+  const contentType = doc.frontMatter.contentType
+
+  const queries = keywords.slice(0, 3).map(kw => {
+    if (contentType === 'troubleshooting') return `${kw} error`
+    if (contentType === 'tutorial') return `how to ${kw}`
+    return kw
+  })
+
+  return [...new Set(queries)]
+}
+
+function calculateIntentMapping(doc) {
+  const contentType = doc.frontMatter.contentType
+  const difficulty = doc.frontMatter.difficulty
+
+  return {
+    troubleshooting: contentType === 'troubleshooting' ? 0.9 : 0.1,
+    learning:
+      contentType === 'tutorial' || difficulty === 'beginner' ? 0.8 : 0.2,
+    reference: contentType === 'reference' ? 0.9 : 0.3,
+  }
+}
+
+function generateQueryExpansions(doc) {
+  const expansions = {}
+  const keywords = doc.frontMatter.keywords || []
+
+  keywords.forEach(keyword => {
+    if (keyword.includes('-')) {
+      expansions[keyword] = keyword.split('-')
+    }
+  })
+
+  return expansions
+}
+
+function generateAutocompleteSuggestions(docs) {
+  const suggestions = []
+  const keywords = docs.flatMap(d => d.frontMatter.keywords || [])
+  const uniqueKeywords = [...new Set(keywords)]
+
+  uniqueKeywords.slice(0, 20).forEach(keyword => {
+    suggestions.push({
+      query: keyword.slice(0, 4),
+      completions: uniqueKeywords
+        .filter(kw => kw.startsWith(keyword.slice(0, 4)))
+        .slice(0, 3),
+    })
+  })
+
+  return suggestions
+}
+
+function generateSpellCorrections(docs) {
+  // Simple typo corrections for common terms
+  return {
+    athentication: 'authentication',
+    lockot: 'lockout',
+    tokn: 'token',
+    cofiguration: 'configuration',
+    integation: 'integration',
+  }
+}
+
+function generateSynonyms(docs) {
+  return {
+    login: ['signin', 'authenticate', 'access'],
+    token: ['JWT', 'bearer token', 'access token'],
+    lockout: ['locked', 'blocked', 'disabled'],
+    configuration: ['config', 'setup', 'settings'],
+  }
+}
+
+function generateRelatedTerms(docs) {
+  return {
+    authentication: ['authorization', 'access control', 'security'],
+    troubleshooting: ['debugging', 'problem solving', 'error resolution'],
+    tutorial: ['guide', 'walkthrough', 'how-to'],
+    configuration: ['setup', 'installation', 'deployment'],
   }
 }
 
@@ -387,28 +771,39 @@ async function extractDocsContent(context) {
 }
 
 /**
- * Search Index Generator Plugin
- * Generates JSON files for both enhanced and original documentation
+ * Enhanced Search Index Generator Plugin
+ * Generates optimized JSON files for both enhanced and original documentation
+ * Overwrites existing files on each build to ensure fresh data
  */
 function searchIndexPlugin(context, options = {}) {
   return {
-    name: 'search-index-generator',
+    name: 'enhanced-search-index-generator',
 
     async postBuild({ outDir }) {
-      console.log('🔍 Generating search indexes...')
+      console.log('🔍 Generating enhanced search indexes...')
 
       try {
         // Extract docs content (in real implementation, use actual docs)
         const { enhanced, original } = await extractDocsContent(context)
 
-        // Create search indexes
+        // Create enhanced search indexes with full optimization
         const enhancedIndex = createSearchIndex(enhanced, 'enhanced')
         const originalIndex = createSearchIndex(original, 'original')
 
-        // Write JSON files to build output
+        // Ensure search data directory exists and clear any existing files
         const staticDir = path.join(outDir, 'search-data')
         await fs.ensureDir(staticDir)
 
+        // Remove existing JSON files to ensure clean overwrite
+        const existingFiles = await fs.readdir(staticDir).catch(() => [])
+        for (const file of existingFiles) {
+          if (file.endsWith('.json')) {
+            await fs.remove(path.join(staticDir, file))
+            console.log(`   🗑️  Removed existing file: ${file}`)
+          }
+        }
+
+        // Write new JSON files (this will overwrite any remaining files)
         await fs.writeJSON(
           path.join(staticDir, 'enhanced-docs.json'),
           enhancedIndex,
@@ -421,15 +816,35 @@ function searchIndexPlugin(context, options = {}) {
           { spaces: 2 },
         )
 
-        console.log('✅ Search indexes generated successfully!')
+        // Generate additional search optimization files
+        await fs.writeJSON(
+          path.join(staticDir, 'search-config.json'),
+          {
+            version: enhancedIndex.metadata.version,
+            searchConfig: enhancedIndex.searchConfig,
+            taxonomies: enhancedIndex.taxonomies,
+            lastGenerated: enhancedIndex.metadata.generatedAt,
+          },
+          { spaces: 2 },
+        )
+
+        console.log('✅ Enhanced search indexes generated successfully!')
         console.log(
-          `   📊 Enhanced: ${enhancedIndex.totalDocuments} docs (${enhancedIndex.enhancementRate}% enhanced)`,
+          `   📊 Enhanced: ${enhancedIndex.metadata.totalDocuments} docs (${enhancedIndex.metadata.enhancementRate}% enhanced)`,
         )
         console.log(
-          `   📄 Original: ${originalIndex.totalDocuments} docs (${originalIndex.enhancementRate}% enhanced)`,
+          `   📄 Original: ${originalIndex.metadata.totalDocuments} docs (${originalIndex.metadata.enhancementRate}% enhanced)`,
         )
+        console.log(
+          `   🎯 RAG Score: ${enhancedIndex.agentStats.averageRAGScore}/100`,
+        )
+        console.log(
+          `   📦 Total Chunks: ${enhancedIndex.chunkingStats.totalChunks}`,
+        )
+        console.log(`   💾 Files written to: ${staticDir}`)
       } catch (error) {
-        console.error('❌ Error generating search indexes:', error)
+        console.error('❌ Error generating enhanced search indexes:', error)
+        throw error // Re-throw to fail the build if search index generation fails
       }
     },
   }
