@@ -1,6 +1,59 @@
 ---
 sidebar_position: 4
 title: Environmental Configuration Framework
+description: >-
+  Configure application environments effectively. Learn initial setup, YAML
+  structure, environment variables, & service dependencies for robust
+  deployments.
+tags:
+  - configuration
+  - environment
+  - yaml
+  - variables
+  - database
+  - redis
+  - deployment
+keywords:
+  - environment configuration
+  - yaml configuration
+  - environment variables
+  - service dependencies
+  - database setup
+  - redis caching
+  - runtime parameters
+  - application configuration
+topics:
+  - environment configuration
+  - initial setup
+  - configuration files
+  - yaml configuration
+  - json configuration
+  - environment variables
+categories:
+  - guide
+  - infrastructure
+audience:
+  - developers
+  - system-administrators
+  - devops-engineers
+prerequisites:
+  - basic-programming
+  - api-knowledge
+  - yaml
+  - bash
+difficulty: intermediate
+complexity: medium
+contentType: guide
+domainArea: infrastructure
+primaryTopic: configuration
+category: configuration-management
+ragScore: 88
+agentCount: 4
+researchConducted: true
+researchDate: '2025-06-28'
+researchSources: 13
+researchScore: 85
+tavilyIntegration: true
 ---
 
 # Environment Configuration Framework
@@ -104,3 +157,10 @@ Log levels can be adjusted per component through the logging configuration file.
 Port assignments and network interface bindings are configured through startup parameters. Default ports may conflict with other services in containerized environments.
 
 Load balancer health check endpoints respond on configured paths. Ensure firewall rules allow health check traffic from load balancer nodes.
+
+## 📚 Additional Resources
+
+- [Atlassian Documentation | Atlassian Support | Atlassian Documentation](https://confluence.atlassian.com/)
+- [Confluence Documentation Directory](https://confluence.atlassian.com/alldoc/confluence-documentation-directory-12877996.html)
+- [Get started with Sourcetree - Atlassian Documentation](https://confluence.atlassian.com/get-started-with-sourcetree)
+
