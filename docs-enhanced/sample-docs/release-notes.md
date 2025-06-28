@@ -1,6 +1,45 @@
 ---
 sidebar_position: 9
 title: Release Notes
+description: >-
+  Explore the latest enhancements and bug fixes in Release 3.2! Improve your
+  user experience with our stable and robust system updates. Learn more now!
+tags:
+  - release
+  - update
+  - bug-fix
+  - enhancement
+  - version-3.2
+keywords:
+  - release-notes
+  - version-3.2
+  - bug-fixes
+  - performance-enhancements
+  - code-refactoring
+topics:
+  - release notes
+  - version 3.2
+  - what's new
+  - enhancements
+  - bug fixes
+  - performance improvements
+categories:
+  - release information
+  - development
+audience:
+  - developers
+  - system-administrators
+  - end-users
+  - beginners
+prerequisites:
+  - basic-programming
+category: Documentation
+difficulty: beginner
+contentType: reference
+domainArea: development
+primaryTopic: releasenotes
+ragScore: 80
+agentCount: 2
 ---
 
 # Release Notes Version 3.2
