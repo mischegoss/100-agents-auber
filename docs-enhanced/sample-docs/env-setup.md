@@ -2,15 +2,15 @@
 sidebar_position: 4
 title: Environmental Configuration Framework
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T20:25:48.017Z'
+chunkingDate: '2025-06-29T04:46:32.677Z'
 structureImprovements: 14
 optimalChunkSize: 350
-chunkingScore: 88
+chunkingScore: 85
 headingsAdded: 14
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T20:25:48.017Z'
+enhanced_at: '2025-06-29T04:46:32.677Z'
 ---
 
 # Environment Configuration Framework
@@ -23,7 +23,7 @@ The application runtime requires specific environmental parameters to be configu
 
 The primary config file uses YAML format for better readability. However, certain legacy components still require JSON configuration files for backward compatibility.
 
-### JSON Configuration File Support (Legacy)
+### JSON Configuration File Support
 
 
 ### YAML Configuration File Example
@@ -50,7 +50,7 @@ api_settings:
 
 Some configuration values must be provided through shell environment variables for security reasons. These include sensitive credentials and deployment-specific overrides.
 
-### Environment Variable Examples
+### Environment Variable Configuration
 
 
 ```bash
@@ -78,7 +78,10 @@ Initial database schema creation happens automatically during first startup. Mig
 
 Redis serves as the distributed cache backend. Connection pooling is enabled by default with configurable pool sizes.
 
-### Redis Connection Configuration (JavaScript Example)
+### JavaScript Cache Configuration Example
+
+
+### Redis Cache Configuration
 
 
 ```javascript
@@ -94,10 +97,10 @@ const cacheConfig = {
 
 Third-party service credentials must be configured for full functionality. API keys are loaded from environment variables during application initialization.
 
-### Email Service Integration
+### Email Service Configuration
 
 
-### Configuring Third-Party Services
+### Third-Party Service Credentials
 
 
 Email service configuration requires SMTP settings or API credentials depending on the chosen provider. The system supports multiple email providers through a unified interface.
@@ -120,7 +123,7 @@ Default memory limits are conservative and may need adjustment for production de
 
 Log levels can be adjusted per component through the logging configuration file. Structured logging is enabled by default with JSON output format.
 
-### Logback Configuration Example (XML)
+### Logback XML Configuration Example
 
 
 ```xml
@@ -149,9 +152,7 @@ Port assignments and network interface bindings are configured through startup p
 ### Load Balancer Health Checks
 
 
-### Port Assignments and Network Bindings
+### Port Assignments and Network Interfaces
 
 
 Load balancer health check endpoints respond on configured paths. Ensure firewall rules allow health check traffic from load balancer nodes.
-
-## Deployment and Monitoring
