@@ -2,15 +2,15 @@
 sidebar_position: 6
 title: Advanced Concepts
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T20:23:12.397Z'
-structureImprovements: 10
+chunkingDate: '2025-06-29T04:44:01.017Z'
+structureImprovements: 9
 optimalChunkSize: 350
 chunkingScore: 85
-headingsAdded: 10
+headingsAdded: 8
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T20:23:12.397Z'
+enhanced_at: '2025-06-29T04:44:01.017Z'
 ---
 
 # Advanced Concepts
@@ -32,25 +32,22 @@ The internal architecture relies on a message queue for decoupling services. Whe
 
 The core processing logic is implemented as a state machine. Each data processing job transitions through states like `PENDING`, `RUNNING`, `COMPLETED`, or `FAILED`. State transitions are atomic operations and are logged for auditing purposes. The framework uses a pessimistic locking strategy on the job record during state transitions to prevent race conditions between multiple workers that might attempt to process the same job.
 
-### Concurrency Control
+### Pessimistic Locking
 
 
 ## Memory Management
-
-## Operational Best Practices
-
 
 ### Garbage Collection Tuning
 
 
 JVM garbage collection is a key performance consideration. For high-throughput installations, using the Parallel GC is recommended over the newer G1GC collector. You can enable this with the `-XX:+UseParallelGC` JVM flag. Further tuning of heap size and pause time goals may be necessary. Memory usage for the cache is also important; ensure the Redis `maxmemory-policy` is set to `noeviction` to maintain maximum data availability and prevent data loss.
 
-### Cache Memory Management
+### Redis Cache Configuration
 
 
 ## Other Information
 
-### Containerized Network Configuration
+### Overlay Networks and Port Mapping
 
 
 Network configuration requires careful planning in containerized environments. Port mapping conflicts are common. Use a dedicated overlay network for inter-service communication. Health checks should be configured to target a specific, lightweight endpoint rather than the main application root to ensure the load balancer can quickly and efficiently detect a failing instance without imposing unnecessary load.
