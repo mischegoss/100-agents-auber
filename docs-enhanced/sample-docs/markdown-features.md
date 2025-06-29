@@ -1,23 +1,20 @@
 ---
 sidebar_position: 6
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T20:26:13.433Z'
-structureImprovements: 14
+chunkingDate: '2025-06-29T20:09:02.299Z'
+structureImprovements: 11
 optimalChunkSize: 350
-chunkingScore: 90
-headingsAdded: 14
+chunkingScore: 85
+headingsAdded: 11
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T20:26:13.433Z'
+enhanced_at: '2025-06-29T20:09:02.299Z'
 ---
 
 # Markdown Features
 
 ## Front Matter Metadata
-
-### Front Matter Example
-
 
 
 Docusaurus supports **[Markdown](https://daringfireball.net/projects/markdown/syntax)** and a few **additional features**.
@@ -38,13 +35,7 @@ slug: /my-custom-url
 
 ## Markdown heading
 
-## Link Usage
-
-### URL Paths
-
-### Relative File Paths
-
-
+## Linking in Markdown
 
 
 Markdown text with [links](./hello.md)
@@ -53,12 +44,6 @@ Markdown text with [links](./hello.md)
 ## Links
 
 ## Image Inclusion
-
-### Absolute Image Paths
-
-### Relative Image Paths
-
-
 
 
 Regular Markdown links are supported, using url paths or relative file paths.
@@ -75,10 +60,7 @@ Let's see how to [Create a page](./create-a-page.md).
 
 ## Images
 
-## Code Block Syntax Highlighting
-
-### Code Block Example
-
+## Code Blocks with Syntax Highlighting
 
 
 Regular Markdown images are supported.
@@ -99,10 +81,7 @@ You can reference images relative to the current file as well. This is particula
 
 ## Code Blocks
 
-## Admonition Callouts
-
-### Admonition Example
-
+## Using Admonitions for Callouts
 
 
 Markdown code blocks are supported with Syntax highlighting.
@@ -123,10 +102,7 @@ function HelloDocusaurus() {
 
 ## Admonitions
 
-## Interactive Documentation with MDX and React
-
-### React Component Example
-
+## Enhancing Documentation with MDX and React
 
 
 Docusaurus has a special syntax to create admonitions and callouts:

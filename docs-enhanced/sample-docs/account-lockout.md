@@ -2,22 +2,25 @@
 sidebar_position: 4
 title: Account Lockout Procedures
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T20:22:58.023Z'
-structureImprovements: 5
+chunkingDate: '2025-06-29T20:05:51.551Z'
+structureImprovements: 9
 optimalChunkSize: 350
 chunkingScore: 85
-headingsAdded: 5
+headingsAdded: 9
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T20:22:58.023Z'
+enhanced_at: '2025-06-29T20:05:51.551Z'
 ---
 
 # Account Lockout Procedures
 
+## Understanding Account Lockouts
+
+
 ## Lockout Overview
 
-### Lockout Trigger
+### Automatic Lockout Mechanism
 
 ### Consequences of Lockout
 
@@ -27,16 +30,25 @@ The system will automatically lock an account after several consecutive failed a
 
 ## End-User Actions
 
-### Unlocking Your Account
+## Resolving a Locked Account
+
+### User Actions During Lockout
+
+### Requesting Administrator Assistance
+
+
 
 
 If your account is locked, you must wait for the automatic lockout period to expire. The duration of this period is set by the system administrator. Attempting to log in during the lockout period may extend the duration. If immediate access is required, you must contact an administrator for manual intervention.
 
 ## Administrator Resolution
 
-### Administrator Account Unlocking Process
+## Administrator Account Unlocking
 
-### Verification Procedures
+### Accessing the Management Console
+
+### Unlocking the Account and Verification
+
 
 
 
