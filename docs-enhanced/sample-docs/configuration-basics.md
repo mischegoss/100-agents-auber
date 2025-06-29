@@ -2,7 +2,7 @@
 sidebar_position: 4
 title: Configuration
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T20:24:27.457Z'
+chunkingDate: '2025-06-29T20:07:18.429Z'
 structureImprovements: 13
 optimalChunkSize: 350
 chunkingScore: 85
@@ -10,13 +10,10 @@ headingsAdded: 9
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T20:24:27.457Z'
+enhanced_at: '2025-06-29T20:07:18.429Z'
 ---
 
 # Configuration
-
-## Example Code Snippets
-
 
 ## Main Configuration
 
@@ -25,19 +22,22 @@ enhanced_at: '2025-06-28T20:24:27.457Z'
 
 The application is configured using a YAML file. This file contains various important settings that control the application's behavior. This includes the database, redis_cache, and API settings. Review this to see how to set your database hose, configure your pool size, add your redis URl, and set rate limits and timeout for your API.
 
+### Connection Pooling
+
+
 ### Database Connection Settings
 
 
 ```yaml
+
+### Data Processing
+
 # app.yml
 database:
   host: # Set this to your database host
   port: 5432
   name: production_db
   # Pool size should be configured as needed
-
-### Connection Pooling
-
 
 redis_cache:
   endpoint: # The full Redis URL
@@ -56,14 +56,14 @@ api_settings:
 
 # Functions You May Want to Use in the App
 
-### Data Processing Function
+## Example Code Snippets
 
 
 ```
 data_processing_snippet: |
   function processArray(arr) {
 
-### Example Database Query
+### Database Interaction
 
     let sum = 0;
     for (let i = 0; i < arr.length; i++) {
@@ -73,14 +73,14 @@ data_processing_snippet: |
   }
 
 example_db_operation: |
-
-### Internal Calculation Class
-
   SELECT o.order_id, p.product_name, oi.quantity
   FROM orders o
   JOIN order_items oi ON o.order_id = oi.order_id
   JOIN products p ON oi.product_id = p.product_id
   WHERE o.status = 'completed' AND o.order_date >= '2025-01-01';
+
+### Internal Calculation Methods
+
 
 internal_calculation_method: |
   class Calculator:
