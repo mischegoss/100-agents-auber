@@ -1,23 +1,20 @@
 ---
 sidebar_position: 6
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T20:26:13.433Z'
-structureImprovements: 14
+chunkingDate: '2025-06-29T04:46:58.586Z'
+structureImprovements: 12
 optimalChunkSize: 350
-chunkingScore: 90
-headingsAdded: 14
+chunkingScore: 88
+headingsAdded: 12
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T20:26:13.433Z'
+enhanced_at: '2025-06-29T04:46:58.586Z'
 ---
 
 # Markdown Features
 
 ## Front Matter Metadata
-
-### Front Matter Example
-
 
 
 Docusaurus supports **[Markdown](https://daringfireball.net/projects/markdown/syntax)** and a few **additional features**.
@@ -25,6 +22,9 @@ Docusaurus supports **[Markdown](https://daringfireball.net/projects/markdown/sy
 ## Front Matter
 
 Markdown documents have metadata at the top called [Front Matter](https://jekyllrb.com/docs/front-matter/):
+
+### Front Matter Example
+
 
 ```text title="my-doc.md"
 // highlight-start
@@ -38,13 +38,7 @@ slug: /my-custom-url
 
 ## Markdown heading
 
-## Link Usage
-
-### URL Paths
-
-### Relative File Paths
-
-
+## Linking in Markdown
 
 
 Markdown text with [links](./hello.md)
@@ -54,14 +48,11 @@ Markdown text with [links](./hello.md)
 
 ## Image Inclusion
 
-### Absolute Image Paths
-
-### Relative Image Paths
-
-
-
 
 Regular Markdown links are supported, using url paths or relative file paths.
+
+### URL and Relative Paths
+
 
 ```md
 Let's see how to [Create a page](/create-a-page).
@@ -75,13 +66,16 @@ Let's see how to [Create a page](./create-a-page.md).
 
 ## Images
 
-## Code Block Syntax Highlighting
+## Code Blocks with Syntax Highlighting
 
-### Code Block Example
+## Using Admonitions for Callouts
 
 
 
 Regular Markdown images are supported.
+
+### Absolute and Relative Paths
+
 
 You can use absolute paths to reference images in the static directory (`static/img/docusaurus.png`):
 
@@ -99,13 +93,10 @@ You can reference images relative to the current file as well. This is particula
 
 ## Code Blocks
 
-## Admonition Callouts
-
-### Admonition Example
-
-
-
 Markdown code blocks are supported with Syntax highlighting.
+
+### Code Block Example
+
 
 ````md
 ```jsx title="src/components/HelloDocusaurus.js"
@@ -125,11 +116,11 @@ function HelloDocusaurus() {
 
 ## Interactive Documentation with MDX and React
 
-### React Component Example
-
-
 
 Docusaurus has a special syntax to create admonitions and callouts:
+
+### Admonition Example
+
 
 ```md
 :::tip My tip
@@ -160,6 +151,9 @@ This action is dangerous
 ## MDX and React Components
 
 [MDX](https://mdxjs.com/) can make your documentation more **interactive** and allows using any **React components inside Markdown**:
+
+### React Component Example
+
 
 ```jsx
 export const Highlight = ({children, color}) => (
