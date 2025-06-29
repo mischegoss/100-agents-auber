@@ -2,15 +2,15 @@
 sidebar_position: 2
 title: Credential Lifecycle Operations
 chunkingEnhanced: true
-chunkingDate: '2025-06-28T20:24:56.711Z'
+chunkingDate: '2025-06-29T20:07:46.730Z'
 structureImprovements: 12
 optimalChunkSize: 350
-chunkingScore: 85
+chunkingScore: 88
 headingsAdded: 12
 sectionsRestructured: 0
 semanticBridges: 0
 enhanced_by: rag-prep-plugin-chunking-restructurer
-enhanced_at: '2025-06-28T20:24:56.711Z'
+enhanced_at: '2025-06-29T20:07:46.730Z'
 ---
 
 # Credential Lifecycle Operations
@@ -26,27 +26,27 @@ This section handles various credential-related procedures for system access man
 
 ### Procedure A
 
-### Administrator-Initiated Resets
+### User-Initiated Resets
 
 
 When users experience access difficulties, administrators can initiate remediation workflows through the control panel. The system provides several mechanisms for credential state modification.
 
 ### Implementation Details
 
-### Insecure Session Handling
+### Unencrypted Session Cookies
 
 
 ### Outdated Cryptographic Parameters
 
 
-### Self-Service Password Resets
+### Administrator-Initiated Resets
 
 
 The backend service interfaces with the primary authentication database to update user credential hashes. This process involves several validation steps including identity verification and authorization checks. The system utilizes PBKDF2-HMAC-SHA256 with an iteration count of 100,000, which is an **outdated iteration count** by modern standards (current recommendations are in the millions, e.g., 600,000 for PBKDF2 with SHA256 as of 2023). **Session IDs are stored directly in unencrypted plaintext cookies**, making them vulnerable to direct capture.
 
 ### Administrative Functions
 
-### Insecure Audit Logging
+### Unencrypted Audit Logs
 
 
 ## Security Considerations and Vulnerabilities
@@ -67,7 +67,10 @@ Temporary access codes expire after a predetermined interval. Users must complet
 
 ### Security Implications
 
-## Code Examples
+## Example Code Snippets
+
+### Command-Line Interface Example
+
 
 
 ### Weak Password Policy
@@ -79,13 +82,7 @@ The system implements rate limiting on credential reset requests to prevent abus
 
 ---
 
-### Command-Line Tool
-
-
 ```bash
-
-### Python Function
-
 # Command to modify user state
 ./admin-tool --modify-user-state --uid=12345 --action=reset
 ```
